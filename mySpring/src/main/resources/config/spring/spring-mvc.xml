@@ -11,8 +11,6 @@
 
 
     <mvc:annotation-driven/>
-    <context:component-scan base-package=""></context:component-scan>
-
-
+    <context:component-scan base-package="net.dingyabin.com.controller"/>
 
 </beans>

@@ -3,7 +3,9 @@ package wecash.actors;
 import akka.actor.UntypedActor;
 
 /**
- * Created by MrDing on 2017/2/9.
+ * Created by MrDing
+ * Date: 2017/2/9.
+ * Time:0:47
  */
 public class HelloActor extends UntypedActor {
 

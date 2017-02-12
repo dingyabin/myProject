@@ -4,7 +4,9 @@ import akka.actor.ActorRef;
 import wecash.util.AkkaUtil;
 
 /**
- * Created by MrDing on 2017/2/9.
+ * Created by MrDing
+ * Date: 2017/2/9.
+ * Time:0:47
  */
 public class AkkaTest {
 

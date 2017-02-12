@@ -10,7 +10,17 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>akka_simple</module>
+        <module>mySpring</module>
     </modules>
+
+
+    <properties>
+        <spring.version>4.1.3.RELEASE</spring.version>
+        <jstl.version>1.2</jstl.version>
+        <servlet-api.version>2.5</servlet-api.version>
+        <jsp-api.version>2.0</jsp-api.version>
+        <slf4j.version>1.6.4</slf4j.version>
+    </properties>
 
 
     <build>
