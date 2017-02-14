@@ -11,6 +11,7 @@
     <modules>
         <module>akka_simple</module>
         <module>mySpring</module>
+        <module>myThread</module>
     </modules>
 
 
