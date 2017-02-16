@@ -3,10 +3,12 @@ package net.dingyabin.com;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.time.StopWatch;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
@@ -26,16 +28,14 @@ public class RunableTaskManger {
             Future<?> future = executorService.submit(new MyRunable(i,atomicInteger));
             list.add(future);
         }
-        while(true){
-            boolean isDone=true;
-            for (Future future : list) {
-                isDone = isDone && future.isDone();
-            }
-            if(isDone){
-                break;
-            }
-        }
         executorService.shutdown();
+        try {
+            //等待线程执行完毕
+            executorService.awaitTermination(60, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+            System.out.println("任务出错.......");
+        }
         System.out.println(String.format("main方法执行完毕,atomicInteger=%s,共耗时：%s ms",atomicInteger.get(),watch.getTime()));
     }
 }
