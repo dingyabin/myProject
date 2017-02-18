@@ -13,7 +13,7 @@ public class StringToEnum implements Converter<String ,Sex>{
     @Override
     public Sex convert(String source) {
         if (source!=null){
-           return Sex.getByValue(Integer.valueOf(source));
+           return Sex.getByValue(source);
         }
         return null;
     }

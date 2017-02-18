@@ -34,6 +34,9 @@
        </mvc:message-converters>
     </mvc:annotation-driven>
 
+    <!-- 这里设置的转换服务只适用于spring自己封装对象，即采用key=value传值时，
+         而若是采用json传值则spring会交给处理json的类（jsckson，fastjson等）去处理，
+         此时这里的转换服务是不起效的，须在上述处理json的类中去配置-->
     <bean id="myConversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean">
         <property name="converters">
           <set>

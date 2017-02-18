@@ -7,19 +7,19 @@ package net.dingyabin.com.enums;
  */
 public enum Sex {
 
-    MAN(1),WOMEN(2);
+    MAN("01"),WOMEN("02");
 
-    private Integer sex;
+    private String sex;
 
-    Sex(Integer sex){
+    Sex(String sex){
         this.sex=sex;
     }
 
-    public  Integer getValue(){
+    public  String getValue(){
         return this.sex;
     }
 
-    public static Sex getByValue(Integer number){
+    public static Sex getByValue(String number){
         for (Sex s:values()){
            if (s.getValue().equals(number)){
                return s;
@@ -27,4 +27,5 @@ public enum Sex {
         }
         return null;
     }
+
 }

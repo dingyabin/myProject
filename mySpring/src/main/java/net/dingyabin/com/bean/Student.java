@@ -1,5 +1,6 @@
 package net.dingyabin.com.bean;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import net.dingyabin.com.enums.Sex;
 
 import java.io.Serializable;
@@ -18,6 +19,7 @@ public class Student implements Serializable {
 
     private String name;
 
+    @JSONField (format="yyyy/MM/dd")
     private Date birth;
 
     private Sex sex;
@@ -60,8 +62,8 @@ public class Student implements Serializable {
         return sex;
     }
 
-    public void setSex(Sex sex) {
-        this.sex = sex;
+    public void setSex(String sex) {
+        this.sex = Sex.getByValue(sex);
     }
 
     @Override
