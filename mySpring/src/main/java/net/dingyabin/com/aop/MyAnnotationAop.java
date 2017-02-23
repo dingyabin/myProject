@@ -58,8 +58,7 @@ public class MyAnnotationAop {
     private Method getMethod(JoinPoint point, Class aClass) {
         Method m = ((MethodSignature) point.getSignature()).getMethod();
         try {
-            Method method = aClass.getMethod(point.getSignature().getName(), m.getParameterTypes());
-            return method;
+            return aClass.getMethod(point.getSignature().getName(), m.getParameterTypes());
         } catch (NoSuchMethodException e) {
             return null;
         }
