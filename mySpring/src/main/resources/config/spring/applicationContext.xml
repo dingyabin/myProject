@@ -21,4 +21,6 @@
     <!--定时任务注解，会扫描Scheduled注解-->
     <task:annotation-driven/>
 
+    <aop:aspectj-autoproxy/>
+
 </beans>

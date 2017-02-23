@@ -15,6 +15,7 @@
 
 
     <context:component-scan base-package="net.dingyabin.com.controller"/>
+
     <mvc:annotation-driven conversion-service="myConversionService">
        <mvc:message-converters register-defaults="true">
            <!--配置fastjson作为springmvc的解析器-->
@@ -52,14 +53,15 @@
         </property>
     </bean>
 
-    <bean id="myAspect" class="net.dingyabin.com.aop.MyAspect"/>
-    <aop:config>
-        <aop:pointcut id="myBeforeCutPoint" expression="execution(* net.dingyabin.com.controller.*.*(..)) and args(student)"/>
-        <aop:pointcut id="myAfterCutPoint" expression="execution(* net.dingyabin.com.controller.*.*(..))"/>
-        <aop:aspect ref="myAspect">
-            <aop:before method="before" pointcut-ref="myBeforeCutPoint" arg-names="point,student"/>
-            <aop:after-returning method="afterReturn" pointcut-ref="myAfterCutPoint" returning="student" arg-names="point,student"/>
-        </aop:aspect>
-    </aop:config>
+
+    <!--<bean id="myAspect" class="net.dingyabin.com.aop.MyAspect"/>-->
+    <!--<aop:config>-->
+        <!--<aop:pointcut id="myBeforeCutPoint" expression="execution(* net.dingyabin.com.controller.*.*(..)) and args(student)"/>-->
+        <!--<aop:pointcut id="myAfterCutPoint" expression="execution(* net.dingyabin.com.controller.*.*(..))"/>-->
+        <!--<aop:aspect ref="myAspect">-->
+            <!--<aop:before method="before" pointcut-ref="myBeforeCutPoint" arg-names="point,student"/>-->
+            <!--<aop:after-returning method="afterReturn" pointcut-ref="myAfterCutPoint" returning="student" arg-names="point,student"/>-->
+        <!--</aop:aspect>-->
+    <!--</aop:config>-->
 
 </beans>

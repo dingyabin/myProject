@@ -84,17 +84,21 @@
             <artifactId>spring-aop</artifactId>
             <version>${spring.version}</version>
         </dependency>
+        <!--jdk 1.7, spring version is 3.0+, 如果使用aspectjrt-1.6.2 and aspectjweaver-1.6.2这个版本，就会出现
+           错误，将aspectj and aspectjweaver 版本改为1.7.3 or more-->
         <!-- AspectJ支持 -->
+        <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjrt -->
         <dependency>
-            <groupId>aspectj</groupId>
+            <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
-            <version>1.5.4</version>
+            <version>1.7.3</version>
         </dependency>
         <!-- 织入 -->
+        <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjweaver -->
         <dependency>
-            <groupId>aspectj</groupId>
+            <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
-            <version>1.5.4</version>
+            <version>1.7.3</version>
         </dependency>
         <!--日志-->
         <dependency>
