@@ -33,6 +33,7 @@ public class MyAnnotationAop {
         Method method = getMethod(point, aClass);
         if (method != null) {
             Annotation[][] parameterAnnotations = method.getParameterAnnotations();
+            boolean methodAnnotationPresent = method.isAnnotationPresent(MyAnnotation.class);
         }
         boolean annotationPresent = aClass.isAnnotationPresent(MyAnnotation.class);
         if (annotationPresent) {

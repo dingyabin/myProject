@@ -17,7 +17,8 @@ public class MyServiceImpl implements MyService {
 
 
     @Override
-    public String done(@MyAnnotation String param) {
+    @MyAnnotation
+    public String done(String param) {
         return param;
     }
 
