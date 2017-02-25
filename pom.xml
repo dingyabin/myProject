@@ -27,6 +27,7 @@
         <commons-lang3.version>3.5</commons-lang3.version>
         <javax.mail.version>1.4.7</javax.mail.version>
         <cglib.version>3.2.4</cglib.version>
+        <guava.version>19.0</guava.version>
     </properties>
 
 
