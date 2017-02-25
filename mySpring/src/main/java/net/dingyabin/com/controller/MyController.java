@@ -62,13 +62,13 @@ public class MyController {
      *
      * @return
      */
-    @RequestMapping(value = "/test3/{to}", produces = "application/json;charset=utf-8")
+    @RequestMapping(value = "/test3", produces = "application/json;charset=utf-8")
     @ResponseBody
-    public Response convertion3(@PathVariable("to") String to) {
+    public Response convertion3(@RequestParam("to") String to) {
         StopWatch watch = StopWatch.createStarted();//开始计时
         EmailBean emailBean = new EmailBean();
         emailBean.setSubject("This is a test email");
-        emailBean.setContent("<body><p>Hello Html Email</p><img src='cid:name.PNG'/></body>");
+        emailBean.setContent("<body><p>Hello Html Email</p><p>hexintao</p><img src='cid:name.PNG'/></body>");
         emailBean.setCreateTime(new Date());
         emailBean.setToWhere(new String[]{to});
         emailBean.setFromName(Config.getAsString("mail.username"));

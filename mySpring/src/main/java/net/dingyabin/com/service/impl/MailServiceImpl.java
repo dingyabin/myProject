@@ -26,7 +26,8 @@ public class MailServiceImpl implements MailService {
 
     @Override
     public boolean sendMail(EmailBean emailBean) {
-        if (emailBean == null || emailBean.getToWhere() == null || StringUtils.isBlank(emailBean.getContent())) {
+        //参数校验
+        if (emailBean == null || !emailBean.isok()) {
             return false;
         }
         try {
@@ -50,6 +51,7 @@ public class MailServiceImpl implements MailService {
                     mimeMessageHelper.addInline(file.getName(), file);
                 }
             }
+            //开始发送...
             javaMailSender.send(mimeMessage);
         } catch (Exception e) {
             e.printStackTrace();

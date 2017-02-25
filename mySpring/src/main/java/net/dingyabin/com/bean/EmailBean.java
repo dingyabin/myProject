@@ -1,5 +1,7 @@
 package net.dingyabin.com.bean;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.io.File;
 import java.util.Date;
 import java.util.List;
@@ -93,5 +95,12 @@ public class EmailBean {
 
     public void setInline(List<File> inline) {
         this.inline = inline;
+    }
+
+    public boolean isok(){
+        if (this.toWhere == null || this.toWhere.length==0 || StringUtils.isBlank(this.content)) {
+            return false;
+        }
+        return true;
     }
 }
