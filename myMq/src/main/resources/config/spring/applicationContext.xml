@@ -2,10 +2,12 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans.xsd
        http://www.springframework.org/schema/context
-       http://www.springframework.org/schema/context/spring-context.xsd">
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/rabbit http://www.springframework.org/schema/rabbit/spring-rabbit.xsd">
 
 
     <context:annotation-config/>
@@ -13,6 +15,43 @@
     <context:property-placeholder location="classpath:config/properties/config.properties"/>
 
     <context:component-scan base-package="net.dingyabin.com"/>
+
+    <!--配置connection-factory，指定连接rabbit server参数 -->
+    <rabbit:connection-factory id="connectionFactory"
+                               host="${rabbit.host}"
+                               port="${rabbit.port}"
+                               username="${rabbit.username}"
+                               password="${rabbit.password}"/>
+
+    <!--通过指定下面的admin信息，当前producer中的exchange和queue会在rabbitmq服务器上自动生成 -->
+    <rabbit:admin id="rabbitAdmin" connection-factory="connectionFactory"/>
+
+    <!--定义queue -->
+    <rabbit:queue name="myFirstQuene" auto-declare="true" auto-delete="false" durable="true" exclusive="false"/>
+    <rabbit:queue name="mysecondQuene" auto-declare="true" auto-delete="false" durable="true" exclusive="false"/>
+
+    <!-- 定义direct exchange，绑定queue -->
+    <rabbit:direct-exchange name="directChange" durable="true" auto-delete="false" auto-declare="true" >
+        <rabbit:bindings>
+            <rabbit:binding queue="myFirstQuene" key="myFirstQuene"></rabbit:binding>
+            <rabbit:binding queue="mysecondQuene" key="mysecondQuene"></rabbit:binding>
+        </rabbit:bindings>
+    </rabbit:direct-exchange>
+
+
+    <!--定义rabbit template用于数据的接收和发送 -->
+    <rabbit:template id="amqpTemplate" connection-factory="connectionFactory" exchange="directChange" />
+
+
+    <!--监听类-->
+    <bean id="studentConsumer" class="net.dingyabin.com.listeners.StudentConsumer"/>
+    <bean id="stringConsumer" class="net.dingyabin.com.listeners.StringConsumer"/>
+
+    <!-- queue litener  观察 监听模式 当有消息到达时会通知监听在对应的队列上的监听对象-->
+    <rabbit:listener-container connection-factory="connectionFactory" >
+        <rabbit:listener ref="studentConsumer" queues="myFirstQuene"/>
+        <rabbit:listener ref="stringConsumer" queues="mysecondQuene"/>
+    </rabbit:listener-container>
 
 
 </beans>
