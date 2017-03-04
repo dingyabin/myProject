@@ -149,6 +149,12 @@
             <artifactId>guava</artifactId>
             <version>${guava.version}</version>
         </dependency>
+        <!-- spring mq-->
+        <dependency>
+            <groupId>org.springframework.amqp</groupId>
+            <artifactId>spring-rabbit</artifactId>
+            <version>${spring-rabbit.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
