@@ -4,6 +4,7 @@ package net.dingyabin.com.listeners;
 import net.dingyabin.com.bean.Student;
 import net.dingyabin.com.consumer.BaseConsumer;
 import org.springframework.amqp.core.MessageProperties;
+import org.springframework.stereotype.Component;
 
 
 /**
@@ -11,6 +12,7 @@ import org.springframework.amqp.core.MessageProperties;
  * Date: 2017/3/4.
  * Time:22:36
  */
+@Component("studentConsumer")
 public class StudentConsumer extends BaseConsumer<Student> {
 
     @Override

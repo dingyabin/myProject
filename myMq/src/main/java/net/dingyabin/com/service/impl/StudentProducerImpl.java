@@ -3,6 +3,9 @@ package net.dingyabin.com.service.impl;
 import net.dingyabin.com.bean.Student;
 import net.dingyabin.com.service.StudentProducer;
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.beans.BeansException;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -13,7 +16,7 @@ import javax.annotation.Resource;
  * Time:22:59
  */
 @Service("studentProducer")
-public class StudentProducerImpl implements StudentProducer {
+public class StudentProducerImpl implements StudentProducer{
 
     @Resource
     private AmqpTemplate amqpTemplate;
