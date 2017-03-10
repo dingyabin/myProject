@@ -30,6 +30,7 @@
         <javax.mail.version>1.4.7</javax.mail.version>
         <cglib.version>3.2.4</cglib.version>
         <guava.version>19.0</guava.version>
+        <commons-codec.version>1.10</commons-codec.version>
         <spring-rabbit.version>1.6.8.RELEASE</spring-rabbit.version>
     </properties>
 
