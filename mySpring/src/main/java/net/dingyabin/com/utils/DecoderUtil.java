@@ -23,11 +23,12 @@ public class DecoderUtil {
         System.out.println("加密前："+origin);
 
         try {
-            FileInputStream input=new FileInputStream("C:\\Users\\MrDing\\Desktop\\_20170311004134.png");
+            FileInputStream input=new FileInputStream("C:\\Users\\MrDing\\Desktop\\111.PNG");
             byte[] array=new byte[input.available()];
             input.read(array);
             String str64s= Base64.encodeBase64String(array);
             input.close();
+            System.out.println("图片编码后长度："+str64s.length());
             System.out.println("图片编码后："+str64s);
         } catch (Exception e) {
             e.printStackTrace();
