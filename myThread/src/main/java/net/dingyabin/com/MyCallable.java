@@ -26,7 +26,7 @@ public class MyCallable implements Callable<String> {
         if(index==2){
             throw new Exception(Thread.currentThread().getName()+"线程发生异常"+index);
         }
-        Thread.sleep(3000);
+        Thread.sleep(1000);
         return Thread.currentThread().getName()+"执行任务完毕"+index;
     }
 }

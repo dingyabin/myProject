@@ -20,24 +20,24 @@ public class CallableTaskManger {
 
     public static void main(String[] args) {
         StopWatch watch = StopWatch.createStarted();
-        AtomicInteger atomicInteger =new AtomicInteger(0);
+        AtomicInteger atomicInteger = new AtomicInteger(0);
         ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-        List<Future<String>> list=Lists.newArrayList();
-        for (int i = 0; i < 5; i++) {
-            Future<String> future = executorService.submit(new MyCallable(i,atomicInteger));
+        List<Future<String>> list = Lists.newArrayList();
+        for (int i = 0; i < 155; i++) {
+            Future<String> future = executorService.submit(new MyCallable(i, atomicInteger));
             list.add(future);
         }
-        try {
-            for (Future<String> f : list) {
-                String s = f.get();
-                System.out.println("执行结果是："+s);
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            System.out.println(e.getMessage());
-        }
         executorService.shutdown();
-        System.out.println(String.format("main方法执行完毕,atomicInteger=%s,共耗时：%s ms",atomicInteger.get(),watch.getTime()));
+        for (Future<String> f : list) {
+            try {
+                String s = f.get();
+                System.out.println("执行结果是：" + s);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        System.out.println(String.format("main方法执行完毕,atomicInteger=%s,共耗时：%s ms", atomicInteger.get(), watch.getTime()));
     }
 }
