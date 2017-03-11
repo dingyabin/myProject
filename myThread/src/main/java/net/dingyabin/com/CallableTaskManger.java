@@ -23,7 +23,7 @@ public class CallableTaskManger {
         AtomicInteger atomicInteger = new AtomicInteger(0);
         ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         List<Future<String>> list = Lists.newArrayList();
-        for (int i = 0; i < 155; i++) {
+        for (int i = 0; i < 10; i++) {
             Future<String> future = executorService.submit(new MyCallable(i, atomicInteger));
             list.add(future);
         }
