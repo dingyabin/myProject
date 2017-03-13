@@ -27,7 +27,7 @@ public class GuavaTaskManager {
             list.add(listenableFuture);
         }
 
-        /** 异步回调方式一 ：listenableFuture.addListener()方法**/
+        /* 异步回调方式一 ：listenableFuture.addListener()方法*/
         for (ListenableFuture<String> l : list) {
             final ListenableFuture<String> listenableFuture = l;
             listenableFuture.addListener(new Runnable() {
@@ -43,7 +43,7 @@ public class GuavaTaskManager {
             }, listenerService);
         }
 
-        /** 异步回调方式二 ： Futures.addCallback()方法，可以针对成功和失败分别做处理**/
+        /* 异步回调方式二 ： Futures.addCallback()方法，可以针对成功和失败分别做处理*/
         for (ListenableFuture<String> listenableFuture : list) {
             Futures.addCallback(listenableFuture, new FutureCallback<String>() {
                 @Override
