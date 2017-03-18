@@ -3,6 +3,8 @@ package net.dingyabin.com.service;
 import net.dingyabin.com.bean.QueryConditon;
 import net.dingyabin.com.bean.Weight;
 
+
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -14,6 +16,8 @@ public interface WeightService {
 
      int saveWeight(Weight weight);
 
-     List<Weight> queryByDate(QueryConditon queryConditon);
+     List<Weight> queryByDateRange(QueryConditon queryConditon);
+
+     List<Weight> queryByDate(Date date);
 
 }

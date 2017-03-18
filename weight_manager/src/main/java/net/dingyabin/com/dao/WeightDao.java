@@ -2,6 +2,9 @@ package net.dingyabin.com.dao;
 
 import net.dingyabin.com.bean.QueryConditon;
 import net.dingyabin.com.bean.Weight;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -11,8 +14,10 @@ import java.util.List;
  */
 public interface WeightDao {
 
-   int  insertWeight(Weight weight);
+    int insertWeight(Weight weight);
 
-   List<Weight> selectByDate(QueryConditon queryConditon);
+    List<Weight> selectByDateRange(QueryConditon queryConditon);
+
+    List<Weight> selectByDate(@Param("date") Date date);
 
 }

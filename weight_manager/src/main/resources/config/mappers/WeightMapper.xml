@@ -49,16 +49,24 @@
 	</insert>
 
 
-	<select id="selectByDate" parameterType="net.dingyabin.com.bean.QueryConditon" resultMap="baseMap">
+	<select id="selectByDateRange" parameterType="net.dingyabin.com.bean.QueryConditon" resultMap="baseMap">
 		SELECT
 			<include refid="baseColoumn"/>
 		FROM  weight  WHERE id > 0
 			<if test="fromDate!=null">
-				AND  createtime &gt; = #{fromDate ,jdbcType=DATE}
+				AND  createtime &gt;= #{fromDate ,jdbcType=DATE}
 			</if>
 			<if test="endDate!=null">
-				AND	createtime  &lt; = #{endDate ,jdbcType=DATE}
+				AND	createtime  &lt;= #{endDate ,jdbcType=DATE}
 			</if>
+	</select>
+
+
+	<select id="selectByDate"  resultMap="baseMap">
+		SELECT
+		<include refid="baseColoumn"/>
+		FROM  weight  WHERE  createtime = #{date ,jdbcType=DATE}
+
 	</select>
 
 </mapper> 

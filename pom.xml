@@ -13,6 +13,7 @@
         <module>mySpring</module>
         <module>myThread</module>
         <module>myMq</module>
+        <module>weight_manager</module>
     </modules>
 
 
@@ -27,9 +28,16 @@
         <aspectjrt.version>1.7.3</aspectjrt.version>
         <aspectjweaver.version>1.7.3</aspectjweaver.version>
         <commons-lang3.version>3.5</commons-lang3.version>
+        <commons-io.version>2.5</commons-io.version>
+        <commons-fileupload.version>1.3.2</commons-fileupload.version>
         <javax.mail.version>1.4.7</javax.mail.version>
         <cglib.version>3.2.4</cglib.version>
         <guava.version>19.0</guava.version>
+        <druid.version>1.0.29</druid.version>
+        <mysql.version>5.1.41</mysql.version>
+        <pagehelper.version>5.0.0</pagehelper.version>
+        <mybatis.version>3.4.0</mybatis.version>
+        <mybatis.spring.version>1.3.0</mybatis.spring.version>
         <commons-codec.version>1.10</commons-codec.version>
         <spring-rabbit.version>1.6.8.RELEASE</spring-rabbit.version>
     </properties>

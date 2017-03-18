@@ -6,6 +6,7 @@ package net.dingyabin.com.enums;
  * Time:21:03
  */
 public enum BusinessEnum {
+    ALREADYEXIST("501","今天已经添加过了哦！"),
     SYSTEM_BUSY("500","系统繁忙，请稍后重试.....");
 
     private String code;

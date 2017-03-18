@@ -9,6 +9,7 @@ import net.dingyabin.com.service.WeightService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -35,9 +36,18 @@ public class WeightServiceImpl implements WeightService {
         return result;
     }
 
+
+
     @Override
-    public List<Weight> queryByDate(QueryConditon queryConditon) {
-        return weightDao.selectByDate(queryConditon);
+    public List<Weight> queryByDateRange(QueryConditon queryConditon) {
+        return weightDao.selectByDateRange(queryConditon);
+    }
+
+
+
+    @Override
+    public List<Weight> queryByDate(Date date) {
+        return weightDao.selectByDate(date);
     }
 
 }

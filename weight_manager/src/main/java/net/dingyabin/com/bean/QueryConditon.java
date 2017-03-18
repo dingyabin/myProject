@@ -1,5 +1,8 @@
 package net.dingyabin.com.bean;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -7,10 +10,12 @@ import java.util.Date;
  * Date: 2017/3/18.
  * Time:19:26
  */
-public class QueryConditon {
+public class QueryConditon implements Serializable {
 
+    @JSONField(format = "yyyy-MM-dd")
     private Date fromDate;
 
+    @JSONField(format = "yyyy-MM-dd")
     private Date endDate;
 
 
