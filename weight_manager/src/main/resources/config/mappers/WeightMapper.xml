@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="net.dingyabin.com.dao.WeightDao">
+
+	<resultMap id="baseMap" type="net.dingyabin.com.bean.Weight">
+		<result column="id" property="id" jdbcType="BIGINT"/>
+		<result column="weight" property="weight" jdbcType="DOUBLE"/>
+		<result column="waist" property="waist" jdbcType="DOUBLE"/>
+		<result column="createtime" property="createTime" jdbcType="DATE"/>
+	</resultMap>
+
+	<sql id="baseColoumn" >
+		id , weight , waist , createtime
+	</sql>
+
+
+	<insert id="insertWeight" parameterType="net.dingyabin.com.bean.Weight" >
+		INSERT  into  weight
+			<trim prefix="(" suffix=")" suffixOverrides="," >
+				<if test="id !=null">
+					id,
+				</if>
+				<if test="weight !=null">
+					weight,
+				</if>
+				<if test="waist !=null">
+					waist,
+				</if>
+				<if test="createTime !=null">
+					createtime,
+				</if>
+			</trim>
+			<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+				<if test="id !=null">
+					#{id, jdbcType=BIGINT},
+				</if>
+				<if test="weight !=null">
+					#{weight, jdbcType=DOUBLE},
+				</if>
+				<if test="waist !=null">
+					#{waist, jdbcType=DOUBLE},
+				</if>
+				<if test="createTime !=null">
+					#{createTime, jdbcType=DOUBLE},
+				</if>
+			</trim>
+	</insert>
+
+
+	<select id="selectByDate" parameterType="net.dingyabin.com.bean.QueryConditon" resultMap="baseMap">
+		SELECT
+			<include refid="baseColoumn"/>
+		FROM  weight  WHERE id > 0
+			<if test="fromDate!=null">
+				AND  createtime &gt; = #{fromDate ,jdbcType=DATE}
+			</if>
+			<if test="endDate!=null">
+				AND	createtime  &lt; = #{endDate ,jdbcType=DATE}
+			</if>
+	</select>
+
+</mapper> 
