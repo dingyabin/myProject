@@ -29,7 +29,7 @@
             $('#divcasebox').datagrid({
                 title:'身体状况记录表',
                 width:'50%',
-                height:$(window).height()-15,
+                height:$(window).height()-23,
                 striped: true,
                 url:"http://localhost:8080/weight/query",
                 queryParams:param,
@@ -121,10 +121,10 @@
 </head>
 
 
-    <body>
+    <body style="font-family:微软雅黑">
             <div id="tb" style="padding:5px;height:auto" align="center">
                 <div>
-                    从: <input id="from" class="easyui-datebox" style="width:140px" editable="false">
+                    从: <input id="from" class="easyui-datebox" style="width:140px" editable="false">&nbsp;
                     至: <input id="to"   class="easyui-datebox" style="width:140px" editable="false">
                     <a  href="#" class="easyui-linkbutton" iconCls="icon-search" onclick="loadDate()">查询</a>
                     <a  href="#" class="easyui-linkbutton" iconCls="icon-add" onclick="openWindow()">添加</a>
