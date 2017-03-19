@@ -59,6 +59,7 @@
 			<if test="endDate!=null">
 				AND	createtime  &lt;= #{endDate ,jdbcType=DATE}
 			</if>
+		ORDER  BY  createtime ASC
 	</select>
 
 
@@ -66,7 +67,6 @@
 		SELECT
 		<include refid="baseColoumn"/>
 		FROM  weight  WHERE  createtime = #{date ,jdbcType=DATE}
-
 	</select>
 
 </mapper> 

@@ -19,6 +19,7 @@ public class ExceptionAdvice {
     @ResponseBody
     @ExceptionHandler(BusinessException.class)
     public Response handlerException(BusinessException e){
+        e.printStackTrace();
        return Response.error().Code(e.getCode()).Message(e.getMessage());
     }
 
@@ -27,6 +28,7 @@ public class ExceptionAdvice {
     @ResponseBody
     @ExceptionHandler(Exception.class)
     public Response handlerException(Exception e){
+        e.printStackTrace();
         return Response.error().Code(BusinessEnum.SYSTEM_BUSY.getCode()).Message(BusinessEnum.SYSTEM_BUSY.getMessage());
     }
 

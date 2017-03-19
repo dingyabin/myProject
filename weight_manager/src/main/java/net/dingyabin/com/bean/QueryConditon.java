@@ -18,6 +18,10 @@ public class QueryConditon implements Serializable {
     @JSONField(format = "yyyy-MM-dd")
     private Date endDate;
 
+    private int page;
+
+    private int rows;
+
 
     public static QueryConditon create() {
         return new QueryConditon();
@@ -50,12 +54,29 @@ public class QueryConditon implements Serializable {
         this.endDate = endDate;
     }
 
+    public int getPage() {
+        return page;
+    }
+
+    public void setPage(int page) {
+        this.page = page;
+    }
+
+    public int getRows() {
+        return rows;
+    }
+
+    public void setRows(int rows) {
+        this.rows = rows;
+    }
+
     @Override
     public String toString() {
         return "QueryConditon{" +
                 "fromDate=" + fromDate +
                 ", endDate=" + endDate +
+                ", page=" + page +
+                ", rows=" + rows +
                 '}';
     }
-
 }
