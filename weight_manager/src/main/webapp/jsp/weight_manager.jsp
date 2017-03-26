@@ -15,6 +15,7 @@
     <script type="text/javascript" src="js/jquery-easyui-1.5.1/jquery.min.js"></script>
     <script type="text/javascript" src="js/jquery-easyui-1.5.1/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="js/myjs/myjs.js"></script>
+    <script type="text/javascript" src="js/fusionchart/FusionCharts.js"></script>
     <script type="text/javascript" src="js/jquery-easyui-1.5.1/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript">
         $(function () {
@@ -28,8 +29,8 @@
             };
             $('#divcasebox').datagrid({
                 title:'身体状况记录表',
-                width:'50%',
-                height:$(window).height()-23,
+                width:'100%',
+                height:'100%',
                 striped: true,
                 url:"http://localhost:8080/weight/query",
                 queryParams:param,
@@ -47,7 +48,10 @@
                     { field: 'waist', title: '腰围(厘米)', width: '30%', halign: 'center', align: 'center' },
                     { field: 'createTime', title: '日期', width:'42%', halign: 'center', align: 'center' }
                 ]],
-                toolbar:'#tb'
+                toolbar:'#tb',
+                onLoadSuccess: function (data) {
+                    createChart(data);
+                }
             });
         }
 
@@ -84,6 +88,10 @@
                     "endDate":$("#to").datebox('getValue')
             };
             $('#divcasebox').datagrid('load',param);
+            var data = $('#divcasebox').datagrid('getData');
+//            var xml=genXml(data);
+//            updateChartXML("chartId", xml);
+            createChart(data);
         }
 
 
@@ -117,11 +125,57 @@
                 }
             })
         }
+
+        function createChart(data) {
+            if (data.rows.length > 0) {
+                var xml = genXml(data);
+                var myChart = new FusionCharts("js/swf/MSArea.swf", "chartId", "80%", "80%", "0", "1");
+                //myChart.setDataXML(xml);
+                myChart.setDataURL("js/swf/sample.xml");
+                myChart.render("chartImage");
+            }
+        }
+        
+        function genXml(data) {
+            var weightTitleStr=
+            "<chart unescapeLinks='0' bgColor='E9E9E9' "
+            +"outCnvBaseFontColor='666666' "
+            +"caption='趋势图' "
+            +"xAxisName='Time' "
+            +"yAxisName='Value' "
+            +"showNames='1' "
+            +"showValues='1' "
+            +"plotFillAlpha='50' "
+            +"numVDivLines='"+(data.rows.length-2)+"' "
+            +"showAlternateVGridColor='1' "
+            +"AlternateVGridColor='e1f5ff' "
+            +"divLineColor='e1f5ff' "
+            +"vdivLineColor='e1f5ff'  "
+            +"baseFontColor='666666'"
+            +"canvasBorderThickness='1' "
+            +"showPlotBorder='1' "
+            +"plotBorderThickness='0'>";
+
+            var weightTagStr="</chart>";
+            var categoriesTitle="<categories>";
+            var weightDataSetTitle=" <dataset seriesName='体重' color='B1D1DC' plotBorderColor='B1D1DC'>";
+            var waistDataSetTitle=" <dataset seriesName='腰围'  color='C8A1D1' plotBorderColor='C8A1D1'>";
+            $(data.rows).each(function (i,weight) {
+                categoriesTitle=categoriesTitle+"<category label='"+weight.createTime+"'/>";
+                weightDataSetTitle=weightDataSetTitle+"<set value='"+weight.weight+"'/>";
+                waistDataSetTitle=waistDataSetTitle+"<set value='"+weight.waist+"'/>";
+            })
+            categoriesTitle+="</categories>";
+            weightDataSetTitle+="</dataset>";
+            waistDataSetTitle+="</dataset>";
+            return weightTitleStr + categoriesTitle + weightDataSetTitle + waistDataSetTitle + weightTagStr;
+        }
     </script>
 </head>
 
 
     <body style="font-family:微软雅黑">
+            <%--表格上方的查询栏--%>
             <div id="tb" style="padding:5px;height:auto" align="center">
                 <div>
                     从: <input id="from" class="easyui-datebox" style="width:140px" editable="false">&nbsp;
@@ -132,6 +186,7 @@
                 </div>
             </div>
 
+            <%--添加数据的窗口--%>
             <div id="addOneWindow" style="padding:5px">
                 <form style="padding:10px 20px 10px 40px;">
                     <div style="padding:5px;text-align:center">
@@ -146,7 +201,16 @@
                     </div>
                 </form>
             </div>
-            <table id="divcasebox"></table>
+
+            <div class="easyui-layout" fit="true">
+                <div region="west" style="height:100%;width:50%">
+                    <%--主表格--%>
+                    <table id="divcasebox"></table>
+                </div>
+                <div id="chartImage" region="center" style="height:100%">
+                    312123123
+                </div>
+            </div>
     </body>
 
 </html>

@@ -50,7 +50,6 @@ public class WeightController {
         PageHelper.startPage(queryConditon.getPage(), queryConditon.getRows());
         List<Weight> weights = weightService.queryByDateRange(queryConditon);
         PageInfo<Weight> pageInfo = new PageInfo<>(weights);
-        System.out.println("查询了一次。。。。");
         return new GridDataResult(pageInfo.getTotal(), weights);
     }
 

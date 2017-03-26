@@ -1,0 +1,41 @@
+<chart bgColor='E9E9E9' outCnvBaseFontColor='666666' caption='趋势图' xAxisName='Time' yAxisName='Value' showNames='1'
+       showValues='1' plotFillAlpha='50' numVDivLines='8' showAlternateVGridColor='1' AlternateVGridColor='e1f5ff'
+       divLineColor='e1f5ff' vdivLineColor='e1f5ff' baseFontColor='666666' canvasBorderThickness='1' showPlotBorder='1'
+       plotBorderThickness='0'>
+    <categories>
+        <category label='2017-03-01'/>
+        <category label='2017-03-02'/>
+        <category label='2017-03-03'/>
+        <category label='2017-03-04'/>
+        <category label='2017-03-05'/>
+        <category label='2017-03-06'/>
+        <category label='2017-03-07'/>
+        <category label='2017-03-08'/>
+        <category label='2017-03-09'/>
+        <category label='2017-03-10'/>
+    </categories>
+    <dataset seriesName='体重' color='B1D1DC' plotBorderColor='B1D1DC'>
+        <set value='233'/>
+        <set value='233'/>
+        <set value='233'/>
+        <set value='233'/>
+        <set value='233'/>
+        <set value='233'/>
+        <set value='233'/>
+        <set value='233'/>
+        <set value='233'/>
+        <set value='233'/>
+    </dataset>
+    <dataset seriesName='腰围' color='C8A1D1' plotBorderColor='C8A1D1'>
+        <set value='32'/>
+        <set value='32'/>
+        <set value='32'/>
+        <set value='32'/>
+        <set value='32'/>
+        <set value='32'/>
+        <set value='32'/>
+        <set value='32'/>
+        <set value='32'/>
+        <set value='32'/>
+    </dataset>
+</chart>
