@@ -89,9 +89,8 @@
             };
             $('#divcasebox').datagrid('load',param);
             var data = $('#divcasebox').datagrid('getData');
-//            var xml=genXml(data);
-//            updateChartXML("chartId", xml);
-            createChart(data);
+            var xml=genXml(data);
+            updateChartXML("chartId", xml);
         }
 
 
@@ -129,19 +128,20 @@
         function createChart(data) {
             if (data.rows.length > 0) {
                 var xml = genXml(data);
-                var myChart = new FusionCharts("js/swf/MSArea.swf", "chartId", "80%", "80%", "0", "1");
-                //myChart.setDataXML(xml);
-                myChart.setDataURL("js/swf/sample.xml");
+                var myChart = new FusionCharts("js/swf/MSArea.swf", "chartId",$("#chartImage").width() ,$("#chartImage").height(), "0", "1");
+                myChart.setDataXML(xml);
                 myChart.render("chartImage");
             }
         }
         
         function genXml(data) {
             var weightTitleStr=
-            "<chart unescapeLinks='0' bgColor='E9E9E9' "
+            "<chart unescapeLinks='0'"
+            +"bgColor='99cc99' canvasBgColor='99cc99' canvasBgAlpha='20' canvasBorderColor='99cc99' "
+            +"basefontsize='11' caption='趋势图' captionFont='微软雅黑' captionFontSize='18' captionFontColor='777777' "
+            +"labelDisplay='ROTATE' slantLabels='1'"
             +"outCnvBaseFontColor='666666' "
-            +"caption='趋势图' "
-            +"xAxisName='Time' "
+            +"xAxisName='Time fly...' "
             +"yAxisName='Value' "
             +"showNames='1' "
             +"showValues='1' "
@@ -150,16 +150,15 @@
             +"showAlternateVGridColor='1' "
             +"AlternateVGridColor='e1f5ff' "
             +"divLineColor='e1f5ff' "
-            +"vdivLineColor='e1f5ff'  "
-            +"baseFontColor='666666'"
+            +"vdivLineColor='e1f5ff' "
+            +"baseFontColor='666666' "
             +"canvasBorderThickness='1' "
             +"showPlotBorder='1' "
-            +"plotBorderThickness='0'>";
-
+            +"plotBorderThickness='1'>";
             var weightTagStr="</chart>";
             var categoriesTitle="<categories>";
-            var weightDataSetTitle=" <dataset seriesName='体重' color='B1D1DC' plotBorderColor='B1D1DC'>";
-            var waistDataSetTitle=" <dataset seriesName='腰围'  color='C8A1D1' plotBorderColor='C8A1D1'>";
+            var weightDataSetTitle=" <dataset seriesName='体重' color='009966' plotBorderColor='006699'>";
+            var waistDataSetTitle=" <dataset seriesName='腰围'  color='3333ff' plotBorderColor='006699'>";
             $(data.rows).each(function (i,weight) {
                 categoriesTitle=categoriesTitle+"<category label='"+weight.createTime+"'/>";
                 weightDataSetTitle=weightDataSetTitle+"<set value='"+weight.weight+"'/>";
@@ -207,8 +206,7 @@
                     <%--主表格--%>
                     <table id="divcasebox"></table>
                 </div>
-                <div id="chartImage" region="center" style="height:100%">
-                    312123123
+                <div id="chartImage" region="center" style="width:50% ;height:100%">
                 </div>
             </div>
     </body>

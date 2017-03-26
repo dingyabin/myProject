@@ -1,4 +1,4 @@
-<chart bgColor='E9E9E9' outCnvBaseFontColor='666666' caption='趋势图' xAxisName='Time' yAxisName='Value' showNames='1'
+<chart unescapeLinks='0' bgColor='E9E9E9' outCnvBaseFontColor='666666' caption='趋势图' xAxisName='Time' yAxisName='Value' showNames='1'
        showValues='1' plotFillAlpha='50' numVDivLines='8' showAlternateVGridColor='1' AlternateVGridColor='e1f5ff'
        divLineColor='e1f5ff' vdivLineColor='e1f5ff' baseFontColor='666666' canvasBorderThickness='1' showPlotBorder='1'
        plotBorderThickness='0'>

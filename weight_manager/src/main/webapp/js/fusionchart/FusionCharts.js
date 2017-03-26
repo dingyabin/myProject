@@ -227,9 +227,7 @@ infosoftglobal.FusionCharts.prototype = {
 			//Render the chart
 			var n = (typeof elementId == 'string') ? document.getElementById(elementId) : elementId;
 			// If loaded in IE and scaleMode and width/height specified in %, load the chart using onload event 
-			if(  this.getVariable('scaleMode').search(/noscale/i)>=0 &&  
-		         ( this.getAttribute('width').search("%")>0 || 
-        		    this.getAttribute('height').search("%")>0) )
+			if(  this.getVariable('scaleMode').search(/noscale/i)>=0 && ( this.getAttribute('width').search("%")>0 || this.getAttribute('height').search("%")>0) )
 			{
 				//store current object reference
 				var obj=this;
