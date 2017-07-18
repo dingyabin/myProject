@@ -27,10 +27,11 @@ public class MongoTest {
 
         MongoCollection<Document> movie = MangoFactory.getCollection("movie");
         Movie bean=new Movie("a","b",3,new Date());
-//        movie.insertOne(BeanUtil.bean2Document(bean));
+        bean.setXxxxx("ssssssss");
+        movie.insertOne(BeanUtil.bean2Document(bean));
 
-        MongoCollection<Movie> movie1 = MangoFactory.getCollection("movie", Movie.class);
-        movie1.insertOne(bean);
+//        MongoCollection<Movie> movie1 = MangoFactory.getCollection("movie", Movie.class);
+//        movie1.insertOne(bean);
 
     }
 

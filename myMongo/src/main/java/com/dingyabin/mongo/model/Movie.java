@@ -18,6 +18,8 @@ public class Movie implements Serializable{
 
     private String name;
 
+    private String xxxxx;
+
     private String directior;
 
     private int time;
@@ -75,6 +77,14 @@ public class Movie implements Serializable{
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public String getXxxxx() {
+        return xxxxx;
+    }
+
+    public void setXxxxx(String xxxxx) {
+        this.xxxxx = xxxxx;
     }
 
     @Override

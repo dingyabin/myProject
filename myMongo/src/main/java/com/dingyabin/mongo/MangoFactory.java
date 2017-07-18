@@ -12,7 +12,7 @@ import org.bson.Document;
  */
 public class MangoFactory {
 
-    private static final String host = "192.168.1.113";
+    private static final String host = "192.168.199.182";
 
     private static final int port = 27017;
 
