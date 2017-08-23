@@ -12,7 +12,6 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.collections4.map.HashedMap;
 import org.apache.commons.io.FileUtils;
@@ -25,6 +24,29 @@ import org.w3c.dom.Document;
  * Created by MrDing
  * Date: 2017/8/24.
  * Time:0:11
+ *
+ *
+ *
+ *
+ *  <dependency>
+ *      <groupId>commons-io</groupId>
+ *      <artifactId>commons-io</artifactId>
+ *      <version>2.5</version>
+ *  </dependency>
+ *
+ *  <dependency>
+ *    <groupId>org.apache.poi</groupId>
+ *    <artifactId>poi-scratchpad</artifactId>
+ *    <version>3.16</version>
+ *  </dependency>
+ *
+ *  <dependency>
+ *    <groupId>commons-codec</groupId>
+ *    <artifactId>commons-codec</artifactId>
+ *    <version>1.10</version>
+ *  </dependency>
+ *
+ *
  */
 public class PoiWordToHtml {
 
