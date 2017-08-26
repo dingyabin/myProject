@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -13,7 +14,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.collections4.map.HashedMap;
 import org.apache.commons.io.FileUtils;
 import org.apache.poi.hwpf.HWPFDocument;
 import org.apache.poi.hwpf.converter.WordToHtmlConverter;
@@ -51,7 +51,7 @@ import org.w3c.dom.Document;
 public class PoiWordToHtml {
 
     public static void main(String[] args) throws Throwable {
-        final String srcFile = "C:\\Users\\MrDing\\Desktop\\知识分享\\交换平台开发文档.doc";
+        final String srcFile = "C:\\Users\\MrDing\\Desktop\\222222.doc";
         final String outfile = "C:\\Users\\MrDing\\Desktop\\html\\";
         InputStream input = new FileInputStream(srcFile);
         HWPFDocument wordDocument = new HWPFDocument(input);
@@ -59,7 +59,7 @@ public class PoiWordToHtml {
         wordToHtmlConverter.setPicturesManager((content, pictureType, suggestedName, widthInches, heightInches) -> suggestedName);
         wordToHtmlConverter.processDocument(wordDocument);
         List<Picture> pics = wordDocument.getPicturesTable().getAllPictures();
-        Map<String,String> map = new HashedMap<>();
+        Map<String,String> map = new HashMap<>();
         StringBuilder sb = new StringBuilder();
         pics.forEach(picture -> {
             sb.append("data:").append(picture.getMimeType()).append(";base64,")
@@ -78,7 +78,7 @@ public class PoiWordToHtml {
         serializer.setOutputProperty(OutputKeys.METHOD, "html");
         serializer.transform(domSource, streamResult);
         outStream.close();
-        String content = new String(outStream.toByteArray());
+        String content = new String(outStream.toByteArray(),"utf-8");
         for (Map.Entry<String, String> stringStringEntry : map.entrySet()) {
             content=content.replaceAll(stringStringEntry.getKey(),stringStringEntry.getValue());
         }
