@@ -53,4 +53,14 @@ public class Weight {
     public void setCreatetime(Date createtime) {
         this.createtime = createtime;
     }
+
+    @Override
+    public String toString() {
+        return "Weight{" +
+                "id=" + id +
+                ", weight=" + weight +
+                ", waist=" + waist +
+                ", createtime=" + createtime +
+                '}';
+    }
 }

@@ -16,6 +16,7 @@
         <module>weight_manager</module>
         <module>myMongo</module>
         <module>test</module>
+        <module>WebMagic</module>
     </modules>
 
 
