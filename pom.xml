@@ -17,6 +17,7 @@
         <module>myMongo</module>
         <module>test</module>
         <module>WebMagic</module>
+        <module>data_structure</module>
     </modules>
 
 
