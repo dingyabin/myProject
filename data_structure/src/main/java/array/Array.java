@@ -36,7 +36,7 @@ public class Array {
         return this.size() == 0;
     }
 
-    public boolean isFull() {
+    private boolean isFull() {
         return this.size() == data.length;
     }
 
@@ -107,6 +107,9 @@ public class Array {
         }
         size--;
         data[size] = 0;
+        if (size == data.length / 4 && data.length / 2 != 0) {
+            resize(data.length / 2);
+        }
         return del;
     }
 
@@ -127,7 +130,7 @@ public class Array {
         return index != -1;
     }
 
-    //递归，区别于deleteElement
+
     public boolean deleteAllElement(int e) {
         int index = find(e);
         boolean flag = false;
@@ -139,6 +142,7 @@ public class Array {
         return flag;
     }
 
+    //递归，区别于deleteElement
     public boolean deleteAllElement2(int e) {
         int index = find(e);
         if (index == -1) {
@@ -162,7 +166,7 @@ public class Array {
 
     private void resize(int newCapcaity) {
         int[] newdata = new int[newCapcaity];
-        System.arraycopy(data, 0, newdata, 0, data.length);
+        System.arraycopy(data, 0, newdata, 0, size);
         data = newdata;
     }
 }

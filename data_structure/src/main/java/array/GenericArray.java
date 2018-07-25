@@ -66,6 +66,15 @@ public class GenericArray<T> {
         size++;
     }
 
+    public T getFirst() {
+        return get(0);
+    }
+
+    public T getLast() {
+        return get(size - 1);
+    }
+
+
     public T get(int index) {
         if (index < 0 || index >= size) {
             throw new IllegalArgumentException("index should >=0 and <" + size());
@@ -109,6 +118,9 @@ public class GenericArray<T> {
         }
         size--;
         data[size] = null;
+        if (size == data.length / 4 && data.length / 2 != 0) {
+            resize(data.length / 2);
+        }
         return del;
     }
 
@@ -129,7 +141,7 @@ public class GenericArray<T> {
         return index != -1;
     }
 
-    //递归，区别于deleteElement
+
     public boolean deleteAllElement(T e) {
         int index = find(e);
         boolean flag = false;
@@ -141,6 +153,7 @@ public class GenericArray<T> {
         return flag;
     }
 
+    //递归，区别于deleteElement
     public boolean deleteAllElement2(T e) {
         int index = find(e);
         if (index == -1) {
@@ -152,19 +165,23 @@ public class GenericArray<T> {
     }
 
 
+
+
+
     @Override
     public String toString() {
         return "Array{" +
                 "data=" + Arrays.toString(data) +
                 ", size=" + size +
+                ", capcaity=" + data.length +
                 '}';
     }
 
 
     @SuppressWarnings("unchecked")
-    private void resize(int newCapcaity){
-        T[] newdata =  (T[]) new Object[newCapcaity];
-        System.arraycopy(data, 0, newdata, 0, data.length);
+    private void resize(int newCapcaity) {
+        T[] newdata = (T[]) new Object[newCapcaity];
+        System.arraycopy(data, 0, newdata, 0, size);
         data = newdata;
     }
 }

@@ -30,14 +30,12 @@ public class MangoFactory {
 
 
     public static MongoCollection<Document> getCollection(String collectionName) {
-        MongoCollection<Document> movie = getMongoDb("MyTest").getCollection(collectionName);
-        return movie;
+        return getMongoDb("MyTest").getCollection(collectionName);
     }
 
 
     public static <T> MongoCollection<T> getCollection(String collectionName, Class<T> clazz) {
-        MongoCollection<T> myTest = getMongoDb("MyTest").getCollection(collectionName, clazz);
-        return myTest;
+        return getMongoDb("MyTest").getCollection(collectionName, clazz);
     }
 
 
