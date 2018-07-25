@@ -7,6 +7,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -32,6 +33,14 @@ public class Test {
     }
 
 
+
+    private static String getHtml(String url) throws IOException {
+        HttpURLConnection e = (HttpURLConnection) (new URL(url)).openConnection();
+        InputStream inputStream = e.getInputStream();
+        return IOUtils.toString(inputStream, "gbk");
+    }
+
+
     private static class parseHome implements Runnable {
         private int page;
         private String url;
@@ -46,11 +55,7 @@ public class Test {
         @Override
         public void run() {
             try {
-                HttpURLConnection e = (HttpURLConnection) (new URL(url)).openConnection();
-                InputStream inputStream = e.getInputStream();
-                String html = IOUtils.toString(inputStream, "gbk");
-
-                Document doc = Jsoup.parse(html);
+                Document doc = Jsoup.parse(getHtml(url));
                 Elements tbodys = doc.getElementsByTag("tbody");
                 int size = 0;
                 for (Element tbody : tbodys) {
