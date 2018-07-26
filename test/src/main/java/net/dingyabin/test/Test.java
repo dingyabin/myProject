@@ -37,6 +37,7 @@ public class Test {
         }
         executorService.shutdown();
         executorService.awaitTermination(10, TimeUnit.HOURS);
+        System.out.println("vvvvvvvvvvvvvvvvvvvvv任务完成vvvvvvvvvvvvvvvvvvvvvv");
     }
 
 
