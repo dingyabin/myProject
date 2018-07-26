@@ -3,6 +3,7 @@ package net.dingyabin.test;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -39,9 +40,6 @@ public class Test {
     }
 
 
-
-
-
     private static class parseHome implements Runnable {
         private int page;
         private String url;
@@ -58,7 +56,7 @@ public class Test {
                 Elements tbodys = doc.getElementsByTag("tbody");
                 int size = 0;
                 for (Element tbody : tbodys) {
-                    if (StringUtils.isBlank(tbody.id())) {
+                    if (StringUtils.isBlank(tbody.id()) || !tbody.id().startsWith("normalthread")) {
                         continue;
                     }
                     Element a = tbody.getElementsByTag("tr").get(0)
@@ -83,24 +81,34 @@ public class Test {
         @Override
         public void run() {
             try {
-                while (!QUEUE.isEmpty()){
-                    Torrent torrent = QUEUE.poll();
+                while (true) {
+                    Torrent torrent = QUEUE.poll(5, TimeUnit.MINUTES);
                     if (torrent == null) {
+                        if (QUEUE.isEmpty()) {
+                            return;
+                        }
                         continue;
                     }
-                    Document doc = Jsoup.parse(getHtml(torrent.getUrl()));
-                    Element tAttachlist = doc.getElementsByClass("t_attachlist").get(0);
-                    Element a = tAttachlist.getElementsByTag("a").get(1);
+                    String html = getHtml(torrent.getUrl());
+                    if (StringUtils.isBlank(html)){
+                        continue;
+                    }
+                    Elements tAttachlists = Jsoup.parse(html).getElementsByClass("t_attachlist");
+                    if (tAttachlists.size()==0){
+                        continue;
+                    }
+                    Element a = tAttachlists.get(0).getElementsByTag("a").get(1);
                     String href = "http://68.168.16.149/forum/" + a.attr("href");
                     byte[] bytes = getFile(href);
-                    FileUtils.writeByteArrayToFile(createFile(BATHPATH + torrent.getName() + ".torrent"), bytes, false);
+                    String fileName = BATHPATH + DateTime.now().toString("yyyyMMdd") + "\\" + torrent.getName() + ".torrent";
+                    FileUtils.writeByteArrayToFile(createFile(fileName), bytes, false);
+                    System.out.printf(">>>>>>线程%s成功download一个文件,目前还剩%s个任务<<<<<<<<\n", Thread.currentThread().getName(), QUEUE.size());
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
     }
-
 
 
     private static String getHtml(String url) throws IOException {
@@ -121,6 +129,10 @@ public class Test {
 
 
     private static File createFile(String path) throws IOException {
+        String[] delStr = {"\\*", "\\?", "|", "<", ">", "!", "\""};
+        for (String str : delStr) {
+            path = path.replaceAll(str, "");
+        }
         File file = new File(path);
         if (!file.exists() && !file.getParentFile().exists()) {
             file.getParentFile().mkdirs();
