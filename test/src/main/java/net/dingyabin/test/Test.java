@@ -52,7 +52,12 @@ public class Test {
         @Override
         public void run() {
             try {
-                Document doc = Jsoup.parse(getHtml(url));
+                String html = getHtml(url);
+                if (StringUtils.isBlank(html)) {
+                    System.out.printf("xxxxxxxxxxparseHome,第%s页空白,跳过xxxxxxxxxxx\n", page);
+                    return;
+                }
+                Document doc = Jsoup.parse(html);
                 Elements tbodys = doc.getElementsByTag("tbody");
                 int size = 0;
                 for (Element tbody : tbodys) {
@@ -90,11 +95,11 @@ public class Test {
                         continue;
                     }
                     String html = getHtml(torrent.getUrl());
-                    if (StringUtils.isBlank(html)){
+                    if (StringUtils.isBlank(html)) {
                         continue;
                     }
                     Elements tAttachlists = Jsoup.parse(html).getElementsByClass("t_attachlist");
-                    if (tAttachlists.size()==0){
+                    if (tAttachlists.size() == 0) {
                         continue;
                     }
                     Element a = tAttachlists.get(0).getElementsByTag("a").get(1);
