@@ -31,8 +31,10 @@ public class Test {
 
     public static void main(String[] args) throws InterruptedException {
         ExecutorService executorService = Executors.newFixedThreadPool(10);
-        for (int i = 1; i <= 10; i++) {
+        for (int i = 16; i <= 16; i++) {
             executorService.submit(new parseHome(i, "http://68.168.16.149/forum/forum-25-" + i + ".html"));
+        }
+        for (int i = 0; i < 10; i++) {
             executorService.submit(new DownTorrent());
         }
         executorService.shutdown();
@@ -88,7 +90,7 @@ public class Test {
         public void run() {
             try {
                 while (true) {
-                    Torrent torrent = QUEUE.poll(5, TimeUnit.MINUTES);
+                    Torrent torrent = QUEUE.poll(30, TimeUnit.SECONDS);
                     if (torrent == null) {
                         if (QUEUE.isEmpty()) {
                             return;
