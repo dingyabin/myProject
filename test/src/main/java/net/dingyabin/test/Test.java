@@ -68,9 +68,9 @@ public class Test {
                         continue;
                     }
                     Element a = tbody.getElementsByTag("tr").get(0)
-                            .getElementsByTag("th").get(0)
-                            .getElementsByTag("span").get(0)
-                            .getElementsByTag("a").get(0);
+                                     .getElementsByTag("th").get(0)
+                                     .getElementsByTag("span").get(0)
+                                     .getElementsByTag("a").get(0);
                     String text = a.text();
                     String href = "http://68.168.16.149/forum/" + a.attr("href");
                     QUEUE.offer(new Torrent(text, href));
