@@ -19,7 +19,7 @@ import java.util.concurrent.BlockingQueue;
  */
 public class NoOneClubTorrentProducer extends AbstractTorrentProducer {
 
-    private String url = "http://68.168.16.149/forum/forum-25-%s.html";
+    private String url = "http://www.hy-car.com/forum/18-%s.html";
 
 
     public NoOneClubTorrentProducer(BlockingQueue<Torrent> queue, int pageNumber) {
@@ -39,13 +39,20 @@ public class NoOneClubTorrentProducer extends AbstractTorrentProducer {
     }
 
     @Override
+    protected int getConnTimeOut() {
+        return 30;
+    }
+
+    @Override
     protected List<Torrent> makeTorrent(String resource) {
         List<Torrent> list = new ArrayList<>();
         try {
             Document doc = Jsoup.parse(resource);
-            Elements tbodys = doc.getElementsByTag("tbody");
+            Elements tbodys = doc.getElementsByClass("mainbox threadlist").get(0)
+                                 .getElementsByTag("table").get(2)
+                                 .getElementsByTag("tbody");
             for (Element tbody : tbodys) {
-                if (StringUtils.isBlank(tbody.id()) || !tbody.id().startsWith("normalthread")) {
+                if (tbody.getElementsByTag("th").size() == 0) {
                     continue;
                 }
                 Element a = tbody.getElementsByTag("tr").get(0)
@@ -55,7 +62,7 @@ public class NoOneClubTorrentProducer extends AbstractTorrentProducer {
                 if (a == null) {
                     continue;
                 }
-                String html = getResource("http://68.168.16.149/forum/" + a.attr("href"));
+                String html = getResource("http://www.hy-car.com/" + a.attr("href"));
                 if (StringUtils.isBlank(html)) {
                     continue;
                 }
@@ -65,7 +72,7 @@ public class NoOneClubTorrentProducer extends AbstractTorrentProducer {
                 }
                 Element ta = tAttachlists.get(0).getElementsByTag("a").get(1);
                 String text = a.text();
-                String href = "http://68.168.16.149/forum/" + ta.attr("href");
+                String href = "http://www.hy-car.com/" + ta.attr("href");
                 list.add(new Torrent(text, href));
             }
         } catch (IOException e) {

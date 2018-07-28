@@ -9,7 +9,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import static net.dingyabin.crawl.enums.WebSiteEnum.DYTT;
+import static net.dingyabin.crawl.enums.WebSiteEnum.*;
+
 
 /**
  * Created by MrDing
@@ -24,8 +25,8 @@ public class Start {
 
     public static void main(String[] args) throws InterruptedException {
         ExecutorService executorService = Executors.newFixedThreadPool(10);
-        for (int i = 1; i <= 10; i++) {
-            executorService.submit(ProducerFactory.getProducer(DYTT, QUEUE, i));
+        for (int i = 1; i <= 1; i++) {
+            executorService.submit(ProducerFactory.getProducer(DYHS, QUEUE, i));
         }
         for (int i = 0; i < 10; i++) {
             executorService.submit(new SimpleTorrentConcumer(QUEUE, BATHPATH));
