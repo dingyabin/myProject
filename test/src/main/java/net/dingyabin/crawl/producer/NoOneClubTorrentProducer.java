@@ -22,11 +22,6 @@ public class NoOneClubTorrentProducer extends AbstractTorrentProducer {
     private String url = "http://www.hy-car.com/forum/18-%s.html";
 
 
-    public NoOneClubTorrentProducer(BlockingQueue<Torrent> queue, int pageNumber) {
-        super(queue, pageNumber);
-        this.url = String.format(this.url, pageNumber);
-    }
-
     public NoOneClubTorrentProducer(BlockingQueue<Torrent> queue, String encoding, int pageNumber) {
         super(queue, encoding, pageNumber);
         this.url = String.format(this.url, pageNumber);

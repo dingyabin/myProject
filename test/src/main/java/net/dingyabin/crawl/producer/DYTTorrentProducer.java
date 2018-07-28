@@ -21,11 +21,6 @@ public class DYTTorrentProducer extends AbstractTorrentProducer {
     private String url = "http://www.dytt8.net/html/gndy/dyzz/list_23_%s.html";
 
 
-    public DYTTorrentProducer(BlockingQueue<Torrent> queue, int pageNumber) {
-        super(queue, pageNumber);
-        this.url = String.format(this.url, pageNumber);
-    }
-
     public DYTTorrentProducer(BlockingQueue<Torrent> queue, String encoding, int pageNumber) {
         super(queue, encoding, pageNumber);
         this.url = String.format(this.url, pageNumber);
