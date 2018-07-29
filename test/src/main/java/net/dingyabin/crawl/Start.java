@@ -28,9 +28,9 @@ public class Start {
         for (int i = 1; i <= 10; i++) {
             executorService.submit(ProducerFactory.getProducer(DYTT, QUEUE, i));
         }
-//        for (int i = 0; i < 10; i++) {
-//            executorService.submit(new SimpleTorrentConcumer(QUEUE, BATHPATH));
-//        }
+        for (int i = 0; i < 10; i++) {
+            executorService.submit(new SimpleTorrentConcumer(QUEUE, BATHPATH));
+        }
         executorService.shutdown();
         executorService.awaitTermination(10, TimeUnit.HOURS);
         System.out.println("^_^_^_^_^_^^_^_^任务完成^_^^_^_^^_^_^^_^_^");

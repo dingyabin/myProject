@@ -17,12 +17,12 @@ import java.util.concurrent.BlockingQueue;
  * Date: 2018/7/28.
  * Time:22:57
  */
-public class NoOneClubTorrentProducer extends AbstractTorrentProducer {
+public class DYHSTorrentProducer extends AbstractTorrentProducer {
 
     private String url = "http://www.hy-car.com/forum/18-%s.html";
 
 
-    public NoOneClubTorrentProducer(BlockingQueue<Torrent> queue, String encoding, int pageNumber) {
+    public DYHSTorrentProducer(BlockingQueue<Torrent> queue, String encoding, int pageNumber) {
         super(queue, encoding, pageNumber);
         this.url = String.format(this.url, pageNumber);
     }

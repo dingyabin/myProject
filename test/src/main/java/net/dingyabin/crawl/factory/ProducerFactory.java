@@ -4,7 +4,7 @@ import net.dingyabin.crawl.enums.WebSiteEnum;
 import net.dingyabin.crawl.model.Torrent;
 import net.dingyabin.crawl.producer.AbstractTorrentProducer;
 import net.dingyabin.crawl.producer.DYTTorrentProducer;
-import net.dingyabin.crawl.producer.NoOneClubTorrentProducer;
+import net.dingyabin.crawl.producer.DYHSTorrentProducer;
 
 import java.util.concurrent.BlockingQueue;
 
@@ -19,7 +19,7 @@ public class ProducerFactory {
     public static AbstractTorrentProducer getProducer(WebSiteEnum webSiteEnum, BlockingQueue<Torrent> queue, int page) {
         switch (webSiteEnum) {
             case DYHS:
-                return new NoOneClubTorrentProducer(queue, "gbk", page);
+                return new DYHSTorrentProducer(queue, "gbk", page);
             case DYTT:
                 return new DYTTorrentProducer(queue, "gb2312", page);
             default:
