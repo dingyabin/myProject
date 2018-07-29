@@ -1,6 +1,8 @@
 package net.dingyabin.crawl.producer;
 
 import net.dingyabin.crawl.model.Torrent;
+import net.dingyabin.crawl.request.AbstractRequest;
+import net.dingyabin.crawl.utils.Utils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -9,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -18,7 +21,7 @@ import java.util.concurrent.BlockingQueue;
  * Date: 2018/7/28.
  * Time:22:25
  */
-public abstract class AbstractTorrentProducer implements Runnable {
+public abstract class AbstractTorrentProducer extends AbstractRequest implements Runnable {
 
 
     private BlockingQueue<Torrent> queue;
@@ -38,52 +41,18 @@ public abstract class AbstractTorrentProducer implements Runnable {
         this.pageNumber = pageNumber;
     }
 
-    protected Map<String, String> getRequestHeader() {
-        return null;
-    }
 
-    /**
-     * 获取ConnTimeOut，单位是秒(s)
-     * @return ConnTime
-     */
-    protected int getConnTimeOut() {
-        return -1;
-    }
-
-    /**
-     * 获取ReadTimeOut，单位是秒(s)
-     * @return ReadTimeOut
-     */
-    protected int getReadTimeOut() {
-        return -1;
-    }
 
     protected String getResource() throws IOException {
-        return getResource(getUrl());
+        return getStringResource(getUrl(),encoding);
     }
 
-
-    protected String getResource(String curl) throws IOException {
-        HttpURLConnection e = (HttpURLConnection) (new URL(curl)).openConnection();
-        Map<String, String> header = getRequestHeader();
-        if (header != null) {
-            header.forEach(e::setRequestProperty);
-        }
-        int connTimeOut = getConnTimeOut();
-        if (connTimeOut > 0) {
-            e.setConnectTimeout(1000 * connTimeOut);
-        }
-        int readTimeOut = getReadTimeOut();
-        if (readTimeOut > 0) {
-            e.setReadTimeout(1000 * readTimeOut);
-        }
-        InputStream inputStream = e.getInputStream();
-        String gbk = IOUtils.toString(inputStream, encoding == null ? "utf-8" : encoding);
-        IOUtils.closeQuietly(inputStream);
-        return gbk;
+    protected String getResource(String url) throws IOException {
+        return getStringResource(url, encoding);
     }
 
     protected abstract String getUrl();
+
 
     protected abstract List<Torrent> makeTorrent(String resource);
 
