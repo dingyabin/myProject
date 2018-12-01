@@ -9,13 +9,19 @@ public class Torrent {
 
     private String name;
     private String url;
+    private byte[] content;
 
     public Torrent() {
     }
 
     public Torrent(String name, String url) {
+        this(name, url, null);
+    }
+
+    public Torrent(String name, String url, byte[] content) {
         this.name = name;
         this.url = url;
+        this.content = content;
     }
 
     public String getName() {
@@ -32,5 +38,13 @@ public class Torrent {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public byte[] getContent() {
+        return content;
+    }
+
+    public void setContent(byte[] content) {
+        this.content = content;
     }
 }

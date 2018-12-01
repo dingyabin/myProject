@@ -16,6 +16,12 @@ public enum WebSiteEnum {
     /**
      * 第一会所
      */
-    DYHS
+    DYHS,
+
+
+    /**
+     * 2048
+     */
+    E048
 
 }

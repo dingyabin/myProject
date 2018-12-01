@@ -9,45 +9,53 @@ public class WaitNotify {
 
     private volatile int index = 0;
 
-    private final Object obj = new Object();
-
     private class PrintO implements Runnable {
         @Override
         public void run() {
-            synchronized (obj) {
+            synchronized (WaitNotify.class) {
                 while (true) {
-                    if (index % 2 != 0) {
-                        try {
-                            obj.wait();
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                    while (index % 2 == 1) {
+                        _wait();
                     }
                     System.out.println(Thread.currentThread().getName() + "----------" + index++);
-                    obj.notifyAll();
+                    _sleep();
+                    WaitNotify.class.notifyAll();
                 }
             }
         }
     }
 
+
     private class PrintJ implements Runnable {
         @Override
         public void run() {
-            synchronized (obj) {
+            synchronized (WaitNotify.class) {
                 while (true) {
-                    if (index % 2 == 0) {
-                        try {
-                            obj.wait();
-                            Thread.sleep(1000);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                    while (index % 2 == 0) {
+                        _wait();
                     }
                     System.out.println(Thread.currentThread().getName() + "----------" + index++);
-                    obj.notifyAll();
+                    _sleep();
+                    WaitNotify.class.notifyAll();
                 }
             }
+        }
+    }
+
+
+    private void _wait() {
+        try {
+            WaitNotify.class.wait();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void _sleep() {
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 

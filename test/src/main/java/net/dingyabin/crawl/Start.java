@@ -26,10 +26,10 @@ public class Start {
     public static void main(String[] args) throws InterruptedException {
         ExecutorService executorService = Executors.newFixedThreadPool(10);
         for (int i = 1; i <= 10; i++) {
-            executorService.submit(ProducerFactory.getProducer(DYTT, QUEUE, i));
+            executorService.submit(ProducerFactory.getProducer(E048, QUEUE, i));
         }
         for (int i = 0; i < 10; i++) {
-            executorService.submit(new SimpleTorrentConcumer(QUEUE, BATHPATH));
+            executorService.submit(new SimpleTorrentConcumer(QUEUE, BATHPATH).fileType(".txt"));
         }
         executorService.shutdown();
         executorService.awaitTermination(10, TimeUnit.HOURS);

@@ -18,7 +18,7 @@ import java.util.concurrent.BlockingQueue;
  */
 public class DYTTorrentProducer extends AbstractTorrentProducer {
 
-    private String url = "http://www.dytt8.net/html/gndy/dyzz/list_23_%s.html";
+    private String url = "https://www.dytt8.net/html/gndy/dyzz/list_23_%s.html";
 
 
     public DYTTorrentProducer(BlockingQueue<Torrent> queue, String encoding, int pageNumber) {
@@ -43,7 +43,7 @@ public class DYTTorrentProducer extends AbstractTorrentProducer {
         }
         for (Element link : links) {
             String text = link.text();
-            String href = "http://www.dytt8.net" + link.attr("href");
+            String href = "https://www.dytt8.net" + link.attr("href");
             list.add(new Torrent(text, href));
         }
         return list;
