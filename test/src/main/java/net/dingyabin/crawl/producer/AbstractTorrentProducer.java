@@ -73,6 +73,14 @@ public abstract class AbstractTorrentProducer extends AbstractRequest implements
         return pageNumber;
     }
 
+    public String getEncoding() {
+        return encoding;
+    }
+
+    public int getPageNumber() {
+        return pageNumber;
+    }
+
     protected abstract String getUrl();
 
 
