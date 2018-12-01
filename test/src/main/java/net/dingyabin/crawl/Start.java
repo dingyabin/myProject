@@ -9,7 +9,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import static net.dingyabin.crawl.enums.WebSiteEnum.*;
+import static net.dingyabin.crawl.enums.WebSiteEnum.E048;
 
 
 /**
@@ -25,10 +25,11 @@ public class Start {
 
     public static void main(String[] args) throws InterruptedException {
         ExecutorService executorService = Executors.newFixedThreadPool(10);
-        for (int i = 1; i <= 10; i++) {
+        for (int i = 11; i <= 20; i++) {
             executorService.submit(ProducerFactory.getProducer(E048, QUEUE, i));
+            //TimeUnit.SECONDS.sleep(30);
         }
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 3; i++) {
             executorService.submit(new SimpleTorrentConcumer(QUEUE, BATHPATH).fileType(".txt"));
         }
         executorService.shutdown();

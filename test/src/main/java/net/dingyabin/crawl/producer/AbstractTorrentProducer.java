@@ -42,14 +42,28 @@ public abstract class AbstractTorrentProducer extends AbstractRequest implements
     }
 
 
-
-    protected String getResource() throws IOException {
-        return getStringResource(getUrl(),encoding);
+    protected String getResource() {
+        String stringResource = null;
+        try {
+            stringResource = getStringResource(getUrl(), encoding);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return stringResource;
     }
+
 
     protected String getResource(String url) throws IOException {
-        return getStringResource(url, encoding);
+        String stringResource = null;
+        try {
+            stringResource = getStringResource(url, encoding);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return stringResource;
     }
+
+
 
     public String getEncoding() {
         return encoding;

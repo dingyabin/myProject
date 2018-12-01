@@ -46,7 +46,10 @@ public class AbstractRequest {
 
 
     protected String getStringResource(String curl, String encoding) throws IOException {
-        InputStream inputStream = getInputStream(curl);
+        InputStream inputStream = getInputStream(curl,0);
+        if (inputStream == null) {
+            return null;
+        }
         String gbk = IOUtils.toString(inputStream, encoding == null ? "utf-8" : encoding);
         IOUtils.closeQuietly(inputStream);
         return gbk;
@@ -54,27 +57,42 @@ public class AbstractRequest {
 
 
     protected byte[] getFileResource(String url) throws IOException {
-        InputStream inputStream = getInputStream(url);
+        InputStream inputStream = getInputStream(url,0);
+        if (inputStream == null) {
+            return null;
+        }
         byte[] bytes = IOUtils.toByteArray(inputStream);
         IOUtils.closeQuietly(inputStream);
         return bytes;
     }
 
 
-    private InputStream getInputStream(String curl) throws IOException {
-        HttpURLConnection e = (HttpURLConnection) (new URL(curl)).openConnection();
+    private InputStream getInputStream(String curl, int retry) throws IOException {
+        if (retry > 3) {
+            System.out.println("重试3次失败，退出...url=" + curl);
+            return null;
+        }
+        HttpURLConnection connection = (HttpURLConnection) (new URL(curl)).openConnection();
         Map<String, String> header = getRequestHeader();
         if (header != null) {
-            header.forEach(e::setRequestProperty);
+            header.forEach(connection::setRequestProperty);
         }
         int connTimeOut = getConnTimeOut();
         if (connTimeOut > 0) {
-            e.setConnectTimeout(1000 * connTimeOut);
+            connection.setConnectTimeout(1000 * connTimeOut);
         }
         int readTimeOut = getReadTimeOut();
         if (readTimeOut > 0) {
-            e.setReadTimeout(1000 * readTimeOut);
+            connection.setReadTimeout(1000 * readTimeOut);
         }
-        return e.getInputStream();
+        InputStream inputStream;
+        try {
+            inputStream = connection.getInputStream();
+            return inputStream;
+        } catch (IOException e) {
+            System.out.println("getInputStream()失败了.....");
+        }
+        return getInputStream(curl, retry + 1);
     }
+
 }

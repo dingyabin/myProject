@@ -87,6 +87,7 @@ public class E048TorrentProducer extends AbstractTorrentProducer {
                 }
                 String content = formatContent(read_tpc.text());
                 list.add(new Torrent(text, null, content.getBytes()));
+                System.out.println("拿到一个.......");
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -101,7 +102,7 @@ public class E048TorrentProducer extends AbstractTorrentProducer {
         }
         for (String keyWord : keyWords) {
             if (source.contains(keyWord)) {
-                source = source.replace(keyWord, "\n" + keyWord );
+                source = source.replace(keyWord, "\n\r" + keyWord );
             }
         }
         return source;

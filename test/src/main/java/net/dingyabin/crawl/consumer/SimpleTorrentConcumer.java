@@ -45,7 +45,7 @@ public class SimpleTorrentConcumer extends AbstractRequest implements Runnable {
 
 
     protected File createFile(String path) throws IOException {
-        String[] delStr = {"\\*", "\\?", "|", "<", ">", "!", "\""};
+        String[] delStr = {"\\*", "\\?", "|", "<", ">", "!", "\"","/"};
         for (String str : delStr) {
             path = path.replaceAll(str, "");
         }
@@ -61,7 +61,7 @@ public class SimpleTorrentConcumer extends AbstractRequest implements Runnable {
     public void run() {
         try {
             while (true) {
-                Torrent torrent = queue.poll(30, TimeUnit.SECONDS);
+                Torrent torrent = queue.poll(100, TimeUnit.SECONDS);
                 if (torrent == null) {
                     if (queue.isEmpty()) {
                         return;
@@ -71,6 +71,9 @@ public class SimpleTorrentConcumer extends AbstractRequest implements Runnable {
                 byte[] bytes = torrent.getContent();
                 if (bytes == null) {
                     bytes = getFileResource(torrent.getUrl());
+                }
+                if (bytes == null) {
+                    continue;
                 }
                 String fileName = basepath + DateTime.now().toString("yyyyMMdd") + "\\" + torrent.getName() + fileType;
                 FileUtils.writeByteArrayToFile(createFile(fileName), bytes, false);
