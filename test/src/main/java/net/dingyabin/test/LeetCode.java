@@ -106,7 +106,7 @@ public class LeetCode {
                break;
             }
         }
-        //打印123456
+        //1111111111
         System.out.println(result);
     }
 
