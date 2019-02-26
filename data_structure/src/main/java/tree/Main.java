@@ -22,8 +22,8 @@ public class Main {
 //        bst.preOrderNR();
 //        System.out.println("---------");
 //        bst.preOrder();
-
-        bst.levelOrder();
-        System.out.println("*********");
+            bst.inOrder();
+//        bst.levelOrder();
+ //       System.out.println("*********");
     }
 }

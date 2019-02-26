@@ -25,7 +25,7 @@ public class Start {
 
     public static void main(String[] args) throws InterruptedException {
         ExecutorService executorService = Executors.newFixedThreadPool(10);
-        for (int i = 11; i <= 20; i++) {
+        for (int i = 111; i <= 130; i++) {
             executorService.submit(ProducerFactory.getProducer(E048, QUEUE, i));
             //TimeUnit.SECONDS.sleep(30);
         }

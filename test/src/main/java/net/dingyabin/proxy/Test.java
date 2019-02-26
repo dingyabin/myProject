@@ -12,11 +12,20 @@ public class Test {
 
     public static void main(String[] args) throws Exception {
 
-        Method move = MoveAble.class.getMethod("test");
-        Method move2 = Car.class.getMethod("test");
+        String s = "abcabcbb";
 
-        System.out.println(move.equals(move2));
+        int[] m = new int[256];
 
+        int res = 0, left = 0;
+
+        for (int i = 0; i < s.length(); i++) {
+            left = Math.max(left, m[s.charAt(i)]);
+
+            res = Math.max(res, i - left + 1);
+
+            m[s.charAt(i)] = i + 1;
+        }
+        System.out.println(res);
 
 
 

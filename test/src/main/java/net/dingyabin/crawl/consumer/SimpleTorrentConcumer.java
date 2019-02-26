@@ -75,7 +75,7 @@ public class SimpleTorrentConcumer extends AbstractRequest implements Runnable {
                 if (bytes == null) {
                     continue;
                 }
-                String fileName = basepath + DateTime.now().toString("yyyyMMdd") + "\\" + torrent.getName() + fileType;
+                String fileName = basepath + DateTime.now().toString("yyyyMMdd") + "\\11\\" + torrent.getName() + fileType;
                 FileUtils.writeByteArrayToFile(createFile(fileName), bytes, false);
                 System.out.printf(">>>>>>线程%s成功download一个文件,目前还剩%s个任务<<<<<<<<\n", Thread.currentThread().getName(), queue.size());
             }
