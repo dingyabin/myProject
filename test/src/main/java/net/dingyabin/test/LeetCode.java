@@ -79,6 +79,7 @@ public class LeetCode {
      * 我们维护一个长度为s1.size()的滑动窗口，
      * 逐渐从0到s2.size()滑动，如果滑动窗口内的memo2累计的在窗口内的各个字符对应次数等于memo1，
      * 那么返回true，否则返回false。
+     * ////
      */
     @Test
     public void checkInclusion() {
