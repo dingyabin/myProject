@@ -22,6 +22,9 @@ public enum WebSiteEnum {
     /**
      * 2048
      */
-    E048
+    E048,
+
+
+    ASMR
 
 }

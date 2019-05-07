@@ -2,10 +2,7 @@ package net.dingyabin.crawl.factory;
 
 import net.dingyabin.crawl.enums.WebSiteEnum;
 import net.dingyabin.crawl.model.Torrent;
-import net.dingyabin.crawl.producer.AbstractTorrentProducer;
-import net.dingyabin.crawl.producer.DYTTorrentProducer;
-import net.dingyabin.crawl.producer.DYHSTorrentProducer;
-import net.dingyabin.crawl.producer.E048TorrentProducer;
+import net.dingyabin.crawl.producer.*;
 
 import java.util.concurrent.BlockingQueue;
 
@@ -26,6 +23,8 @@ public class ProducerFactory {
                 return new DYTTorrentProducer(queue, "gb2312", page);
             case E048:
                 return new E048TorrentProducer(queue, "utf-8", page);
+            case ASMR:
+                return new AMSRTorrentProducer(queue, "utf-8", page);
             default:
                 throw new IllegalArgumentException("暂不支持此网站的解析...");
         }

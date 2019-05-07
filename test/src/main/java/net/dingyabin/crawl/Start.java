@@ -9,6 +9,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
+import static net.dingyabin.crawl.enums.WebSiteEnum.ASMR;
 import static net.dingyabin.crawl.enums.WebSiteEnum.E048;
 
 
@@ -21,16 +22,17 @@ public class Start {
 
     private static final LinkedBlockingQueue<Torrent> QUEUE = new LinkedBlockingQueue<>();
 
-    private static final String BATHPATH = String.format("C:\\Users\\%s\\Desktop\\torrent\\",System.getenv().get("USERNAME"));
+    //private static final String BATHPATH = String.format("C:\\Users\\%s\\Desktop\\torrent\\",System.getenv().get("USERNAME"));
+    private static final String BATHPATH = "E:\\BaiduYunDownload\\";
 
     public static void main(String[] args) throws InterruptedException {
         ExecutorService executorService = Executors.newFixedThreadPool(10);
-        for (int i = 111; i <= 130; i++) {
-            executorService.submit(ProducerFactory.getProducer(E048, QUEUE, i));
-            //TimeUnit.SECONDS.sleep(30);
+        for (int i = 1; i <= 1; i++) {
+            executorService.submit(ProducerFactory.getProducer(ASMR, QUEUE, i));
+            TimeUnit.SECONDS.sleep(1);
         }
-        for (int i = 0; i < 3; i++) {
-            executorService.submit(new SimpleTorrentConcumer(QUEUE, BATHPATH).fileType(".txt"));
+        for (int i = 0; i < 10; i++) {
+            executorService.submit(new SimpleTorrentConcumer(QUEUE, BATHPATH).fileType(".mp3"));
         }
         executorService.shutdown();
         executorService.awaitTermination(10, TimeUnit.HOURS);

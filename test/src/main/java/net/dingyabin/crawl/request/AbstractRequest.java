@@ -1,5 +1,6 @@
 package net.dingyabin.crawl.request;
 
+import net.dingyabin.crawl.utils.SSLUtils;
 import net.dingyabin.crawl.utils.Utils;
 import org.apache.commons.io.IOUtils;
 
@@ -45,7 +46,7 @@ public class AbstractRequest {
     }
 
 
-    protected String getStringResource(String curl, String encoding) throws IOException {
+    protected String getStringResource(String curl, String encoding) throws Exception {
         InputStream inputStream = getInputStream(curl,0);
         if (inputStream == null) {
             return null;
@@ -56,7 +57,7 @@ public class AbstractRequest {
     }
 
 
-    protected byte[] getFileResource(String url) throws IOException {
+    protected byte[] getFileResource(String url) throws Exception {
         InputStream inputStream = getInputStream(url,0);
         if (inputStream == null) {
             return null;
@@ -67,11 +68,12 @@ public class AbstractRequest {
     }
 
 
-    private InputStream getInputStream(String curl, int retry) throws IOException {
+    private InputStream getInputStream(String curl, int retry) throws Exception {
         if (retry > 3) {
             System.out.println("重试3次失败，退出...url=" + curl);
             return null;
         }
+        SSLUtils.ignoreSsl();
         HttpURLConnection connection = (HttpURLConnection) (new URL(curl)).openConnection();
         Map<String, String> header = getRequestHeader();
         if (header != null) {

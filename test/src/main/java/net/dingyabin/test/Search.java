@@ -11,6 +11,7 @@ public class Search {
 
     private List<String> sourceKey = Arrays.asList("shandong", "dashandong", "shanshandong", "wudanshan");
 
+
     public void search(String keyWord) {
         char[] chars = keyWord.toUpperCase().toCharArray();
         for (String source : sourceKey) {

@@ -46,7 +46,7 @@ public abstract class AbstractTorrentProducer extends AbstractRequest implements
         String stringResource = null;
         try {
             stringResource = getStringResource(getUrl(), encoding);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return stringResource;
@@ -57,7 +57,7 @@ public abstract class AbstractTorrentProducer extends AbstractRequest implements
         String stringResource = null;
         try {
             stringResource = getStringResource(url, encoding);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return stringResource;
