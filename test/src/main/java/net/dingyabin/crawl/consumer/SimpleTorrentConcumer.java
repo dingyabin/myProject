@@ -1,5 +1,6 @@
 package net.dingyabin.crawl.consumer;
 
+import net.dingyabin.crawl.enums.WebSiteEnum;
 import net.dingyabin.crawl.model.Torrent;
 import net.dingyabin.crawl.request.AbstractRequest;
 import org.apache.commons.io.FileUtils;
@@ -21,29 +22,12 @@ public class SimpleTorrentConcumer extends AbstractRequest implements Runnable {
 
     private BlockingQueue<Torrent> queue;
 
-    private String basepath;
+    private WebSiteEnum webSiteEnum;
 
-    private String fileType = ".torrent";
-
-    public SimpleTorrentConcumer(BlockingQueue<Torrent> queue, String basepath) {
+    public SimpleTorrentConcumer(WebSiteEnum webSiteEnum, BlockingQueue<Torrent> queue) {
         this.queue = queue;
-        this.basepath = basepath;
+        this.webSiteEnum = webSiteEnum;
     }
-
-    public SimpleTorrentConcumer(BlockingQueue<Torrent> queue, String basepath, String fileType) {
-        this.queue = queue;
-        this.basepath = basepath;
-        this.fileType = fileType;
-    }
-
-
-    public SimpleTorrentConcumer fileType(String fileType) {
-        if (StringUtils.isNotBlank(fileType)) {
-            this.fileType = fileType;
-        }
-        return this;
-    }
-
 
     protected Pair<File,Boolean> createFile(String path) throws IOException {
         File file = null;
@@ -78,13 +62,13 @@ public class SimpleTorrentConcumer extends AbstractRequest implements Runnable {
                     }
                     continue;
                 }
-                String fileName = basepath + DateTime.now().toString("yyyyMMdd") + "\\男生\\" + torrent.getName() + fileType;
+                String fileName = webSiteEnum.getPath() + torrent.getName() + webSiteEnum.getFileType();
                 Pair<File, Boolean> fileBooleanPair = createFile(fileName);
                 File file = fileBooleanPair.getLeft();
                 if (file == null) {
                     continue;
                 }
-                if (!fileBooleanPair.getRight()) {
+                if (!fileBooleanPair.getRight() && file.getTotalSpace() > 100) {
                     System.out.println("发现已经存在的文件:"+ file.getAbsolutePath());
                     continue;
                 }
