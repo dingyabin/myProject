@@ -2,18 +2,11 @@ package net.dingyabin.crawl.producer;
 
 import net.dingyabin.crawl.model.Torrent;
 import net.dingyabin.crawl.request.AbstractRequest;
-import net.dingyabin.crawl.utils.Utils;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 
 /**
@@ -95,7 +88,7 @@ public abstract class AbstractTorrentProducer extends AbstractRequest implements
             torrents.forEach(torrent -> {
                 queue.offer(torrent);
                 String content = (torrent.getContent() != null) ? new String(torrent.getContent()) : null;
-                System.out.println("第" + pageNumber + "页-->" + torrent.getName() + "url=(" + torrent.getUrl() + ") content=" + content + "\n\n");
+                System.out.println("第" + pageNumber + "页-->" + torrent.getName() + ",url=(" + torrent.getUrl() + ") content=" + content + "\n\n");
             });
             System.out.printf("第%s页，获取到%s个\n", pageNumber, torrents.size());
         } catch (Exception e) {

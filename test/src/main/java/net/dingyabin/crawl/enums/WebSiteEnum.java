@@ -13,27 +13,27 @@ public enum WebSiteEnum {
     /**
      * 电影天堂
      */
-    DYTT(".txt", WebSiteEnum.BATHPATH),
+    DYTT(".txt", String.format("C:\\Users\\%s\\Desktop\\torrent\\%s\\", System.getenv().get("USERNAME"), DateTime.now().toString("yyyyMMdd"))),
 
     /**
      * 第一会所
      */
-    DYHS(".torrent", WebSiteEnum.BATHPATH),
+    DYHS(".torrent", String.format("C:\\Users\\%s\\Desktop\\torrent\\%s\\", System.getenv().get("USERNAME"), DateTime.now().toString("yyyyMMdd"))),
 
     /**
      * 2048
      */
-    E048(".txt", WebSiteEnum.BATHPATH),
+    E048(".txt", String.format("C:\\Users\\%s\\Desktop\\torrent\\%s\\", System.getenv().get("USERNAME"), DateTime.now().toString("yyyyMMdd"))),
 
-
-    ASMR(".mp3",  WebSiteEnum.BATHPATH);
+    /**
+     * ASMR
+     */
+    ASMR(".mp3", String.format("C:\\Users\\%s\\Desktop\\torrent\\%s\\", System.getenv().get("USERNAME"), DateTime.now().toString("yyyyMMdd")));
 
 
     private String fileType;
 
     private String path;
-
-    private static final String BATHPATH = String.format("C:\\Users\\%s\\Desktop\\torrent\\%s", System.getenv().get("USERNAME"), DateTime.now().toString("yyyyMMdd"));
 
     WebSiteEnum(String fileType, String path) {
         this.fileType = fileType;
