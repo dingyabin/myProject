@@ -73,7 +73,7 @@ public class AbstractRequest {
             System.out.println("重试3次失败，退出...url=" + curl);
             return null;
         }
-        SSLUtils.ignoreSsl();
+//        SSLUtils.ignoreSsl();
         HttpURLConnection connection = (HttpURLConnection) (new URL(curl)).openConnection();
         Map<String, String> header = getRequestHeader();
         if (header != null) {
@@ -92,6 +92,7 @@ public class AbstractRequest {
             inputStream = connection.getInputStream();
             return inputStream;
         } catch (IOException e) {
+            e.printStackTrace();
             System.out.println("getInputStream()失败了.....");
         }
         return getInputStream(curl, retry + 1);

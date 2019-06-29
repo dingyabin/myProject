@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 
 import static net.dingyabin.crawl.enums.WebSiteEnum.ASMR;
 import static net.dingyabin.crawl.enums.WebSiteEnum.E048;
+import static net.dingyabin.crawl.enums.WebSiteEnum.TWO66NA;
 
 
 /**
@@ -24,12 +25,12 @@ public class Start {
 
     public static void main(String[] args) throws InterruptedException {
         ExecutorService executorService = Executors.newFixedThreadPool(10);
-        for (int i = 1; i <= 1; i++) {
-            executorService.submit(ProducerFactory.getProducer(ASMR, QUEUE, i));
+        for (int i = 1; i <= 31; i++) {
+            executorService.submit(ProducerFactory.getProducer(TWO66NA, QUEUE, i));
             TimeUnit.SECONDS.sleep(1);
         }
         for (int i = 0; i < 10; i++) {
-            executorService.submit(new SimpleTorrentConcumer(ASMR, QUEUE));
+            executorService.submit(new SimpleTorrentConcumer(TWO66NA, QUEUE));
         }
         executorService.shutdown();
         executorService.awaitTermination(10, TimeUnit.HOURS);

@@ -28,7 +28,10 @@ public enum WebSiteEnum {
     /**
      * ASMR
      */
-    ASMR(".mp3", String.format("C:\\Users\\%s\\Desktop\\torrent\\%s\\", System.getenv().get("USERNAME"), DateTime.now().toString("yyyyMMdd")));
+    ASMR(".mp3", String.format("C:\\Users\\%s\\Desktop\\torrent\\%s\\", System.getenv().get("USERNAME"), DateTime.now().toString("yyyyMMdd"))),
+
+
+    TWO66NA(".txt", String.format("C:\\Users\\%s\\Desktop\\torrent\\%s\\", System.getenv().get("USERNAME"), DateTime.now().toString("yyyyMMdd")));
 
 
     private String fileType;
