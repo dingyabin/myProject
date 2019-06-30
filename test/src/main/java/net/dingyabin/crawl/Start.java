@@ -8,6 +8,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static net.dingyabin.crawl.enums.WebSiteEnum.ASMR;
 import static net.dingyabin.crawl.enums.WebSiteEnum.E048;
@@ -24,10 +25,15 @@ public class Start {
     private static final LinkedBlockingQueue<Torrent> QUEUE = new LinkedBlockingQueue<>();
 
     public static void main(String[] args) throws InterruptedException {
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
-        for (int i = 1; i <= 31; i++) {
+        AtomicInteger index = new AtomicInteger();
+        ExecutorService executorService = Executors.newFixedThreadPool(10, r -> {
+            Thread thread = new Thread(r);
+            thread.setName("task thread-" + index.getAndIncrement());
+            return thread;
+        });
+        for (int i = 1; i <= 21; i++) {
             executorService.submit(ProducerFactory.getProducer(TWO66NA, QUEUE, i));
-            TimeUnit.SECONDS.sleep(1);
+            //TimeUnit.SECONDS.sleep(1);
         }
         for (int i = 0; i < 10; i++) {
             executorService.submit(new SimpleTorrentConcumer(TWO66NA, QUEUE));

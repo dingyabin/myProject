@@ -19,7 +19,7 @@ import java.util.concurrent.BlockingQueue;
  */
 public class Two66naTorrentProducer extends AbstractTorrentProducer {
 
-    private String url = "https://www.266na.com/vod/html4/index%s.html";
+    private String url = "https://www.266na.com/vod/html10/index%s.html";
 
 
     public Two66naTorrentProducer(BlockingQueue<Torrent> queue, String encoding, int pageNumber) {
@@ -64,22 +64,31 @@ public class Two66naTorrentProducer extends AbstractTorrentProducer {
 
     private String  handlePreview(Element preview) {
         StringBuilder content = new StringBuilder();
-        Elements previewList = preview.getElementsByTag("a");
-        for (int i = 0; i < previewList.size(); i++) {
-            content.append("预览地址")
-                    .append(i + 1)
-                    .append(" https://www.266na.com")
-                    .append(previewList.get(i).attr("href"))
-                    .append("\n\r");
+        try {
+            Elements previewList = preview.getElementsByTag("a");
+            for (int i = 0; i < previewList.size(); i++) {
+                content.append("预览地址")
+                        .append(i + 1)
+                        .append(" https://www.266na.com")
+                        .append(previewList.get(i).attr("href"))
+                        .append("\n\r");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return content.toString();
     }
 
     private String  handleDownLoad(Element download) throws IOException {
-        Elements downloadList = download.getElementsByTag("a");
-        String href = "https://www.266na.com" + downloadList.get(0).attr("href");
-        Document _doc = Jsoup.parse(getResource(href));
-        String attr = _doc.getElementsByClass("download").get(0).getElementsByTag("a").get(0).attr("href");
+        String attr = null;
+        try {
+            Elements downloadList = download.getElementsByTag("a");
+            String href = "https://www.266na.com" + downloadList.get(0).attr("href");
+            Document _doc = Jsoup.parse(getResource(href));
+            attr = _doc.getElementsByClass("download").get(0).getElementsByTag("a").get(0).attr("href");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return "下载地址："+ attr;
     }
 }
