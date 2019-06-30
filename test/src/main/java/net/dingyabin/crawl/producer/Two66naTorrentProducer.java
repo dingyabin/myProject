@@ -19,7 +19,7 @@ import java.util.concurrent.BlockingQueue;
  */
 public class Two66naTorrentProducer extends AbstractTorrentProducer {
 
-    private String url = "https://www.266na.com/vod/html10/index%s.html";
+    private String url = "https://www.266na.com/vod/html16/index%s.html";
 
 
     public Two66naTorrentProducer(BlockingQueue<Torrent> queue, String encoding, int pageNumber) {
@@ -79,7 +79,7 @@ public class Two66naTorrentProducer extends AbstractTorrentProducer {
         return content.toString();
     }
 
-    private String  handleDownLoad(Element download) throws IOException {
+    private String  handleDownLoad(Element download) {
         String attr = null;
         try {
             Elements downloadList = download.getElementsByTag("a");

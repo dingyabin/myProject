@@ -31,7 +31,7 @@ public class Start {
             thread.setName("task thread-" + index.getAndIncrement());
             return thread;
         });
-        for (int i = 1; i <= 21; i++) {
+        for (int i = 1; i <= 20; i++) {
             executorService.submit(ProducerFactory.getProducer(TWO66NA, QUEUE, i));
             //TimeUnit.SECONDS.sleep(1);
         }
