@@ -14,12 +14,10 @@ public class WaitNotify {
         public void run() {
             synchronized (WaitNotify.class) {
                 while (true) {
-                    while (index % 2 == 1) {
-                        _wait();
-                    }
                     System.out.println(Thread.currentThread().getName() + "----------" + index++);
                     _sleep();
-                    WaitNotify.class.notifyAll();
+                    WaitNotify.class.notify();
+                    _wait();
                 }
             }
         }
@@ -31,12 +29,10 @@ public class WaitNotify {
         public void run() {
             synchronized (WaitNotify.class) {
                 while (true) {
-                    while (index % 2 == 0) {
-                        _wait();
-                    }
                     System.out.println(Thread.currentThread().getName() + "----------" + index++);
                     _sleep();
-                    WaitNotify.class.notifyAll();
+                    WaitNotify.class.notify();
+                    _wait();
                 }
             }
         }
