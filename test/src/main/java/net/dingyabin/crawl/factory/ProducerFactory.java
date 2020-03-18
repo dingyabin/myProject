@@ -27,6 +27,8 @@ public class ProducerFactory {
                 return new AMSRTorrentProducer(queue, "utf-8", page);
             case TWO66NA:
                 return new Two66naTorrentProducer(queue, "utf-8", page);
+            case LPXXS:
+                return new LpxxsTorrentProducer(queue, "utf-8", page);
             default:
                 throw new IllegalArgumentException("暂不支持此网站的解析...");
         }

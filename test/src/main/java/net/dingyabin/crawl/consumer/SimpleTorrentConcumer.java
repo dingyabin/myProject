@@ -24,18 +24,16 @@ public class SimpleTorrentConcumer extends AbstractRequest implements Runnable {
 
     private WebSiteEnum webSiteEnum;
 
+    private String[] delStr = {"\\*", "\\?", "\\|", "<", ">", "!", "\"", "/", " ", "：", ":"};
+
     public SimpleTorrentConcumer(WebSiteEnum webSiteEnum, BlockingQueue<Torrent> queue) {
         this.queue = queue;
         this.webSiteEnum = webSiteEnum;
     }
 
     protected Pair<File,Boolean> createFile(String path) throws IOException {
-        File file = null;
+        File file;
         try {
-            String[] delStr = {"\\*", "\\?", "\\|", "<", ">", "!", "\"", "/"," "};
-            for (String str : delStr) {
-                path = path.replaceAll(str, "");
-            }
             file = new File(path);
             if (file.exists()){
                 return Pair.of(file,false);
@@ -55,14 +53,18 @@ public class SimpleTorrentConcumer extends AbstractRequest implements Runnable {
     public void run() {
         try {
             while (true) {
-                Torrent torrent = queue.poll(20, TimeUnit.SECONDS);
+                Torrent torrent = queue.poll(40, TimeUnit.SECONDS);
                 if (torrent == null) {
                     if (queue.isEmpty()) {
                         return;
                     }
                     continue;
                 }
-                String fileName = webSiteEnum.getPath() + torrent.getName() + webSiteEnum.getFileType();
+                String name = torrent.getName();
+                for (String str : delStr) {
+                    name = name.replaceAll(str, "");
+                }
+                String fileName = webSiteEnum.getPath() + name + webSiteEnum.getFileType();
                 Pair<File, Boolean> fileBooleanPair = createFile(fileName);
                 File file = fileBooleanPair.getLeft();
                 if (file == null) {

@@ -1,0 +1,35 @@
+<configuration debug="false" scan="false" scanPeriod="10 seconds">
+
+    <property name="log.root" value="logs"/>
+    <property name="encoding" value="UTF-8"/>
+    <property name="normal-pattern"
+              value="%d{yyyy-MM-dd.HH:mm:ss.SSS} %highlight(%-5level) TraceId[%X{traceId}] [%thread] %logger{10}.%M:%L %msg%n"/>
+
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${normal-pattern}</pattern>
+            <charset>${encoding}</charset>
+        </encoder>
+    </appender>
+
+
+    <!--<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">-->
+        <!--<file>${log.root}/mylog.log</file>-->
+        <!--<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">-->
+            <!--<FileNamePattern>${log.root}/mylog.log.%d{yyyy-MM-dd}.gz</FileNamePattern>-->
+            <!--<maxHistory>5</maxHistory>-->
+        <!--</rollingPolicy>-->
+        <!--<encoder>-->
+            <!--<pattern>${normal-pattern}</pattern>-->
+            <!--<charset>${encoding}</charset>-->
+        <!--</encoder>-->
+    <!--</appender>-->
+
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT"/>
+        <!--<appender-ref ref="FILE"/>-->
+    </root>
+
+</configuration>

@@ -10,9 +10,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static net.dingyabin.crawl.enums.WebSiteEnum.ASMR;
-import static net.dingyabin.crawl.enums.WebSiteEnum.E048;
-import static net.dingyabin.crawl.enums.WebSiteEnum.TWO66NA;
+import static net.dingyabin.crawl.enums.WebSiteEnum.*;
 
 
 /**
@@ -31,12 +29,12 @@ public class Start {
             thread.setName("task thread-" + index.getAndIncrement());
             return thread;
         });
-        for (int i = 1; i <= 20; i++) {
-            executorService.submit(ProducerFactory.getProducer(TWO66NA, QUEUE, i));
-            //TimeUnit.SECONDS.sleep(1);
+        for (int i = 1; i <= 8; i++) {
+            executorService.submit(ProducerFactory.getProducer(LPXXS, QUEUE, i));
+            TimeUnit.SECONDS.sleep(1);
         }
         for (int i = 0; i < 10; i++) {
-            executorService.submit(new SimpleTorrentConcumer(TWO66NA, QUEUE));
+            executorService.submit(new SimpleTorrentConcumer(LPXXS, QUEUE));
         }
         executorService.shutdown();
         executorService.awaitTermination(10, TimeUnit.HOURS);

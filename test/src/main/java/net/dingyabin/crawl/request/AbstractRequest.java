@@ -91,7 +91,7 @@ public class AbstractRequest {
         try {
             inputStream = connection.getInputStream();
             return inputStream;
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             System.out.println("getInputStream()失败了.....");
         }

