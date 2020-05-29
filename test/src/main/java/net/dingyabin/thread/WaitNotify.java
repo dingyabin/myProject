@@ -15,7 +15,7 @@ public class WaitNotify {
             synchronized (WaitNotify.class) {
                 while (true) {
                     System.out.println(Thread.currentThread().getName() + "----------" + index++);
-                    _sleep();
+                    //_sleep();
                     WaitNotify.class.notify();
                     _wait();
                 }
@@ -30,7 +30,7 @@ public class WaitNotify {
             synchronized (WaitNotify.class) {
                 while (true) {
                     System.out.println(Thread.currentThread().getName() + "----------" + index++);
-                    _sleep();
+                    //_sleep();
                     WaitNotify.class.notify();
                     _wait();
                 }
