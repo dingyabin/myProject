@@ -33,7 +33,11 @@ public enum WebSiteEnum {
 
     TWO66NA(".txt", String.format("C:\\Users\\%s\\Desktop\\torrent\\%s\\xiiixiii\\", System.getenv().get("USERNAME"), DateTime.now().toString("yyyyMMdd"))),
 
-    LPXXS(".mp3", String.format("C:\\Users\\%s\\Desktop\\torrent\\%s\\jqsm\\", System.getenv().get("USERNAME"), DateTime.now().toString("yyyyMMdd")));
+    LPXXS(".mp3", String.format("C:\\Users\\%s\\Desktop\\torrent\\%s\\jqsm\\", System.getenv().get("USERNAME"), DateTime.now().toString("yyyyMMdd"))),
+
+    M3U8(".ts", String.format("C:\\Users\\%s\\Desktop\\torrent\\%s\\m3u8u\\", System.getenv().get("USERNAME"), DateTime.now().toString("yyyyMMdd")));
+
+
 
 
     private String fileType;

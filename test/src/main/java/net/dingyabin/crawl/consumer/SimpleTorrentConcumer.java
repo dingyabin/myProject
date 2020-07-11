@@ -3,6 +3,7 @@ package net.dingyabin.crawl.consumer;
 import net.dingyabin.crawl.enums.WebSiteEnum;
 import net.dingyabin.crawl.model.Torrent;
 import net.dingyabin.crawl.request.AbstractRequest;
+import net.dingyabin.crawl.utils.TimeCounter;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
@@ -82,7 +83,7 @@ public class SimpleTorrentConcumer extends AbstractRequest implements Runnable {
                     continue;
                 }
                 FileUtils.writeByteArrayToFile(file, bytes, false);
-                System.out.printf(">>>>>>线程%s成功download一个文件,目前还剩%s个任务<<<<<<<<\n", Thread.currentThread().getName(), queue.size());
+                System.out.printf(">>>>>>线程%s成功download一个文件,目前还剩%s个任务,大概需要%s<<<<<<<<\n", Thread.currentThread().getName(), queue.size(), TimeCounter.restTime());
             }
         } catch (Exception e) {
             e.printStackTrace();
