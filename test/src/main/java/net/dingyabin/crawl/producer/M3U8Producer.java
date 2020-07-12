@@ -41,10 +41,6 @@ public class M3U8Producer extends AbstractTorrentProducer {
 
     @Override
     protected List<Torrent> makeTorrent(String resource) {
-
-
-
-
         List<Torrent> list = new ArrayList<>();
         try {
 

@@ -14,6 +14,7 @@ public class HelloWorldSwing {
         JFrame frame = new JFrame("Login Example");
         // Setting the width and height of frame
         frame.setSize(350, 200);
+        frame.setResizable(false);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         /* 创建面板，这个类似于 HTML 的 div 标签
