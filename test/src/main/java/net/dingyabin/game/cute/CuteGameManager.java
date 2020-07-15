@@ -26,7 +26,7 @@ public class CuteGameManager {
         jFrame.setResizable(false);
         //窗口居中
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        jFrame.setBounds((int)(screenSize.getWidth() - WIDTH) / 2, (int)(screenSize.getHeight() - HEIGHT) / 2, WIDTH, HEIGHT);
+        jFrame.setBounds((int) (screenSize.getWidth() - WIDTH) / 2, (int) (screenSize.getHeight() - HEIGHT) / 2, WIDTH + 300, HEIGHT);
         //关闭动作
         jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 

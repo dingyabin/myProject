@@ -2,16 +2,15 @@ package net.dingyabin.game.cute;
 
 import com.google.common.collect.HashMultimap;
 import net.dingyabin.game.cute.abstracts.BaseCute;
-import net.dingyabin.game.cute.certain.ACute;
 import net.dingyabin.game.cute.constants.ImageIcons;
 
 import javax.swing.*;
+import javax.swing.Timer;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by MrDing
@@ -27,10 +26,13 @@ public class CutePanel extends JPanel {
 
     private BaseCute next;
 
+    private int score;
+
     private HashMultimap<Integer, CuteUnit> cuteContainer = HashMultimap.create();
 
 
     private void init() {
+        score = 0;
         current = Utils.randomCute();
         next = Utils.randomCute();
         this.setFocusable(true);
@@ -49,7 +51,7 @@ public class CutePanel extends JPanel {
     public CutePanel() {
         super();
         init();
-        this.setBackground(new Color(149, 191, 147));
+        this.setBackground(new Color(137, 149, 121));
         this.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
@@ -97,6 +99,10 @@ public class CutePanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+
+        g.setColor(new Color(149, 191, 147));
+        g.fillRect(0, 0, CuteGameManager.WIDTH, CuteGameManager.HEIGHT);
+
         //画当前方块
         for (CuteUnit cuteUnit : getCurrent().getCuteUnits()) {
             ImageIcons.CUTE.paintIcon(this, g, cuteUnit.getX(), cuteUnit.getY());
@@ -165,25 +171,36 @@ public class CutePanel extends JPanel {
         for (CuteUnit cuteUnit : current.getCuteUnits()) {
             cuteContainer.put(cuteUnit.getY(), cuteUnit);
         }
+        SortedSet<Integer> disAppareRows = new TreeSet<>(Comparator.naturalOrder());
         for (CuteUnit cuteUnit : current.getCuteUnits()) {
             Set<CuteUnit> baseCutes = cuteContainer.get(cuteUnit.getY());
             //cuteUnit.getY()行满了，消除他
             if (baseCutes.size() >= CuteGameManager.WIDTH / CuteGameManager.STEP) {
+                disAppareRows.add(cuteUnit.getY());
                 cuteContainer.removeAll(cuteUnit.getY());
+                score += 10;
             }
+        }
+        //没有消除的行
+        if (disAppareRows.isEmpty()){
+            return;
         }
         //消除之后，消除行上面的行要下移
-        for (Integer integer : new HashSet<>(cuteContainer.keySet())) {
-            if (integer >= cuteUnit.getY()) {
-                continue;
+        for (Integer integer : disAppareRows) {
+            Optional<Integer> min = cuteContainer.keySet().stream().min(Integer::compareTo);
+            if (!min.isPresent()){
+                return;
             }
-            Set<CuteUnit> cuteUnits = cuteContainer.get(integer);
-            if (!cuteUnits.isEmpty()) {
+            for (int i = integer - CuteGameManager.STEP; i >= min.get(); i -= CuteGameManager.STEP) {
+                Set<CuteUnit> cuteUnits = cuteContainer.get(i);
+                if (cuteUnits.isEmpty()) {
+                    continue;
+                }
                 cuteUnits.forEach(unit -> unit.setY(unit.getY() + CuteGameManager.STEP));
-                cuteContainer.removeAll(integer);
+                cuteContainer.putAll(i + CuteGameManager.STEP, cuteUnits);
+                cuteContainer.removeAll(i);
             }
         }
-
     }
 
 
