@@ -18,12 +18,6 @@ public enum DirectionEnum {
         public ImageIcon getHeadImageIcon() {
             return ImageIcons.UP;
         }
-        @Override
-        public void beyondWindowHandle(SnakeElement head,int up, int down, int left, int right) {
-            if (head.getY() < up) {
-                head.setY(SnakeGameManager.HEIGHT);
-            }
-        }
     },
     DOWN(KeyEvent.VK_DOWN) {
         @Override
@@ -33,12 +27,6 @@ public enum DirectionEnum {
         @Override
         public ImageIcon getHeadImageIcon() {
             return ImageIcons.DOWN;
-        }
-        @Override
-        public void beyondWindowHandle(SnakeElement head,int up, int down, int left, int right) {
-            if (head.getY() > down) {
-                head.setY(SnakeGameManager.TITLE);
-            }
         }
     },
     LEFT(KeyEvent.VK_LEFT) {
@@ -50,12 +38,6 @@ public enum DirectionEnum {
         public ImageIcon getHeadImageIcon() {
             return ImageIcons.LEFT;
         }
-        @Override
-        public void beyondWindowHandle(SnakeElement head,int up, int down, int left, int right) {
-            if (head.getX() < left) {
-                head.setX(SnakeGameManager.WIDTH);
-            }
-        }
     },
     RIGHT(KeyEvent.VK_RIGHT) {
         @Override
@@ -65,12 +47,6 @@ public enum DirectionEnum {
         @Override
         public ImageIcon getHeadImageIcon() {
             return ImageIcons.RIGHT;
-        }
-        @Override
-        public void beyondWindowHandle(SnakeElement head, int up, int down, int left, int right) {
-            if (head.getX() > right) {
-                head.setX(0);
-            }
         }
     };
 
@@ -88,8 +64,6 @@ public enum DirectionEnum {
     public abstract void moveHead(SnakeElement head, int distasnce);
 
     public abstract ImageIcon getHeadImageIcon();
-
-    public abstract void beyondWindowHandle(SnakeElement head, int up, int down, int left, int right);
 
 
     public static DirectionEnum getDirection(int keyCode) {

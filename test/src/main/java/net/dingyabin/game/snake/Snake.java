@@ -70,7 +70,19 @@ public class Snake {
 
 
     public void beyondWindowHandle(int up, int down, int left, int right) {
-        direction.beyondWindowHandle(getHead(), up, down, left, right);
+        SnakeElement head = getHead();
+        if (head.getY() < up) {
+            head.setY(SnakeGameManager.HEIGHT - SnakeGameManager.STEP);
+        }
+        if (head.getY() > down) {
+            head.setY(SnakeGameManager.TITLE);
+        }
+        if (head.getX() < left) {
+            head.setX(SnakeGameManager.WIDTH - SnakeGameManager.STEP);
+        }
+        if (head.getX() >= right) {
+            head.setX(0);
+        }
     }
 
 

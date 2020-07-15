@@ -50,6 +50,7 @@ public class SnakeGamePanel extends JPanel {
 
 
     public SnakeGamePanel() {
+        super();
         initSnake();
         this.setFocusable(true);
         this.addKeyListener(new KeyAdapter() {
@@ -74,7 +75,7 @@ public class SnakeGamePanel extends JPanel {
             }
         });
 
-        timer = new Timer(100, new AbstractAction() {
+        timer = new Timer(150, new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!start || over) {
