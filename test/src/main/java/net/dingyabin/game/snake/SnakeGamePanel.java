@@ -127,6 +127,7 @@ public class SnakeGamePanel extends JPanel {
         //食物
         ImageIcons.FOOD.paintIcon(this, graphics, food.getX(), food.getY());
 
+
         //暂停提示
         if (!start){
             graphics.setColor(new Color(201, 45, 55));
@@ -138,7 +139,6 @@ public class SnakeGamePanel extends JPanel {
                     SnakeGameManager.HEIGHT / 2
             );
         }
-
         //画积分
         graphics.setColor(new Color(51, 201, 18));
         graphics.setFont(new Font("华文行楷", Font.BOLD, 35));

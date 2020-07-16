@@ -31,12 +31,17 @@ public class CutePanel extends JPanel {
 
     private boolean over;
 
+    private boolean start;
+
     private HashMultimap<Integer, CuteUnit> cuteContainer = HashMultimap.create();
 
 
     private void init() {
         score = 0;
         over = false;
+        //默认暂停
+        start = false;
+        cuteContainer.clear();
         current = Utils.randomCute();
         next = Utils.randomCute();
         this.setFocusable(true);
@@ -60,6 +65,15 @@ public class CutePanel extends JPanel {
             @Override
             public void keyPressed(KeyEvent e) {
                 super.keyPressed(e);
+                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+                    if (over) {
+                        init();
+                        over = false;
+                    } else {
+                        start = !start;
+                    }
+                    repaint();
+                }
                 if (e.getKeyCode() == KeyEvent.VK_UP) {
                     current.rotate();
                 }
@@ -82,15 +96,19 @@ public class CutePanel extends JPanel {
         timer = new Timer(500, new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (over){
+                if (!start ||over){
                     return;
                 }
                 if (!canDown()) {
+                    //处理消除行
                     handleDisAppare();
+                    //刷新下一个
                     startNext();
-                    return;
+                } else {
+                    current.down();
                 }
-                current.down();
+                //检测是否结束游戏
+                isOver();
                 //重画
                 repaint();
             }
@@ -124,6 +142,28 @@ public class CutePanel extends JPanel {
         //画侧边栏下一个
         for (CuteUnit cuteUnit : getNext().getCuteUnits()) {
             ImageIcons.CUTE.paintIcon(this, g, cuteUnit.getX() + 800, cuteUnit.getY()+400);
+        }
+
+        //暂停提示
+        if (!start){
+            g.setColor(new Color(201, 45, 55));
+            g.setFont(new Font("微软雅黑", Font.BOLD, 50));
+
+            g.drawString(
+                    "点击空格键开始/暂停游戏",
+                    (SnakeGameManager.WIDTH - g.getFont().getSize() * 12) / 2,
+                    SnakeGameManager.HEIGHT / 2
+            );
+        }
+        //游戏结束
+        if (over){
+            g.setColor(new Color(201, 45, 55));
+            g.setFont(new Font("微软雅黑", Font.BOLD, 50));
+            g.drawString(
+                    "游戏失败 Game Over!",
+                    (SnakeGameManager.WIDTH - g.getFont().getSize() * 12) / 2,
+                    SnakeGameManager.HEIGHT / 2
+            );
         }
 
     }
@@ -175,6 +215,15 @@ public class CutePanel extends JPanel {
             }
         }
         return true;
+    }
+
+
+
+    public void isOver(){
+        Set<Integer> integers = cuteContainer.keySet();
+        if (integers.size() >= CuteGameManager.HEIGHT / CuteGameManager.STEP) {
+            over = true;
+        }
     }
 
 
