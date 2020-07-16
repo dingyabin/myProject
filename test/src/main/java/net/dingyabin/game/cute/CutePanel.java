@@ -3,6 +3,7 @@ package net.dingyabin.game.cute;
 import com.google.common.collect.HashMultimap;
 import net.dingyabin.game.cute.abstracts.BaseCute;
 import net.dingyabin.game.cute.constants.ImageIcons;
+import net.dingyabin.game.snake.SnakeGameManager;
 
 import javax.swing.*;
 import javax.swing.Timer;
@@ -28,11 +29,14 @@ public class CutePanel extends JPanel {
 
     private int score;
 
+    private boolean over;
+
     private HashMultimap<Integer, CuteUnit> cuteContainer = HashMultimap.create();
 
 
     private void init() {
         score = 0;
+        over = false;
         current = Utils.randomCute();
         next = Utils.randomCute();
         this.setFocusable(true);
@@ -66,21 +70,21 @@ public class CutePanel extends JPanel {
                     current.right();
                 }
                 if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-                    if (!canDown()) {
-                        handleDisAppare();
-                        startNext();
-                        return;
+                    if (canDown()) {
+                        current.down();
                     }
-                    current.down();
                 }
                 repaint();
             }
         });
 
 
-        timer = new Timer(1000, new AbstractAction() {
+        timer = new Timer(500, new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                if (over){
+                    return;
+                }
                 if (!canDown()) {
                     handleDisAppare();
                     startNext();
@@ -99,7 +103,7 @@ public class CutePanel extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-
+        //侧边栏
         g.setColor(new Color(149, 191, 147));
         g.fillRect(0, 0, CuteGameManager.WIDTH, CuteGameManager.HEIGHT);
 
@@ -111,6 +115,17 @@ public class CutePanel extends JPanel {
         for (CuteUnit unit : cuteContainer.values()) {
             ImageIcons.CUTE.paintIcon(this, g, unit.getX(), unit.getY());
         }
+
+        //画积分
+        g.setColor(new Color(201, 50, 33));
+        g.setFont(new Font("微软雅黑", Font.BOLD, 35));
+        g.drawString("得分:" + score, CuteGameManager.WIDTH + CuteGameManager.BAR / 4, CuteGameManager.BAR / 3);
+
+        //画侧边栏下一个
+        for (CuteUnit cuteUnit : getNext().getCuteUnits()) {
+            ImageIcons.CUTE.paintIcon(this, g, cuteUnit.getX() + 800, cuteUnit.getY()+400);
+        }
+
     }
 
 

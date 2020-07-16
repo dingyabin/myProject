@@ -18,6 +18,8 @@ public class CuteGameManager {
 
     public static final int HEIGHT = 930;
 
+    public static final int BAR = 300;
+
     public static final int STEP = ImageIcons.CUTE.getIconHeight();
 
 
@@ -26,7 +28,7 @@ public class CuteGameManager {
         jFrame.setResizable(false);
         //窗口居中
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        jFrame.setBounds((int) (screenSize.getWidth() - WIDTH) / 2, (int) (screenSize.getHeight() - HEIGHT) / 2, WIDTH + 300, HEIGHT);
+        jFrame.setBounds((int) (screenSize.getWidth() - WIDTH) / 2, (int) (screenSize.getHeight() - HEIGHT) / 2, WIDTH + BAR, HEIGHT);
         //关闭动作
         jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
