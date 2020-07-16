@@ -88,12 +88,15 @@ public class CutePanel extends JPanel {
                         current.down();
                     }
                 }
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                   System.exit(0);
+                }
                 repaint();
             }
         });
 
 
-        timer = new Timer(500, new AbstractAction() {
+        timer = new Timer(300, new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (!start ||over){

@@ -67,6 +67,9 @@ public class SnakeGamePanel extends JPanel {
                     repaint();
                     return;
                 }
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    System.exit(0);
+                }
                 DirectionEnum direction = DirectionEnum.getDirection(e.getKeyCode());
                 if (direction == null) {
                     return;
