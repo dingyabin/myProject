@@ -70,7 +70,7 @@ public class DYHSTorrentProducer extends AbstractTorrentProducer {
                 String href = "http://www.hy-car.com/" + ta.attr("href");
                 list.add(new Torrent(text, href));
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return list;

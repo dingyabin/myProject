@@ -54,7 +54,7 @@ public class Two66naTorrentProducer extends AbstractTorrentProducer {
                 String downLoad = handleDownLoad(playul.get(1));
                 list.add(new Torrent(title, null, (preview + "\n\r" + downLoad).getBytes()));
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return list;
@@ -86,7 +86,7 @@ public class Two66naTorrentProducer extends AbstractTorrentProducer {
             String href = "https://www.266na.com" + downloadList.get(0).attr("href");
             Document _doc = Jsoup.parse(getResource(href));
             attr = _doc.getElementsByClass("download").get(0).getElementsByTag("a").get(0).attr("href");
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return "下载地址："+ attr;

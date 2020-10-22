@@ -46,7 +46,7 @@ public abstract class AbstractTorrentProducer extends AbstractRequest implements
     }
 
 
-    protected String getResource(String url) throws IOException {
+    protected String getResource(String url){
         String stringResource = null;
         try {
             stringResource = getStringResource(url, encoding);

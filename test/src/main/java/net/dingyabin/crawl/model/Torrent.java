@@ -18,6 +18,11 @@ public class Torrent {
         this(name, url, null);
     }
 
+    public Torrent(String name, byte[] content) {
+        this.name = name;
+        this.content = content;
+    }
+
     public Torrent(String name, String url, byte[] content) {
         this.name = name;
         this.url = url;

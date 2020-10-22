@@ -89,7 +89,7 @@ public class E048TorrentProducer extends AbstractTorrentProducer {
                 list.add(new Torrent(text, null, content.getBytes()));
                 System.out.println("拿到一个.......");
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return list;

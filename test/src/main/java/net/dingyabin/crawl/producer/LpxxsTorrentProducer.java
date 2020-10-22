@@ -78,7 +78,7 @@ public class LpxxsTorrentProducer extends AbstractTorrentProducer {
                 }
                 list.add(new Torrent(name, src));
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return list;

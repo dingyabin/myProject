@@ -61,7 +61,14 @@ public class YueLiangProducer extends AbstractTorrentProducer {
                 String contentTitle = contentDetail.getKey();
                 String contentVideoUrl = contentDetail.getValue();
                 System.out.println(contentVideoUrl);
-                pushTorrent(new Torrent(contentTitle, contentVideoUrl));
+
+
+                String resource = getResource(contentVideoUrl);
+                String prefix = contentVideoUrl.substring(0, contentVideoUrl.lastIndexOf("/"));
+
+                byte[] bytes = (prefix + "\n\r" + resource).getBytes();
+
+                pushTorrent(new Torrent(contentTitle, bytes));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -126,7 +133,6 @@ public class YueLiangProducer extends AbstractTorrentProducer {
             JSONObject data = parseObject.getJSONObject("data");
             String contentTitle = data.getString("contentTitle");
             String contentVideoUrl = data.getString("contentVideoUrl");
-            String prefix = contentVideoUrl.substring(0, contentVideoUrl.lastIndexOf("/"));
             pairs.add(new Pair<>(contentTitle, contentVideoUrl));
         }
         return pairs;
