@@ -33,6 +33,8 @@ public class ProducerFactory {
                 return new M3U8Producer(queue, "utf-8", page);
             case CAITAZHIJIA:
                 return new CaiTaZhiJiaProducer(queue, "utf-8", page);
+                case YUELAING:
+                return new YueLiangProducer(queue, "utf-8", page);
             default:
                 throw new IllegalArgumentException("暂不支持此网站的解析...");
         }

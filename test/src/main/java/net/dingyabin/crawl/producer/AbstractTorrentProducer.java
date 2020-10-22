@@ -82,6 +82,7 @@ public abstract class AbstractTorrentProducer extends AbstractRequest implements
     @Override
     public void run() {
         try {
+
             String resource = getResource();
             if (StringUtils.isBlank(resource)) {
                 System.out.printf("xxxxxxxxxxparseHome,第%s页空白,跳过xxxxxxxxxxx\n", pageNumber);

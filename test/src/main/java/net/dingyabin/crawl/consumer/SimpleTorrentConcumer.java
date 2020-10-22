@@ -15,6 +15,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 /**
+ * @author 丁亚宾
  * Created by MrDing
  * Date: 2018/7/28.
  * Time:23:13
