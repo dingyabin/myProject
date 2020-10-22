@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.Lists;
 import javafx.util.Pair;
+import net.dingyabin.crawl.context.Holder;
 import net.dingyabin.crawl.model.Torrent;
 import net.wecash.utils.HTTPClient;
 import org.apache.http.Header;
@@ -60,6 +61,7 @@ public class YueLiangProducer extends AbstractTorrentProducer {
                 String contentTitle = contentDetail.getKey();
                 String contentVideoUrl = contentDetail.getValue();
                 System.out.println(contentVideoUrl);
+                pushTorrent(new Torrent(contentTitle, contentVideoUrl));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -78,11 +80,18 @@ public class YueLiangProducer extends AbstractTorrentProducer {
             Header header = new BasicHeader(key, value);
             headers[index++] = header;
         }
+
+        String lastId ="";
+        if (getPageNumber() !=1){
+            Holder.lock();
+            lastId = Holder.lastId;
+        }
+
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("pageNum", getPageNumber());
         jsonObject.put("pageSize", 10);
         jsonObject.put("subCategoryId", 2);
-        jsonObject.put("lastId", "");
+        jsonObject.put("lastId", lastId);
         jsonObject.put("userId", null);
         String params = jsonObject.toJSONString();
         String string = HTTPClient.postJson(getUrl(), params, headers);
@@ -92,11 +101,15 @@ public class YueLiangProducer extends AbstractTorrentProducer {
         }
         JSONArray jsonArray = parseObject.getJSONObject("data").getJSONArray("rows");
         List<String> list = Lists.newArrayList();
+        String tempLastId = "";
         for (int i = 0; i < jsonArray.size(); i++) {
             JSONObject row = jsonArray.getJSONObject(i);
+            tempLastId = row.getString("id");
             String contentId = row.getString("contentId");
             list.add(contentId);
         }
+        Holder.lastId = tempLastId;
+        Holder.unlock();
         return list;
     }
 
@@ -114,7 +127,8 @@ public class YueLiangProducer extends AbstractTorrentProducer {
             JSONObject data = parseObject.getJSONObject("data");
             String contentTitle = data.getString("contentTitle");
             String contentVideoUrl = data.getString("contentVideoUrl");
-            pairs.add(new Pair<>(contentTitle, contentVideoUrl));
+            String prefix = contentVideoUrl.substring(0, contentVideoUrl.lastIndexOf("/"));
+            pairs.add(new Pair<>(contentTitle + "###" + prefix, contentVideoUrl));
         }
         return pairs;
     }
