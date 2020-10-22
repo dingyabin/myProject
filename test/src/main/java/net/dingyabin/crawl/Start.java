@@ -3,6 +3,7 @@ package net.dingyabin.crawl;
 import net.dingyabin.crawl.consumer.SimpleTorrentConcumer;
 import net.dingyabin.crawl.factory.ProducerFactory;
 import net.dingyabin.crawl.model.Torrent;
+import net.dingyabin.crawl.producer.CaiTaZhiJiaProducer;
 import net.dingyabin.crawl.utils.TimeCounter;
 
 import java.util.concurrent.ExecutorService;
@@ -33,17 +34,23 @@ public class Start {
 
     public static void main(String[] args) throws InterruptedException {
         AtomicInteger index = new AtomicInteger();
-        ExecutorService executorService = Executors.newFixedThreadPool(10, r -> {
+        ExecutorService executorService = Executors.newCachedThreadPool(r -> {
             Thread thread = new Thread(r);
             thread.setName("task thread-" + index.getAndIncrement());
             return thread;
         });
-        for (int i = 1; i <= 1; i++) {
-            executorService.submit(ProducerFactory.getProducer(M3U8, QUEUE, i));
-            TimeUnit.SECONDS.sleep(1);
+        executorService.submit(() -> {
+            while (true) {
+                System.out.println("失败了----" + CaiTaZhiJiaProducer.coiunt.get() + "个任务");
+                TimeUnit.SECONDS.sleep(5);
+            }
+        });
+        for (int i = 16275; i < 16275+2000; i++) {
+            executorService.submit(ProducerFactory.getProducer(CAITAZHIJIA, QUEUE, i));
+            //TimeUnit.SECONDS.sleep(1);
         }
         for (int i = 0; i < 10; i++) {
-            executorService.submit(new SimpleTorrentConcumer(M3U8, QUEUE));
+            executorService.submit(new SimpleTorrentConcumer(CAITAZHIJIA, QUEUE));
         }
         executorService.shutdown();
         executorService.awaitTermination(10, TimeUnit.HOURS);

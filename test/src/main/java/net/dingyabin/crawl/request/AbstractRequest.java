@@ -58,19 +58,24 @@ public class AbstractRequest {
 
 
     protected byte[] getFileResource(String url) throws Exception {
-        InputStream inputStream = getInputStream(url,0);
-        if (inputStream == null) {
-            return null;
+        byte[] bytes = null;
+        try {
+            InputStream inputStream = getInputStream(url,0);
+            if (inputStream == null) {
+                return null;
+            }
+            bytes = IOUtils.toByteArray(inputStream);
+            IOUtils.closeQuietly(inputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        byte[] bytes = IOUtils.toByteArray(inputStream);
-        IOUtils.closeQuietly(inputStream);
         return bytes;
     }
 
 
     private InputStream getInputStream(String curl, int retry) throws Exception {
-        if (retry > 3) {
-            System.out.println("重试3次失败，退出...url=" + curl);
+        if (retry > 0) {
+            System.out.println("重试"+retry+"次失败，退出...url=" + curl);
             return null;
         }
 //        SSLUtils.ignoreSsl();

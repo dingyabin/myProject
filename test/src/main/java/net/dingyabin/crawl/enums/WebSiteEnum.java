@@ -35,7 +35,10 @@ public enum WebSiteEnum {
 
     LPXXS(".mp3", String.format("C:\\Users\\%s\\Desktop\\torrent\\%s\\jqsm\\", System.getenv().get("USERNAME"), DateTime.now().toString("yyyyMMdd"))),
 
-    M3U8(".ts", String.format("C:\\Users\\%s\\Desktop\\torrent\\%s\\m3u8u\\", System.getenv().get("USERNAME"), DateTime.now().toString("yyyyMMdd")));
+    M3U8(".ts", String.format("C:\\Users\\%s\\Desktop\\torrent\\%s\\m3u8u\\", System.getenv().get("USERNAME"), DateTime.now().toString("yyyyMMdd"))),
+
+    CAITAZHIJIA(".mp4", String.format("C:\\Users\\%s\\Desktop\\torrent\\%s\\caitazhijia\\", System.getenv().get("USERNAME"), DateTime.now().toString("yyyyMMdd")));
+    ;
 
 
 

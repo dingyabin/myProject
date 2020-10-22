@@ -1,10 +1,7 @@
 package net.dingyabin.game.cute;
 
 import net.dingyabin.game.cute.abstracts.BaseCute;
-import net.dingyabin.game.cute.certain.ACute;
-import net.dingyabin.game.cute.certain.BCute;
-import net.dingyabin.game.cute.certain.DCute;
-import net.dingyabin.game.cute.certain.ECute;
+import net.dingyabin.game.cute.certain.*;
 
 import java.util.Random;
 
@@ -15,7 +12,7 @@ import java.util.Random;
  */
 public class Utils {
 
-    private static final Class[] BASE_CUTES = {ACute.class, BCute.class, DCute.class, ECute.class};
+    private static final Class[] BASE_CUTES = {ACute.class, BCute.class, DCute.class, ECute.class, FCute.class};
 
 
     public static BaseCute randomCute() {

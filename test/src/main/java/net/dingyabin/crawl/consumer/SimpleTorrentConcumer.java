@@ -54,7 +54,7 @@ public class SimpleTorrentConcumer extends AbstractRequest implements Runnable {
     public void run() {
         try {
             while (true) {
-                Torrent torrent = queue.poll(40, TimeUnit.SECONDS);
+                Torrent torrent = queue.poll(40000000, TimeUnit.SECONDS);
                 if (torrent == null) {
                     if (queue.isEmpty()) {
                         return;

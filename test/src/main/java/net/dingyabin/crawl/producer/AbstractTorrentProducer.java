@@ -72,6 +72,13 @@ public abstract class AbstractTorrentProducer extends AbstractRequest implements
     protected abstract List<Torrent> makeTorrent(String resource);
 
 
+
+    protected void pushTorrent(Torrent torrent){
+        queue.offer(torrent);
+    }
+
+
+
     @Override
     public void run() {
         try {
@@ -86,7 +93,7 @@ public abstract class AbstractTorrentProducer extends AbstractRequest implements
                 return;
             }
             torrents.forEach(torrent -> {
-                queue.offer(torrent);
+                pushTorrent(torrent);
                 String content = (torrent.getContent() != null) ? new String(torrent.getContent()) : null;
                 System.out.println("第" + pageNumber + "页-->" + torrent.getName() + ",url=(" + torrent.getUrl() + ") content=" + content + "\n\n");
             });
@@ -95,6 +102,11 @@ public abstract class AbstractTorrentProducer extends AbstractRequest implements
             e.printStackTrace();
         }
     }
+
+
+
+
+
 
 
 }
