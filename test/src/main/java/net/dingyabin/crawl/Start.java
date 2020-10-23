@@ -22,15 +22,7 @@ import static net.dingyabin.crawl.enums.WebSiteEnum.*;
  */
 public class Start {
 
-    private static final LinkedBlockingQueue<Torrent> QUEUE = new LinkedBlockingQueue<Torrent>() {
-        private static final long serialVersionUID = 7487139222835543212L;
-        @Override
-        public Torrent poll(long timeout, TimeUnit unit) throws InterruptedException {
-            Torrent torrent = super.poll(timeout, unit);
-            TimeCounter.refresh();
-            return torrent;
-        }
-    };
+    private static final LinkedBlockingQueue<Torrent> QUEUE = new LinkedBlockingQueue<>();
 
     public static void main(String[] args) throws InterruptedException {
         AtomicInteger index = new AtomicInteger();

@@ -57,7 +57,7 @@ public class AbstractRequest {
     }
 
 
-    protected byte[] getFileResource(String url) throws Exception {
+    protected byte[] getFileResource(String url) {
         byte[] bytes = null;
         try {
             InputStream inputStream = getInputStream(url,0);
@@ -74,7 +74,7 @@ public class AbstractRequest {
 
 
     private InputStream getInputStream(String curl, int retry) throws Exception {
-        if (retry > 0) {
+        if (retry > 2) {
             System.out.println("重试"+retry+"次失败，退出...url=" + curl);
             return null;
         }
