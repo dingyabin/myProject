@@ -14,7 +14,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Holder {
 
 
-    public volatile static String lastId = "1399";
+    public volatile static String lastId = "";
 
 
     public static ReentrantLock reentrantLock = new ReentrantLock();
