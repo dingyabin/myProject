@@ -60,8 +60,6 @@ public class YueLiangProducer extends AbstractTorrentProducer {
             for (Pair<String, String> contentDetail : contentDetails) {
                 String contentTitle = contentDetail.getKey();
                 String contentVideoUrl = contentDetail.getValue();
-                System.out.println(contentVideoUrl);
-
 
                 String resource = getResource(contentVideoUrl);
                 String prefix = contentVideoUrl.substring(0, contentVideoUrl.lastIndexOf("/"));
@@ -91,10 +89,9 @@ public class YueLiangProducer extends AbstractTorrentProducer {
         Holder.lock();
         String lastId = Holder.lastId;
 
-
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("pageNum", getPageNumber());
-        jsonObject.put("pageSize", 10);
+        jsonObject.put("pageSize", 60);
         jsonObject.put("subCategoryId", 2);
         jsonObject.put("lastId", lastId);
         jsonObject.put("userId", null);
@@ -113,6 +110,8 @@ public class YueLiangProducer extends AbstractTorrentProducer {
             String contentId = row.getString("contentId");
             list.add(contentId);
         }
+
+        Holder.addId(tempLastId);
         Holder.lastId = tempLastId;
         Holder.unlock();
 
