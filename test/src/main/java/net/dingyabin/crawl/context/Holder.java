@@ -1,5 +1,9 @@
 package net.dingyabin.crawl.context;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
@@ -9,10 +13,17 @@ import java.util.concurrent.locks.ReentrantLock;
  */
 public class Holder {
 
-    public volatile static String lastId = "";
+
+    public volatile static String lastId = "1399";
 
 
     public static ReentrantLock reentrantLock = new ReentrantLock();
+
+
+    public static List<String> ids = Collections.synchronizedList(new ArrayList<>());
+
+
+    public static CountDownLatch countDownLatch = new CountDownLatch(100);
 
 
 
@@ -26,8 +37,17 @@ public class Holder {
         reentrantLock.unlock();
     }
 
-    public static boolean islock(){
-       return reentrantLock.isLocked();
+
+    public static void addId(String id){
+        countDownLatch.countDown();
+        ids.add(id);
     }
+
+
+    public static void echoIds(){
+        System.out.println(ids);
+    }
+
+
 
 }
