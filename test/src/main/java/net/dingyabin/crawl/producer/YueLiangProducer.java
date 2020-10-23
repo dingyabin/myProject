@@ -111,7 +111,6 @@ public class YueLiangProducer extends AbstractTorrentProducer {
             list.add(contentId);
         }
 
-        Holder.addId(tempLastId);
         Holder.lastId = tempLastId;
         Holder.unlock();
 

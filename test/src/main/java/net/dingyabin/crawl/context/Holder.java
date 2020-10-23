@@ -20,12 +20,6 @@ public class Holder {
     public static ReentrantLock reentrantLock = new ReentrantLock();
 
 
-    public static List<String> ids = Collections.synchronizedList(new ArrayList<>());
-
-
-    public static CountDownLatch countDownLatch = new CountDownLatch(100);
-
-
 
     public static void lock(){
         reentrantLock.lock();
@@ -37,16 +31,6 @@ public class Holder {
         reentrantLock.unlock();
     }
 
-
-    public static void addId(String id){
-        countDownLatch.countDown();
-        ids.add(id);
-    }
-
-
-    public static void echoIds(){
-        System.out.println(ids);
-    }
 
 
 
