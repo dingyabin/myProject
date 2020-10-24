@@ -1,5 +1,6 @@
 package net.dingyabin.crawl.producer;
 
+import com.google.common.collect.Lists;
 import net.dingyabin.bean.FileResult;
 import net.dingyabin.crawl.request.AbstractRequest;
 import org.apache.commons.io.FileUtils;
@@ -14,6 +15,7 @@ import java.io.InputStream;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -38,14 +40,16 @@ public class TxtProducer extends AbstractRequest {
     public FileResult download() {
         FileResult fileResult = new FileResult();
         try {
-            String url = "";
             String baseUrl ="E:\\test\\";
-            File file = new File("C:\\Users\\丁亚宾\\Desktop\\torrent\\20201024\\yueliang\\台湾SWAG满足邻居哥哥饥渴的足交的射精游戏.txt");
+            File file = new File("C:\\Users\\丁亚宾\\Desktop\\torrent\\20201023\\yueliang\\SWAG剧情精品美乳正妹试玩道具催情与老板大战_x264_aac.txt");
 
             fileResult.setMoviePath(baseUrl);
             fileResult.setMovieName(FilenameUtils.getBaseName(file.getPath()));
 
             LineIterator lineIterator = FileUtils.lineIterator(file, "UTF-8");
+
+            String url = "";
+            List<String> parts = Lists.newArrayList();
             while (lineIterator.hasNext()) {
                 String line = lineIterator.next();
                 if (line.startsWith("http")) {
@@ -53,15 +57,18 @@ public class TxtProducer extends AbstractRequest {
                     continue;
                 }
                 if (line.endsWith(".ts")) {
-
-                    String resourceuri = url + "/" + line;
-
-                    String downLoadFilePath = baseUrl +line;
-
-                    fileResult.addPart(downLoadFilePath);
-
-                    doDownload(resourceuri, downLoadFilePath, fileResult);
+                    parts.add(line);
                 }
+            }
+            fileResult.start(parts.size());
+            for (String part : parts) {
+                String resourceuri = url + "/" + part;
+
+                String downLoadFilePath = baseUrl + part;
+
+                fileResult.addPart(downLoadFilePath);
+
+                doDownloadAsync(resourceuri, downLoadFilePath, fileResult);
             }
             return fileResult;
         } catch (Exception e) {
@@ -71,21 +78,32 @@ public class TxtProducer extends AbstractRequest {
     }
 
 
-    private void doDownload(String url, String filePath, FileResult fileResult) {
+
+    /**
+     * 异步下载
+     */
+    private void doDownloadAsync(String url, String filePath, FileResult fileResult) {
         executorService.execute(() -> {
 
             try {
                 File target = new File(filePath);
                 if (target.exists()) {
+                    fileResult.getCountDownLatch().countDown();
                     System.out.println("exist " + target.getName());
                     return;
                 }
                 byte[] fileResource = getFileResource(url);
                 if (fileResource == null) {
+                    System.out.println("下载失败："+ filePath+" 即将重试...");
+                    //失败了，记录下
                     fileResult.addFailUrl(url);
-                    doDownload(url, filePath, fileResult);
+                    //重新扔到队列里下载
+                    doDownloadAsync(url, filePath, fileResult);
                     return;
                 } else {
+                    System.out.println("下载完成："+ filePath);
+                    //成功了，计数减一,删除失败记录
+                    fileResult.getCountDownLatch().countDown();
                     fileResult.removeFailUrl(url);
                 }
                 FileUtils.writeByteArrayToFile(target, fileResource);
@@ -128,8 +146,8 @@ public class TxtProducer extends AbstractRequest {
         try {
             TxtProducer txtProducer = new TxtProducer();
             FileResult fileResult = txtProducer.download();
-            executorService.shutdown();
-            executorService.awaitTermination(10, TimeUnit.HOURS);
+
+            fileResult.getCountDownLatch().await();
 
             if (fileResult.getFailUrls().size() > 0){
                 System.out.println("有下载失败的...");
@@ -143,6 +161,10 @@ public class TxtProducer extends AbstractRequest {
                     partFile.delete();
                 }
             }
+
+            executorService.shutdown();
+            executorService.awaitTermination(10, TimeUnit.HOURS);
+
             System.out.println("^_^_^_^_^_^^_^_^任务完成^_^^_^_^^_^_^^_^_^");
         } catch (InterruptedException e) {
             e.printStackTrace();

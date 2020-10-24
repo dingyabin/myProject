@@ -3,6 +3,7 @@ package net.dingyabin.bean;
 import lombok.Data;
 
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * @author 丁亚宾
@@ -19,6 +20,16 @@ public class FileResult {
     private Set<String> failUrls = Collections.synchronizedSet(new HashSet<>());
 
     private List<String> parts = new ArrayList<>();
+
+    private CountDownLatch countDownLatch;
+
+
+    public FileResult() {
+    }
+
+    public void start(int count) {
+        this.countDownLatch = new CountDownLatch(count);
+    }
 
 
     public FileResult addPart(String part){
