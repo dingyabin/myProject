@@ -40,7 +40,7 @@ public class TxtProducer extends AbstractRequest {
     public FileResult download() {
         FileResult fileResult = new FileResult();
         try {
-            String baseUrl ="E:\\test\\";
+            String baseUrl = "E:\\test\\";
             File file = new File("C:\\Users\\丁亚宾\\Desktop\\torrent\\20201023\\yueliang\\SWAG剧情精品美乳正妹试玩道具催情与老板大战_x264_aac.txt");
 
             fileResult.setMoviePath(baseUrl);
@@ -78,7 +78,6 @@ public class TxtProducer extends AbstractRequest {
     }
 
 
-
     /**
      * 异步下载
      */
@@ -94,14 +93,14 @@ public class TxtProducer extends AbstractRequest {
                 }
                 byte[] fileResource = getFileResource(url);
                 if (fileResource == null) {
-                    System.out.println("下载失败："+ filePath+" 即将重试...");
+                    System.out.println("下载失败：" + filePath + " 即将重试...");
                     //失败了，记录下
                     fileResult.addFailUrl(url);
                     //重新扔到队列里下载
                     doDownloadAsync(url, filePath, fileResult);
                     return;
                 } else {
-                    System.out.println("下载完成："+ filePath);
+                    System.out.println("下载完成：" + filePath);
                     //成功了，计数减一,删除失败记录
                     fileResult.getCountDownLatch().countDown();
                     fileResult.removeFailUrl(url);
@@ -114,19 +113,9 @@ public class TxtProducer extends AbstractRequest {
     }
 
 
-
-
-
-
-
-
-
-
-
-
     public List<String> createScriptAndRun(String scritPath, String moviePath, String movieName) {
         try {
-            String scriptPath = scritPath +"run.bat";
+            String scriptPath = scritPath + "run.bat";
             String scriptContent = String.format("copy/b  %s*.ts  %s%s.mp4", moviePath, moviePath, movieName);
             FileUtils.write(new File(scriptPath), scriptContent, "GBK");
             Process exec = Runtime.getRuntime().exec(scriptPath);
@@ -141,7 +130,6 @@ public class TxtProducer extends AbstractRequest {
     }
 
 
-
     public static void main(String[] args) {
         try {
             TxtProducer txtProducer = new TxtProducer();
@@ -149,7 +137,7 @@ public class TxtProducer extends AbstractRequest {
 
             fileResult.getCountDownLatch().await();
 
-            if (fileResult.getFailUrls().size() > 0){
+            if (fileResult.getFailUrls().size() > 0) {
                 System.out.println("有下载失败的...");
                 return;
             }
