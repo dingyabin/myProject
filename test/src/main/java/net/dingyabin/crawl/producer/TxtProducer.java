@@ -7,6 +7,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.LineIterator;
 
+import javax.xml.transform.Source;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -39,7 +40,7 @@ public class TxtProducer extends AbstractRequest {
         try {
             String url = "";
             String baseUrl ="E:\\test\\";
-            File file = new File("C:\\Users\\丁亚宾\\Desktop\\torrent\\20201023\\yueliang\\JK学生百合丝袜福利看了都硬.txt");
+            File file = new File("C:\\Users\\丁亚宾\\Desktop\\torrent\\20201024\\yueliang\\台湾SWAG满足邻居哥哥饥渴的足交的射精游戏.txt");
 
             fileResult.setMoviePath(baseUrl);
             fileResult.setMovieName(FilenameUtils.getBaseName(file.getPath()));
@@ -52,25 +53,14 @@ public class TxtProducer extends AbstractRequest {
                     continue;
                 }
                 if (line.endsWith(".ts")) {
+
                     String resourceuri = url + "/" + line;
 
-                    fileResult.addPart(baseUrl + line);
+                    String downLoadFilePath = baseUrl +line;
 
-                    executorService.execute(()->{
+                    fileResult.addPart(downLoadFilePath);
 
-                        try {
-                            File target = new File(baseUrl + line);
-                            if (target.exists()){
-                                System.out.println("exist " + target.getName());
-                                return;
-                            }
-                            byte[] fileResource = getFileResource(resourceuri);
-                            FileUtils.writeByteArrayToFile(target, fileResource);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-
-                    });
+                    doDownload(resourceuri, downLoadFilePath, fileResult);
                 }
             }
             return fileResult;
@@ -79,6 +69,41 @@ public class TxtProducer extends AbstractRequest {
         }
         return fileResult;
     }
+
+
+    private void doDownload(String url, String filePath, FileResult fileResult) {
+        executorService.execute(() -> {
+
+            try {
+                File target = new File(filePath);
+                if (target.exists()) {
+                    System.out.println("exist " + target.getName());
+                    return;
+                }
+                byte[] fileResource = getFileResource(url);
+                if (fileResource == null) {
+                    fileResult.addFailUrl(url);
+                    doDownload(url, filePath, fileResult);
+                    return;
+                } else {
+                    fileResult.removeFailUrl(url);
+                }
+                FileUtils.writeByteArrayToFile(target, fileResource);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+
+
+
+
+
+
+
+
+
 
 
     public List<String> createScriptAndRun(String scritPath, String moviePath, String movieName) {
@@ -105,9 +130,14 @@ public class TxtProducer extends AbstractRequest {
             FileResult fileResult = txtProducer.download();
             executorService.shutdown();
             executorService.awaitTermination(10, TimeUnit.HOURS);
+
+            if (fileResult.getFailUrls().size() > 0){
+                System.out.println("有下载失败的...");
+                return;
+            }
             List<String> scriptAndRun = txtProducer.createScriptAndRun("E:\\test\\", fileResult.getMoviePath(), fileResult.getMovieName());
             if (scriptAndRun.size() > 2) {
-                File partFile = null;
+                File partFile;
                 for (String part : fileResult.getParts()) {
                     partFile = new File(part);
                     partFile.delete();

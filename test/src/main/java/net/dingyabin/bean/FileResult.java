@@ -2,8 +2,7 @@ package net.dingyabin.bean;
 
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author 丁亚宾
@@ -17,6 +16,8 @@ public class FileResult {
 
     private String moviePath;
 
+    private Set<String> failUrls = Collections.synchronizedSet(new HashSet<>());
+
     private List<String> parts = new ArrayList<>();
 
 
@@ -26,7 +27,13 @@ public class FileResult {
     }
 
 
+    public FileResult addFailUrl(String failUrl){
+        failUrls.add(failUrl);
+        return this;
+    }
 
 
-
+    public void removeFailUrl(String failUrl){
+        failUrls.remove(failUrl);
+    }
 }

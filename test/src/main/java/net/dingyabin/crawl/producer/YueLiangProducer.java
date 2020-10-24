@@ -92,7 +92,7 @@ public class YueLiangProducer extends AbstractTorrentProducer {
         JSONObject jsonObject = new JSONObject();
         jsonObject.put("pageNum", getPageNumber());
         jsonObject.put("pageSize", 50);
-        jsonObject.put("subCategoryId", 12);
+        jsonObject.put("subCategoryId", 5);
         jsonObject.put("lastId", lastId);
         jsonObject.put("userId", null);
         String params = jsonObject.toJSONString();
