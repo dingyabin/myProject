@@ -125,9 +125,9 @@ public class TxtProducer extends AbstractRequest {
     }
 
 
-    public List<String> createScriptAndRun(String scritPath, String moviePath, String movieName) {
+    public List<String> createScriptAndRun(String moviePath, String movieName) {
         try {
-            String scriptPath = scritPath + "run.bat";
+            String scriptPath =  moviePath + File.separator + "run.bat";
             String scriptContent = String.format("copy/b  %s*.ts  %s%s.mp4", moviePath + File.separator, moviePath+ File.separator, movieName);
             FileUtils.write(new File(scriptPath), scriptContent, "GBK");
             Process exec = Runtime.getRuntime().exec(scriptPath);
@@ -142,28 +142,37 @@ public class TxtProducer extends AbstractRequest {
     }
 
 
+
+    public void waitToFinish(FileResult fileResult) throws InterruptedException {
+
+        fileResult.getCountDownLatch().await();
+
+        if (fileResult.getFailUrls().size() > 0) {
+            System.out.println("有下载失败的...");
+            return;
+        }
+        List<String> scriptAndRun = createScriptAndRun(fileResult.getMoviePath(), fileResult.getMovieName());
+        if (scriptAndRun.size() > 2) {
+            File partFile;
+            for (String part : fileResult.getParts()) {
+                partFile = new File(part);
+                partFile.delete();
+            }
+        }
+    }
+
+
+
+
+
     public static void main(String[] args) {
         try {
 
             String s = IOUtils.readLines(TxtProducer.class.getResourceAsStream("/file.txt"), "utf-8").get(0);
 
             TxtProducer txtProducer = new TxtProducer(s,"E:\\test\\");
-            FileResult fileResult = txtProducer.download();
 
-            fileResult.getCountDownLatch().await();
-
-            if (fileResult.getFailUrls().size() > 0) {
-                System.out.println("有下载失败的...");
-                return;
-            }
-            List<String> scriptAndRun = txtProducer.createScriptAndRun("E:\\test\\", fileResult.getMoviePath(), fileResult.getMovieName());
-            if (scriptAndRun.size() > 2) {
-                File partFile;
-                for (String part : fileResult.getParts()) {
-                    partFile = new File(part);
-                    partFile.delete();
-                }
-            }
+            txtProducer.waitToFinish(txtProducer.download());
 
             TxtProducer.executorService.shutdown();
             TxtProducer.executorService.awaitTermination(10, TimeUnit.HOURS);
