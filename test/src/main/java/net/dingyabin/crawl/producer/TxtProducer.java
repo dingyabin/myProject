@@ -100,19 +100,19 @@ public class TxtProducer extends AbstractRequest {
                 File target = new File(filePath);
                 if (target.exists()) {
                     fileResult.getCountDownLatch().countDown();
-                    System.out.println("exist " + target.getName());
+                    System.out.println("exist " + fileResult.getMoviePath() + target.getName());
                     return;
                 }
                 byte[] fileResource = getFileResource(url);
                 if (fileResource == null) {
-                    System.out.println("下载失败：" + filePath + " 即将重试...");
+                    System.out.println("下载失败：" + fileResult.getMoviePath() + filePath + " 即将重试...");
                     //失败了，记录下
                     fileResult.addFailUrl(url);
                     //重新扔到队列里下载
                     doDownloadAsync(url, filePath, fileResult);
                     return;
                 } else {
-                    System.out.println("下载完成：" + filePath);
+                    System.out.println("下载完成：" + fileResult.getMoviePath() + filePath);
                     //成功了，计数减一,删除失败记录
                     fileResult.getCountDownLatch().countDown();
                     fileResult.removeFailUrl(url);
@@ -142,7 +142,9 @@ public class TxtProducer extends AbstractRequest {
     }
 
 
-
+    /**
+     * 会阻塞
+     */
     public void waitToFinish(FileResult fileResult) throws InterruptedException {
 
         fileResult.getCountDownLatch().await();
