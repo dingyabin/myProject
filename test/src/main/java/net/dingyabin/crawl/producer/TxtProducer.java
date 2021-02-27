@@ -28,7 +28,12 @@ import java.util.concurrent.TimeUnit;
 public class TxtProducer extends AbstractRequest {
 
 
-    private static ExecutorService executorService = Executors.newFixedThreadPool(20);
+    private static ExecutorService executorService = Executors.newFixedThreadPool(150);
+
+
+    private  String torrentPath;
+
+    private  String moviePath;
 
 
     @Override
@@ -37,14 +42,22 @@ public class TxtProducer extends AbstractRequest {
     }
 
 
+
+    public TxtProducer(String torrentPath , String moviePath) {
+        this.torrentPath = torrentPath;
+        this.moviePath = moviePath;
+    }
+
+
     public FileResult download() {
         FileResult fileResult = new FileResult();
         try {
-            String baseUrl = "E:\\test\\";
-            File file = new File("C:\\Users\\丁亚宾\\Desktop\\torrent\\20201023\\yueliang\\SWAG剧情精品美乳正妹试玩道具催情与老板大战_x264_aac.txt");
 
-            fileResult.setMoviePath(baseUrl);
-            fileResult.setMovieName(FilenameUtils.getBaseName(file.getPath()));
+            File file = new File(torrentPath);
+
+            String movieName = FilenameUtils.getBaseName(file.getPath());
+            fileResult.setMoviePath(moviePath + movieName );
+            fileResult.setMovieName(movieName);
 
             LineIterator lineIterator = FileUtils.lineIterator(file, "UTF-8");
 
@@ -62,13 +75,12 @@ public class TxtProducer extends AbstractRequest {
             }
             fileResult.start(parts.size());
             for (String part : parts) {
-                String resourceuri = url + "/" + part;
 
-                String downLoadFilePath = baseUrl + part;
+                String downLoadFilePath = fileResult.getMoviePath() + File.separator + part;
 
                 fileResult.addPart(downLoadFilePath);
 
-                doDownloadAsync(resourceuri, downLoadFilePath, fileResult);
+                doDownloadAsync(url + "/" + part, downLoadFilePath, fileResult);
             }
             return fileResult;
         } catch (Exception e) {
@@ -81,8 +93,8 @@ public class TxtProducer extends AbstractRequest {
     /**
      * 异步下载
      */
-    private void doDownloadAsync(String url, String filePath, FileResult fileResult) {
-        executorService.execute(() -> {
+    private void doDownloadAsync(String url, String filePath ,FileResult fileResult) {
+        TxtProducer.executorService.execute(() -> {
 
             try {
                 File target = new File(filePath);
@@ -116,7 +128,7 @@ public class TxtProducer extends AbstractRequest {
     public List<String> createScriptAndRun(String scritPath, String moviePath, String movieName) {
         try {
             String scriptPath = scritPath + "run.bat";
-            String scriptContent = String.format("copy/b  %s*.ts  %s%s.mp4", moviePath, moviePath, movieName);
+            String scriptContent = String.format("copy/b  %s*.ts  %s%s.mp4", moviePath + File.separator, moviePath+ File.separator, movieName);
             FileUtils.write(new File(scriptPath), scriptContent, "GBK");
             Process exec = Runtime.getRuntime().exec(scriptPath);
             InputStream inputStream = exec.getInputStream();
@@ -132,7 +144,10 @@ public class TxtProducer extends AbstractRequest {
 
     public static void main(String[] args) {
         try {
-            TxtProducer txtProducer = new TxtProducer();
+
+            String s = IOUtils.readLines(TxtProducer.class.getResourceAsStream("/file.txt"), "utf-8").get(0);
+
+            TxtProducer txtProducer = new TxtProducer(s,"E:\\test\\");
             FileResult fileResult = txtProducer.download();
 
             fileResult.getCountDownLatch().await();
@@ -150,11 +165,11 @@ public class TxtProducer extends AbstractRequest {
                 }
             }
 
-            executorService.shutdown();
-            executorService.awaitTermination(10, TimeUnit.HOURS);
+            TxtProducer.executorService.shutdown();
+            TxtProducer.executorService.awaitTermination(10, TimeUnit.HOURS);
 
             System.out.println("^_^_^_^_^_^^_^_^任务完成^_^^_^_^^_^_^^_^_^");
-        } catch (InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
