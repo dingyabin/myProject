@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 public class TxtProducer extends AbstractRequest {
 
 
-    private static ExecutorService executorService = Executors.newFixedThreadPool(150);
+    private static ExecutorService executorService = Executors.newFixedThreadPool(500);
 
 
     private  String torrentPath;
@@ -125,7 +125,7 @@ public class TxtProducer extends AbstractRequest {
     }
 
 
-    public List<String> createScriptAndRun(String moviePath, String movieName) {
+    private List<String> createScriptAndRun(String moviePath, String movieName) {
         try {
             String scriptPath =  moviePath + File.separator + "run.bat";
             String scriptContent = String.format("copy/b  %s*.ts  %s%s.mp4", moviePath + File.separator, moviePath+ File.separator, movieName);
@@ -145,21 +145,24 @@ public class TxtProducer extends AbstractRequest {
     /**
      * 会阻塞
      */
-    public void waitToFinish(FileResult fileResult) throws InterruptedException {
+    public void waitToFinish(FileResult fileResult) {
+        try {
+            fileResult.getCountDownLatch().await();
 
-        fileResult.getCountDownLatch().await();
-
-        if (fileResult.getFailUrls().size() > 0) {
-            System.out.println("有下载失败的...");
-            return;
-        }
-        List<String> scriptAndRun = createScriptAndRun(fileResult.getMoviePath(), fileResult.getMovieName());
-        if (scriptAndRun.size() > 2) {
-            File partFile;
-            for (String part : fileResult.getParts()) {
-                partFile = new File(part);
-                partFile.delete();
+            if (fileResult.getFailUrls().size() > 0) {
+                System.out.println("有下载失败的...");
+                return;
             }
+            List<String> scriptAndRun = createScriptAndRun(fileResult.getMoviePath(), fileResult.getMovieName());
+            if (scriptAndRun.size() > 2) {
+                File partFile;
+                for (String part : fileResult.getParts()) {
+                    partFile = new File(part);
+                    partFile.delete();
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -170,13 +173,14 @@ public class TxtProducer extends AbstractRequest {
     public static void main(String[] args) {
         try {
 
-            String s = IOUtils.readLines(TxtProducer.class.getResourceAsStream("/file.txt"), "utf-8").get(0);
+            List<String> strings = IOUtils.readLines(TxtProducer.class.getResourceAsStream("/file.txt"), "utf-8");
+            for (String string : strings) {
+                TxtProducer txtProducer = new TxtProducer(string, "E:\\test\\");
+                FileResult fileResult = txtProducer.download();
+                TxtProducer.executorService.execute(() -> txtProducer.waitToFinish(fileResult));
+            }
 
-            TxtProducer txtProducer = new TxtProducer(s,"E:\\test\\");
-
-            txtProducer.waitToFinish(txtProducer.download());
-
-            TxtProducer.executorService.shutdown();
+            //TxtProducer.executorService.shutdown();
             TxtProducer.executorService.awaitTermination(10, TimeUnit.HOURS);
 
             System.out.println("^_^_^_^_^_^^_^_^任务完成^_^^_^_^^_^_^^_^_^");
