@@ -175,7 +175,7 @@ public class TxtProducer extends AbstractRequest {
 
             List<String> strings = IOUtils.readLines(TxtProducer.class.getResourceAsStream("/file.txt"), "utf-8");
             for (String string : strings) {
-                TxtProducer txtProducer = new TxtProducer(string, "E:\\test\\");
+                TxtProducer txtProducer = new TxtProducer(string, "E:\\test\\ttt\\");
                 FileResult fileResult = txtProducer.download();
                 TxtProducer.executorService.execute(() -> txtProducer.waitToFinish(fileResult));
             }
