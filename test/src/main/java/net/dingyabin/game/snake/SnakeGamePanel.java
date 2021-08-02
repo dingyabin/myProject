@@ -36,7 +36,7 @@ public class SnakeGamePanel extends JPanel {
         snakeElements.add(new SnakeElement(0, SnakeGameManager.TITLE));
         //身子
         for (int i = 1; i <= startLength; i++) {
-            snakeElements.add(new SnakeElement(0 - SnakeGameManager.STEP, SnakeGameManager.TITLE));
+            snakeElements.add(new SnakeElement( -SnakeGameManager.STEP, SnakeGameManager.TITLE));
         }
         snake = new Snake(DirectionEnum.RIGHT, snakeElements);
         food = new Food().refresh();
