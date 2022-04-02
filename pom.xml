@@ -19,6 +19,7 @@
         <module>WebMagic</module>
         <module>data_structure</module>
         <module>GUI</module>
+        <module>common-config-sdk</module>
     </modules>
 
 

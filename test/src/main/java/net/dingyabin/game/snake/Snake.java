@@ -49,22 +49,24 @@ public class Snake {
         SnakeElement snakeElement = new SnakeElement();
         SnakeElement tail = snake.get(snake.size() -1);
         SnakeElement tpre = snake.get(snake.size() -2);
-        if (tail.getX() < tpre.getX()) {
-            snakeElement.setX(tail.getX() - 1);
-            snakeElement.setY(tail.getY());
-        }
-        if (tail.getX() > tpre.getX()) {
-            snakeElement.setX(tail.getX() + 1);
-            snakeElement.setY(tail.getY());
-        }
-        if (tail.getY() < tpre.getY()) {
-            snakeElement.setX(tpre.getX());
-            snakeElement.setY(tpre.getY() - 1);
-        }
-        if (tail.getY() > tpre.getY()) {
-            snakeElement.setX(tpre.getX());
-            snakeElement.setY(tpre.getY() + 1);
-        }
+//        if (tail.getX() < tpre.getX()) {
+//            snakeElement.setX(tail.getX() - 1);
+//            snakeElement.setY(tail.getY());
+//        }
+//        if (tail.getX() > tpre.getX()) {
+//            snakeElement.setX(tail.getX() + 1);
+//            snakeElement.setY(tail.getY());
+//        }
+//        if (tail.getY() < tpre.getY()) {
+//            snakeElement.setX(tpre.getX());
+//            snakeElement.setY(tpre.getY() - 1);
+//        }
+//        if (tail.getY() > tpre.getY()) {
+//            snakeElement.setX(tpre.getX());
+//            snakeElement.setY(tpre.getY() + 1);
+//        }
+        snakeElement.setX(tail.getX());
+        snakeElement.setY(tail.getY());
         this.snake.add(snakeElement);
     }
 
