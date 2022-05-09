@@ -6,7 +6,7 @@ import com.ctrip.framework.apollo.ConfigService;
 import com.ctrip.framework.apollo.core.enums.ConfigFileFormat;
 import com.dingyabin.config.listener.ApollOnChangeListener;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.HashMap;
@@ -16,7 +16,7 @@ import java.util.Map;
  * @author dingyabin
  * @date 2022-04-02 14:46
  */
-public class ApolloConfigService implements InitializingBean {
+public class ApolloConfigService implements SmartInitializingSingleton {
 
     private static final ApolloConfigService INSTANCE = new ApolloConfigService();
 
@@ -43,7 +43,7 @@ public class ApolloConfigService implements InitializingBean {
 
 
     @Override
-    public void afterPropertiesSet() {
+    public void afterSingletonsInstantiated() {
         for (String s : ns.split(",")) {
             String formatNs = StringUtils.substringBeforeLast(s, ".");
             if (s.endsWith(".yml") || s.endsWith(".yaml")) {
@@ -97,7 +97,7 @@ public class ApolloConfigService implements InitializingBean {
 
     public ApolloConfigService withNs(String ns) {
         this.ns = ns;
-        afterPropertiesSet();
+        afterSingletonsInstantiated();
         return this;
     }
 
