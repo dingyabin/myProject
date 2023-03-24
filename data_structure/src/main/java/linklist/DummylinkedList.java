@@ -148,4 +148,21 @@ public class DummylinkedList<E> {
         }
     }
 
+
+    /**
+     * 链表翻转
+     * @param head
+     * @return
+     */
+    public Node reverse(Node head) {
+        Node pre = null;
+        while (head != null) {
+            Node next = head.next;
+            head.next = pre;
+            pre = head;
+            head = next;
+        }
+        return pre;
+    }
+
 }
