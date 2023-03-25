@@ -39,7 +39,10 @@ public enum WebSiteEnum {
 
     CAITAZHIJIA(".mp4", String.format("C:\\Users\\%s\\Desktop\\torrent\\%s\\caitazhijia\\", System.getenv().get("USERNAME"), DateTime.now().toString("yyyyMMdd"))),
 
-    YUELAING(".txt", String.format("C:\\Users\\%s\\Desktop\\torrent\\%s\\yueliang\\", System.getenv().get("USERNAME"), DateTime.now().toString("yyyyMMdd")))
+    YUELAING(".txt", String.format("C:\\Users\\%s\\Desktop\\torrent\\%s\\yueliang\\", System.getenv().get("USERNAME"), DateTime.now().toString("yyyyMMdd"))),
+
+    FOSTWARE(".txt", String.format("C:\\Users\\%s\\Desktop\\torrent\\%s\\software\\", System.getenv().get("USERNAME"), DateTime.now().toString("yyyyMMdd")))
+
     ;
 
 

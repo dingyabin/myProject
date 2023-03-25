@@ -7,6 +7,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.BlockingQueue;
 
 /**
@@ -36,9 +37,15 @@ public abstract class AbstractTorrentProducer extends AbstractRequest implements
 
 
     protected String getResource() {
+        return getResource(getUrl());
+    }
+
+
+
+    protected String getResource(String url){
         String stringResource = null;
         try {
-            stringResource = getStringResource(getUrl(), encoding);
+            stringResource = getStringResource(url, encoding);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -46,10 +53,11 @@ public abstract class AbstractTorrentProducer extends AbstractRequest implements
     }
 
 
-    protected String getResource(String url){
+
+    protected String getResource(String url, Map<String,String> header){
         String stringResource = null;
         try {
-            stringResource = getStringResource(url, encoding);
+            stringResource = getStringResource(url, encoding, header);
         } catch (Exception e) {
             e.printStackTrace();
         }

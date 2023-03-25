@@ -31,11 +31,11 @@ public class Start {
             thread.setName("task thread-" + index.getAndIncrement());
             return thread;
         });
-        for (int i = 1; i <= 100; i++) {
-            executorService.submit(ProducerFactory.getProducer(YUELAING, QUEUE, i));
+        for (int i = 1; i <= 1; i++) {
+            executorService.submit(ProducerFactory.getProducer(FOSTWARE, QUEUE, i));
         }
         for (int i = 0; i < 10; i++) {
-            executorService.submit(new SimpleTorrentConcumer(YUELAING, QUEUE));
+           // executorService.submit(new SimpleTorrentConcumer(YUELAING, QUEUE));
         }
         executorService.shutdown();
         executorService.awaitTermination(10, TimeUnit.HOURS);

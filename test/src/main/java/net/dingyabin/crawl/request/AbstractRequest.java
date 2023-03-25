@@ -46,8 +46,8 @@ public class AbstractRequest {
     }
 
 
-    protected String getStringResource(String curl, String encoding) throws Exception {
-        InputStream inputStream = getInputStream(curl,0);
+    protected String getStringResource(String curl, String encoding, Map<String,String> header) throws Exception {
+        InputStream inputStream = getInputStream(curl,0, header);
         if (inputStream == null) {
             return null;
         }
@@ -57,10 +57,15 @@ public class AbstractRequest {
     }
 
 
+    protected String getStringResource(String curl, String encoding) throws Exception {
+        return getStringResource(curl, encoding, getRequestHeader());
+    }
+
+
     protected byte[] getFileResource(String url) {
         byte[] bytes = null;
         try {
-            InputStream inputStream = getInputStream(url,0);
+            InputStream inputStream = getInputStream(url,0, getRequestHeader());
             if (inputStream == null) {
                 return null;
             }
@@ -73,14 +78,13 @@ public class AbstractRequest {
     }
 
 
-    private InputStream getInputStream(String curl, int retry) throws Exception {
+    private InputStream getInputStream(String curl, int retry, Map<String,String> header) throws Exception {
         if (retry > 2) {
             System.out.println("重试"+retry+"次失败，退出...url=" + curl);
             return null;
         }
 //        SSLUtils.ignoreSsl();
         HttpURLConnection connection = (HttpURLConnection) (new URL(curl)).openConnection();
-        Map<String, String> header = getRequestHeader();
         if (header != null) {
             header.forEach(connection::setRequestProperty);
         }
@@ -92,6 +96,7 @@ public class AbstractRequest {
         if (readTimeOut > 0) {
             connection.setReadTimeout(1000 * readTimeOut);
         }
+        connection.setRequestMethod("GET");
         InputStream inputStream;
         try {
             inputStream = connection.getInputStream();
@@ -100,7 +105,7 @@ public class AbstractRequest {
             e.printStackTrace();
             System.out.println("getInputStream()失败了.....");
         }
-        return getInputStream(curl, retry + 1);
+        return getInputStream(curl, retry + 1, header);
     }
 
 }
