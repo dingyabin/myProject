@@ -34,8 +34,8 @@ public class Start {
         for (int i = 1; i <= 1; i++) {
             executorService.submit(ProducerFactory.getProducer(FOSTWARE, QUEUE, i));
         }
-        for (int i = 0; i < 10; i++) {
-           // executorService.submit(new SimpleTorrentConcumer(YUELAING, QUEUE));
+        for (int i = 0; i < 1; i++) {
+            executorService.submit(new SimpleTorrentConcumer(FOSTWARE, QUEUE));
         }
         executorService.shutdown();
         executorService.awaitTermination(10, TimeUnit.HOURS);
