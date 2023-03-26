@@ -2,12 +2,12 @@ package net.dingyabin.crawl.producer;
 
 import net.dingyabin.crawl.model.Torrent;
 import net.wecash.utils.HTTPClient;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.regex.Matcher;
@@ -42,8 +42,6 @@ public class SoftWareTorrentProducer extends AbstractTorrentProducer {
 
     @Override
     protected List<Torrent> makeTorrent(String resource) {
-        List<Torrent> list = new ArrayList<>();
-        StringBuilder stringBuilder = new StringBuilder();
         try {
             Document doc = Jsoup.parse(resource);
             Elements tbodys = doc.getElementsByTag("tbody");
@@ -55,11 +53,13 @@ public class SoftWareTorrentProducer extends AbstractTorrentProducer {
                     if (td.html().length() < 15) {
                         continue;
                     }
+                    StringBuilder stringBuilder = new StringBuilder();
                     String colspan = td.attr("colspan");
                     if ("3".equals(colspan) && "center".equals(td.attr("align"))) {
                         String html = td.getElementsByAttributeValueContaining("style", "rgb(0, 0, 0)").html();
                         System.out.println("大标题: " + html.replaceAll("&nbsp;", ""));
                         stringBuilder.append(html.replaceAll("&nbsp;", "")).append("\n");
+                        pushTorrent(new Torrent("soft", stringBuilder.toString().getBytes(), true));
                         continue;
                     }
                     Elements aTags = td.getElementsByTag("a");
@@ -67,6 +67,7 @@ public class SoftWareTorrentProducer extends AbstractTorrentProducer {
                         String html = td.getElementsByTag("strong").get(0).getElementsByTag("span").html();
                         System.out.println("小标题: " + html.replaceAll("&nbsp;", ""));
                         stringBuilder.append(html.replaceAll("&nbsp;", "")).append("\n");
+                        pushTorrent(new Torrent("soft", stringBuilder.toString().getBytes(), true));
                         continue;
                     }
                     Element atag = aTags.get(0);
@@ -93,16 +94,32 @@ public class SoftWareTorrentProducer extends AbstractTorrentProducer {
                         stringBuilder.append(group).append("\t");
                     }
                     stringBuilder.append("\n");
+
+                    pushTorrent(new Torrent("soft", stringBuilder.toString().getBytes(), true));
+
                     Thread.sleep(2000);
                 }
-                if (i==2){
-                    break;
-                }
             }
-            list.add(new Torrent("soft",stringBuilder.toString().getBytes()));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return list;
+        return null;
+    }
+
+
+
+
+    @Override
+    public void run() {
+        try {
+            String resource = getResource();
+            if (StringUtils.isBlank(resource)) {
+                System.out.println("xxxxxxxxxxparseHome,第1页空白,跳过xxxxxxxxxxx");
+                return;
+            }
+            makeTorrent(resource);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -72,7 +72,7 @@ public class SimpleTorrentConcumer extends AbstractRequest implements Runnable {
                 if (file == null) {
                     continue;
                 }
-                if (!fileBooleanPair.getRight() && file.getTotalSpace() > 100) {
+                if (!torrent.getAppend() && !fileBooleanPair.getRight() && file.getTotalSpace() > 100) {
                     System.out.println("发现已经存在的文件:"+ file.getAbsolutePath());
                     continue;
                 }
@@ -83,7 +83,7 @@ public class SimpleTorrentConcumer extends AbstractRequest implements Runnable {
                 if (bytes == null) {
                     continue;
                 }
-                FileUtils.writeByteArrayToFile(file, bytes, false);
+                FileUtils.writeByteArrayToFile(file, bytes, torrent.getAppend());
                 System.out.printf(">>>>>>线程%s成功download一个文件,目前还剩%s个任务<<<<<<<<", Thread.currentThread().getName(), queue.size());
             }
         } catch (Exception e) {

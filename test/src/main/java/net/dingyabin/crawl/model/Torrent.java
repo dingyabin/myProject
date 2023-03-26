@@ -9,6 +9,7 @@ public class Torrent {
 
     private String name;
     private String url;
+    private boolean append;
     private byte[] content;
 
     public Torrent() {
@@ -20,6 +21,12 @@ public class Torrent {
 
     public Torrent(String name, byte[] content) {
         this.name = name;
+        this.content = content;
+    }
+
+    public Torrent(String name, byte[] content, boolean append) {
+        this.name = name;
+        this.append = append;
         this.content = content;
     }
 
@@ -51,5 +58,13 @@ public class Torrent {
 
     public void setContent(byte[] content) {
         this.content = content;
+    }
+
+    public boolean getAppend() {
+        return append;
+    }
+
+    public void setAppend(boolean append) {
+        this.append = append;
     }
 }
