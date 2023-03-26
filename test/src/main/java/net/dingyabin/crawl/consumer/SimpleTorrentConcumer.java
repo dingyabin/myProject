@@ -28,6 +28,11 @@ public class SimpleTorrentConcumer extends AbstractRequest implements Runnable {
 
     private String[] delStr = {"\\*", "\\?", "\\|", "<", ">", "!", "\"", "/", " ", "：", ":"};
 
+
+    public SimpleTorrentConcumer() {
+
+    }
+
     public SimpleTorrentConcumer(WebSiteEnum webSiteEnum, BlockingQueue<Torrent> queue) {
         this.queue = queue;
         this.webSiteEnum = webSiteEnum;
@@ -83,11 +88,42 @@ public class SimpleTorrentConcumer extends AbstractRequest implements Runnable {
                 if (bytes == null) {
                     continue;
                 }
-                FileUtils.writeByteArrayToFile(file, bytes, torrent.getAppend());
+                doWrite(torrent, file, bytes);
                 System.out.printf(">>>>>>线程%s成功download一个文件,目前还剩%s个任务<<<<<<<<", Thread.currentThread().getName(), queue.size());
             }
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            doInFinally();
         }
+    }
+
+
+    protected void doInFinally() {
+
+    }
+
+
+    /**
+     * 执行具体的写操作
+     * @param torrent 内容
+     * @param file 文件
+     * @param bytes 内容字节
+     */
+    protected void doWrite(Torrent torrent, File file, byte[] bytes) throws IOException {
+        FileUtils.writeByteArrayToFile(file, bytes, torrent.getAppend());
+    }
+
+
+
+    public SimpleTorrentConcumer setQueue(BlockingQueue<Torrent> queue) {
+        this.queue = queue;
+        return this;
+    }
+
+
+    public SimpleTorrentConcumer setWebSiteEnum(WebSiteEnum webSiteEnum) {
+        this.webSiteEnum = webSiteEnum;
+        return this;
     }
 }

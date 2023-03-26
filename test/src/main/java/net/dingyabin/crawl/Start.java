@@ -35,7 +35,7 @@ public class Start {
             executorService.submit(ProducerFactory.getProducer(FOSTWARE, QUEUE, i));
         }
         for (int i = 0; i < 1; i++) {
-            executorService.submit(new SimpleTorrentConcumer(FOSTWARE, QUEUE));
+            executorService.submit(FOSTWARE.consumer().setWebSiteEnum(FOSTWARE).setQueue(QUEUE));
         }
         executorService.shutdown();
         executorService.awaitTermination(10, TimeUnit.HOURS);
