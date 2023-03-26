@@ -24,7 +24,7 @@ public class SoftWareTorrentProducer extends AbstractTorrentProducer {
 
     private Pattern baiduPompile = Pattern.compile("(https://pan.baidu.com/[a-zA-Z0-9]+/[a-zA-Z0-9_\\-]+)");
 
-    private Pattern codePompile = Pattern.compile("\\[提取码\\]：</span><span[\\s\\S]*>([a-zA-Z0-9_]+)</span>");
+    private Pattern codePompile = Pattern.compile("\\[提取码\\]：</span><span [\\s\\S]*>([a-zA-Z0-9_]+)</span>");
 
 
     public SoftWareTorrentProducer(BlockingQueue<Torrent> queue, String encoding, int pageNumber) {
@@ -48,7 +48,7 @@ public class SoftWareTorrentProducer extends AbstractTorrentProducer {
             Document doc = Jsoup.parse(resource);
             Elements tbodys = doc.getElementsByTag("tbody");
 
-            for (int i = 1; i < tbodys.size(); i++) {
+            for (int i = 2; i < tbodys.size(); i++) {
                 Element tbody = tbodys.get(i);
                 Elements tds = tbody.getElementsByTag("td");
                 for (Element td : tds) {
@@ -90,7 +90,7 @@ public class SoftWareTorrentProducer extends AbstractTorrentProducer {
                     while (matcherCode.find()){
                         String group = matcherCode.group(1);
                         System.out.println("提取码:    "+group);
-                        stringBuilder.append(group).append("\t");;
+                        stringBuilder.append(group).append("\t");
                     }
                     stringBuilder.append("\n");
                     Thread.sleep(2000);
