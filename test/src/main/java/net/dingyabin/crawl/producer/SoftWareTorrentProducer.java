@@ -10,6 +10,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.regex.Matcher;
@@ -90,23 +91,26 @@ public class SoftWareTorrentProducer extends AbstractTorrentProducer {
                     Document _doc = Jsoup.parse(HTTPClient.get(href));
                     String html = _doc.html();
 
-                    String url = StringUtils.EMPTY;
+
+                    List<String> urls = new ArrayList<>();
                     Matcher matcher = baiduPompile.matcher(html);
                     while (matcher.find()){
                         String group = matcher.group(1);
-                        System.out.println("地址:    "+group);
-                        url = url + group + "\n";
+                        urls.add(group);
+                        System.out.println("地址:    " + group);
                     }
-                    jsonObject.put("url", url);
+                    jsonObject.put("url", String.join("\n", urls));
 
-                    String code = StringUtils.EMPTY;
+
+                    List<String> codes = new ArrayList<>();
                     Matcher matcherCode = codePompile.matcher(html);
                     while (matcherCode.find()){
                         String group = matcherCode.group(1);
                         System.out.println("提取码:    "+group);
-                        code = code + group + "\n";
+                        codes.add(group);
                     }
-                    jsonObject.put("code", code);
+                    jsonObject.put("code", String.join("\n", codes));
+
                     pushTorrent(new Torrent("soft", jsonObject.toJSONString().getBytes(),true));
 
                     Thread.sleep(2000);
