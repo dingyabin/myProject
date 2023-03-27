@@ -28,6 +28,8 @@ public class SoftWareTorrentProducer extends AbstractTorrentProducer {
 
     private Pattern codePompile = Pattern.compile("\\[提取码\\]：</span><span [\\s\\S]*?>([a-zA-Z0-9_]+)</span>");
 
+    private Pattern subTitlePompile = Pattern.compile(">([a-zA-Z0-9_\\u4e00-\\u9fa5]+?[&nbsp;]*?)</");
+
 
     public SoftWareTorrentProducer(BlockingQueue<Torrent> queue, String encoding, int pageNumber) {
         super(queue, encoding, pageNumber);
@@ -48,6 +50,7 @@ public class SoftWareTorrentProducer extends AbstractTorrentProducer {
             Document doc = Jsoup.parse(resource);
             Elements tbodys = doc.getElementsByTag("tbody");
 
+            int fff=0;
             for (int i = 1; i < tbodys.size(); i++) {
                 Element tbody = tbodys.get(i);
                 Elements tds = tbody.getElementsByTag("td");
@@ -64,9 +67,14 @@ public class SoftWareTorrentProducer extends AbstractTorrentProducer {
                     }
                     Elements aTags = td.getElementsByTag("a");
                     if (aTags == null || aTags.isEmpty()) {
-                        String html = td.getElementsByTag("strong").get(0).getElementsByTag("span").html().replaceAll("&nbsp;", "");
-                        System.out.println("小标题: " + html);
-                        pushTorrent(new Torrent("soft", JSONObject.toJSONString(ImmutableMap.of("name", html)).getBytes(),true));
+                        Matcher matcher = subTitlePompile.matcher(td.html());
+                        String subTitle = StringUtils.EMPTY;
+                        while (matcher.find()){
+                            subTitle = matcher.group(1).replaceAll("&nbsp;", "");
+                            System.out.println("小标题: " + subTitle);
+                            break;
+                        }
+                        pushTorrent(new Torrent("soft", JSONObject.toJSONString(ImmutableMap.of("name", subTitle)).getBytes(),true));
                         continue;
                     }
 
@@ -102,6 +110,10 @@ public class SoftWareTorrentProducer extends AbstractTorrentProducer {
                     pushTorrent(new Torrent("soft", jsonObject.toJSONString().getBytes(),true));
 
                     Thread.sleep(2000);
+                    fff++;
+                    if (fff ==50) {
+                        return null;
+                    }
                 }
             }
         } catch (Exception e) {
