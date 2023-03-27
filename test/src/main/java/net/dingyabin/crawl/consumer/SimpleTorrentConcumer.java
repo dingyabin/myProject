@@ -60,7 +60,7 @@ public class SimpleTorrentConcumer extends AbstractRequest implements Runnable {
     public void run() {
         try {
             while (true) {
-                Torrent torrent = queue.poll(1000, TimeUnit.SECONDS);
+                Torrent torrent = queue.poll(getWaitTimeSec(), TimeUnit.SECONDS);
                 if (torrent == null) {
                     if (queue.isEmpty()) {
                         return;
@@ -125,5 +125,10 @@ public class SimpleTorrentConcumer extends AbstractRequest implements Runnable {
     public SimpleTorrentConcumer setWebSiteEnum(WebSiteEnum webSiteEnum) {
         this.webSiteEnum = webSiteEnum;
         return this;
+    }
+
+
+    protected int getWaitTimeSec(){
+        return 100;
     }
 }

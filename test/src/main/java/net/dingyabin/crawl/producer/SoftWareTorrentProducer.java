@@ -1,5 +1,7 @@
 package net.dingyabin.crawl.producer;
 
+import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.ImmutableMap;
 import net.dingyabin.crawl.model.Torrent;
 import net.wecash.utils.HTTPClient;
 import org.apache.commons.lang3.StringUtils;
@@ -53,49 +55,51 @@ public class SoftWareTorrentProducer extends AbstractTorrentProducer {
                     if (td.html().length() < 15) {
                         continue;
                     }
-                    StringBuilder stringBuilder = new StringBuilder();
                     String colspan = td.attr("colspan");
                     if ("3".equals(colspan) && "center".equals(td.attr("align"))) {
-                        String html = td.getElementsByAttributeValueContaining("style", "rgb(0, 0, 0)").html();
-                        System.out.println("大标题: " + html.replaceAll("&nbsp;", ""));
-                        stringBuilder.append(html.replaceAll("&nbsp;", "")).append("\n");
-                        pushTorrent(new Torrent("soft", stringBuilder.toString().getBytes(), true));
+                        String html = td.getElementsByAttributeValueContaining("style", "rgb(0, 0, 0)").html().replaceAll("&nbsp;", "");
+                        System.out.println("大标题: " + html);
+                        pushTorrent(new Torrent("soft", JSONObject.toJSONString(ImmutableMap.of("name", html)).getBytes(),true));
                         continue;
                     }
                     Elements aTags = td.getElementsByTag("a");
                     if (aTags == null || aTags.isEmpty()) {
-                        String html = td.getElementsByTag("strong").get(0).getElementsByTag("span").html();
-                        System.out.println("小标题: " + html.replaceAll("&nbsp;", ""));
-                        stringBuilder.append(html.replaceAll("&nbsp;", "")).append("\n");
-                        pushTorrent(new Torrent("soft", stringBuilder.toString().getBytes(), true));
+                        String html = td.getElementsByTag("strong").get(0).getElementsByTag("span").html().replaceAll("&nbsp;", "");
+                        System.out.println("小标题: " + html);
+                        pushTorrent(new Torrent("soft", JSONObject.toJSONString(ImmutableMap.of("name", html)).getBytes(),true));
                         continue;
                     }
+
+                    JSONObject jsonObject = new JSONObject();
+
                     Element atag = aTags.get(0);
                     String href = atag.attr("href");
                     String textvalue = atag.attr("textvalue");
                     System.out.println(textvalue + " : " + href);
-                    stringBuilder.append(textvalue).append("\t");
+                    jsonObject.put("name", textvalue);
+
 
                     Document _doc = Jsoup.parse(HTTPClient.get(href));
                     String html = _doc.html();
 
+                    String url = StringUtils.EMPTY;
                     Matcher matcher = baiduPompile.matcher(html);
                     while (matcher.find()){
                         String group = matcher.group(1);
                         System.out.println("地址:    "+group);
-                        stringBuilder.append(group).append("\t");
+                        url = url + group + "\n";
                     }
+                    jsonObject.put("url", url);
 
-
+                    String code = StringUtils.EMPTY;
                     Matcher matcherCode = codePompile.matcher(html);
                     while (matcherCode.find()){
                         String group = matcherCode.group(1);
                         System.out.println("提取码:    "+group);
-                        stringBuilder.append(group).append("\t");
+                        code = code + group + "\n";
                     }
-                    stringBuilder.append("\n");
-
-                    pushTorrent(new Torrent("soft", stringBuilder.toString().getBytes(), true));
+                    jsonObject.put("code", code);
+                    pushTorrent(new Torrent("soft", jsonObject.toJSONString().getBytes(),true));
 
                     Thread.sleep(2000);
                 }

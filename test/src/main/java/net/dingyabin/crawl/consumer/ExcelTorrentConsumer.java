@@ -28,7 +28,7 @@ public class ExcelTorrentConsumer extends SimpleTorrentConcumer {
 
     public ExcelTorrentConsumer(Class<? extends ExcelBean> excelBeanClass) {
         this.excelBeanClass = excelBeanClass;
-        this.excelWriter = EasyExcel.write("C:\\Users\\丁亚宾\\Desktop\\torrent\\20230326\\software\\soft.xlsx", excelBeanClass).build();
+        this.excelWriter = EasyExcel.write("C:\\Users\\丁亚宾\\Desktop\\torrent\\20230327\\software\\soft.xlsx", excelBeanClass).build();
         this.writeSheet = EasyExcel.writerSheet().build();
     }
 
@@ -53,5 +53,12 @@ public class ExcelTorrentConsumer extends SimpleTorrentConcumer {
     @Override
     protected void doInFinally() {
         excelWriter.close();
+    }
+
+
+
+    @Override
+    protected int getWaitTimeSec() {
+        return 10;
     }
 }

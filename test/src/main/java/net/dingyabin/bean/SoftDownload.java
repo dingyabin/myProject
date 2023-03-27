@@ -1,6 +1,7 @@
 package net.dingyabin.bean;
 
 import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.fastjson.JSONObject;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -34,9 +35,10 @@ public class SoftDownload implements ExcelBean {
 
     @Override
     public ExcelBean build(String context) {
-        this.name = context;
-        this.url= context;
-        this.code= context;
+        JSONObject jsonObject = JSONObject.parseObject(context);
+        this.name = jsonObject.getString("name");
+        this.url= jsonObject.getString("url");
+        this.code= jsonObject.getString("code");
         return this;
     }
 }
