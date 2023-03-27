@@ -56,9 +56,9 @@ public class Test58 {
 //        String post = HTTPClient.post(build);
 //        System.out.println(post);
 
-        String ss="<tr><td colspan=\"3\" rowspan=\"1\" width=\"547\" style=\"border-color: rgb(214, 214, 214);word-break: break-all;\"><strong style=\"font-size: 14px;background-color: rgb(254, 254, 254);\"></strong><strong><span style=\"font-size: 14px;\">Acrobat&nbsp;&nbsp;</span></strong></td></tr>";
 
-        Pattern codePompile = Pattern.compile(">([a-zA-Z0-9_\\u4e00-\\u9fa5]+?[&nbsp;]*?)</");
+        String ss= "<p style=\"color: rgb(0, 0, 0); font-size: medium; text-align: start; white-space: normal; visibility: visible;\"><span style=\"font-size: 15px; visibility: visible;\">1.鼠标右击【解压到 Office2021(64bit)】。</span></p>";
+        Pattern codePompile = Pattern.compile(">([a-zA-Z0-9_.。\\u4e00-\\u9fa5]+?)</");
         Matcher matcher = codePompile.matcher(ss);
         while (matcher.find()){
             String group = matcher.group(1);
