@@ -70,10 +70,9 @@ public class SoftWareTorrentProducer extends AbstractTorrentProducer {
                     if (aTags == null || aTags.isEmpty()) {
                         Matcher matcher = subTitlePompile.matcher(td.html());
                         String subTitle = StringUtils.EMPTY;
-                        while (matcher.find()){
+                        if (matcher.find()) {
                             subTitle = matcher.group(1).replaceAll("&nbsp;", "");
                             System.out.println("小标题: " + subTitle);
-                            break;
                         }
                         pushTorrent(new Torrent("soft", JSONObject.toJSONString(ImmutableMap.of("name", subTitle)).getBytes(),true));
                         continue;
