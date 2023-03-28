@@ -86,32 +86,17 @@ public class SoftWareTorrentProducer extends AbstractTorrentProducer {
                     System.out.println(textvalue + " : " + href);
                     jsonObject.put("name", textvalue);
 
-
                     Document _doc = Jsoup.parse(HTTPClient.get(href));
                     String html = _doc.html();
-
-
-                    List<String> urls = new ArrayList<>();
-                    Matcher matcher = baiduPompile.matcher(html);
-                    while (matcher.find()){
-                        String group = matcher.group(1);
-                        urls.add(group);
-                        System.out.println("地址:    " + group);
-                    }
-                    jsonObject.put("url", String.join("\n", urls));
-
-
-                    List<String> codes = new ArrayList<>();
-                    Matcher matcherCode = codePompile.matcher(html);
-                    while (matcherCode.find()){
-                        String group = matcherCode.group(1);
-                        System.out.println("提取码:    "+group);
-                        codes.add(group);
-                    }
-                    jsonObject.put("code", String.join("\n", codes));
-
+                    //提取下载url
+                    findUrl(jsonObject, html);
+                    //提取验证码
+                    findCode(jsonObject, html);
+                    //获取安装方法
+                    findOperation(jsonObject, html);
+                    //载入下载队列
                     pushTorrent(new Torrent("soft", jsonObject.toJSONString().getBytes(),true));
-
+                    //休眠2s防止太频繁
                     Thread.sleep(2000);
                     fff++;
                     if (fff ==50) {
@@ -123,6 +108,42 @@ public class SoftWareTorrentProducer extends AbstractTorrentProducer {
             e.printStackTrace();
         }
         return null;
+    }
+
+
+
+
+
+    private void findUrl(JSONObject jsonObject, String html) {
+        List<String> urls = new ArrayList<>();
+        Matcher matcher = baiduPompile.matcher(html);
+        while (matcher.find()){
+            String group = matcher.group(1);
+            urls.add(group);
+            System.out.println("地址:    " + group);
+        }
+        jsonObject.put("url", String.join("\n", urls));
+    }
+
+
+
+
+
+    private void findCode(JSONObject jsonObject, String html) {
+        List<String> codes = new ArrayList<>();
+        Matcher matcherCode = codePompile.matcher(html);
+        while (matcherCode.find()){
+            String group = matcherCode.group(1);
+            System.out.println("提取码:    "+group);
+            codes.add(group);
+        }
+        jsonObject.put("code", String.join("\n", codes));
+    }
+
+
+
+    private void findOperation(JSONObject jsonObject, String html){
+
     }
 
 
