@@ -23,14 +23,15 @@ public class SoftDownload implements ExcelBean {
     @ExcelProperty(value = "提取码", index = 2)
     private String code;
 
+    @ExcelProperty(value = "操作方法", index = 3)
+    private String operation;
+
+    @ExcelProperty(value = "图例", index = 4)
+    private String imgs;
+
     public SoftDownload() {
     }
 
-    public SoftDownload(String name, String url, String code) {
-        this.name = name;
-        this.url = url;
-        this.code = code;
-    }
 
 
     @Override
@@ -39,6 +40,8 @@ public class SoftDownload implements ExcelBean {
         this.name = jsonObject.getString("name");
         this.url= jsonObject.getString("url");
         this.code= jsonObject.getString("code");
+        this.operation= jsonObject.getString("operation");
+        this.imgs= jsonObject.getString("imgs");
         return this;
     }
 }

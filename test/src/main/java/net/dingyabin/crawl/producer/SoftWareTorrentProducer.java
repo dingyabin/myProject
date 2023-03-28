@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.google.common.collect.ImmutableMap;
 import net.dingyabin.crawl.model.Torrent;
 import net.wecash.utils.HTTPClient;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -11,10 +12,12 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Created by MrDing
@@ -30,6 +33,11 @@ public class SoftWareTorrentProducer extends AbstractTorrentProducer {
     private Pattern codePompile = Pattern.compile("\\[提取码\\]：</span><span [\\s\\S]*?>([a-zA-Z0-9_]+)</span>");
 
     private Pattern subTitlePompile = Pattern.compile(">([a-zA-Z0-9_\\u4e00-\\u9fa5]+?[&nbsp;]*?)</");
+
+    private List<String> IMgStrs = Arrays.asList(
+            "https://mmbiz.qpic.cn/mmbiz_gif/mWLribm6sbwKbFmKToSImq3CsNxopsUZgC4lnIMAiacZjpmWaPIqfSm3uWZd8uPuO4ibPuvXM6up5JbOicXxrwObPQ/640?wx_fmt=gif",
+            "https://mmbiz.qpic.cn/mmbiz_gif/mWLribm6sbwI1qzZMucV5Gj2QP82UNbFSLnUytKhvYwJLeiaE1ZvZnbPTtMt8k04B0K6fhjDIfqcY9BEicibG9BHsw/640?wx_fmt=gif"
+    );
 
 
     public SoftWareTorrentProducer(BlockingQueue<Torrent> queue, String encoding, int pageNumber) {
@@ -93,13 +101,13 @@ public class SoftWareTorrentProducer extends AbstractTorrentProducer {
                     //提取验证码
                     findCode(jsonObject, html);
                     //获取安装方法
-                    findOperation(jsonObject, html);
+                    findOperation(jsonObject, html, _doc);
                     //载入下载队列
                     pushTorrent(new Torrent("soft", jsonObject.toJSONString().getBytes(),true));
                     //休眠2s防止太频繁
                     Thread.sleep(2000);
                     fff++;
-                    if (fff ==50) {
+                    if (fff ==10) {
                         return null;
                     }
                 }
@@ -142,8 +150,27 @@ public class SoftWareTorrentProducer extends AbstractTorrentProducer {
 
 
 
-    private void findOperation(JSONObject jsonObject, String html){
-
+    private void findOperation(JSONObject jsonObject, String html, Document doc){
+        Elements imgs = doc.getElementsByTag("img");
+        Element section = null;
+        for (Element img : imgs) {
+            String src = img.attr("data-src");
+            if (IMgStrs.contains(src)){
+                Element cur = img;
+                while (cur != null && !cur.tagName().equals("section")) {
+                    cur = cur.parent();
+                }
+                section = cur;
+                break;
+            }
+        }
+        if (section != null) {
+            Elements spans = section.getElementsByTag("span");
+            String operation = spans.stream().filter(span-> CollectionUtils.isEmpty(span.getElementsByTag("img"))).map(Element::html).collect(Collectors.joining("\n"));
+            jsonObject.put("operation", operation);
+        }
+        String imgStr = imgs.stream().map(element -> element.attr("data-src")).filter(str -> !IMgStrs.contains(str)).collect(Collectors.joining("\n"));
+        jsonObject.put("imgs", imgStr);
     }
 
 
