@@ -28,11 +28,11 @@ public class SoftWareTorrentProducer extends AbstractTorrentProducer {
 
     private String url = "https://mp.weixin.qq.com/s/RH0oCJWD00QFXpuCYwB8oA";
 
-    private Pattern baiduPompile = Pattern.compile("(https://pan.baidu.com/[a-zA-Z0-9]+/[a-zA-Z0-9_\\-]+)");
+    private final Pattern baiduPompile = Pattern.compile("(https://pan.baidu.com/[a-zA-Z0-9]+/[a-zA-Z0-9_\\-]+)");
 
-    private Pattern codePompile = Pattern.compile("\\[提取码\\]：</span><span [\\s\\S]*?>([a-zA-Z0-9_]+)</span>");
+    private final Pattern codePompile = Pattern.compile("\\[提取码\\]：</span><span [\\s\\S]*?>([a-zA-Z0-9_]+)</span>");
 
-    private Pattern subTitlePompile = Pattern.compile(">([a-zA-Z0-9_\\u4e00-\\u9fa5]+?[&nbsp;]*?)</");
+    private final Pattern subTitlePompile = Pattern.compile(">([a-zA-Z0-9_\\u4e00-\\u9fa5]+?[&nbsp;]*?)</");
 
     private List<String> IMgStrs = Arrays.asList(
             "https://mmbiz.qpic.cn/mmbiz_gif/mWLribm6sbwKbFmKToSImq3CsNxopsUZgC4lnIMAiacZjpmWaPIqfSm3uWZd8uPuO4ibPuvXM6up5JbOicXxrwObPQ/640?wx_fmt=gif",

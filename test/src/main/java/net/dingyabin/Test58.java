@@ -4,6 +4,11 @@ import net.wecash.utils.HTTPBuilder;
 import net.wecash.utils.HTTPClient;
 import org.apache.http.message.BasicHeader;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -17,6 +22,20 @@ public class Test58 {
 
 
     public static void main(String[] args) {
+
+
+        Path source = Paths.get("C:\\Users\\丁亚宾\\Desktop");
+        Path target = source.resolveSibling("new.txt");
+
+        System.out.println(source.getFileName());
+        System.out.println(source.getNameCount());
+
+//        try {
+//            Files.move(source, target, StandardCopyOption.REPLACE_EXISTING);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+
 
 //        int[] array = {2, 1, 5, 4, 7, 8, 9, 22, 11, 3, 98};
 //
@@ -57,13 +76,13 @@ public class Test58 {
 //        System.out.println(post);
 
 
-        String ss= "<p style=\"color: rgb(0, 0, 0); font-size: medium; text-align: start; white-space: normal; visibility: visible;\"><span style=\"font-size: 15px; visibility: visible;\">1.鼠标右击【解压到 Office2021(64bit)】。</span></p>";
-        Pattern codePompile = Pattern.compile(">([a-zA-Z0-9_.。\\u4e00-\\u9fa5]+?)</");
-        Matcher matcher = codePompile.matcher(ss);
-        while (matcher.find()){
-            String group = matcher.group(1);
-            System.out.println("地址:    "+group);
-        }
+//        String ss= "<p style=\"color: rgb(0, 0, 0); font-size: medium; text-align: start; white-space: normal; visibility: visible;\"><span style=\"font-size: 15px; visibility: visible;\">1.鼠标右击【解压到 Office2021(64bit)】。</span></p>";
+//        Pattern codePompile = Pattern.compile(">([a-zA-Z0-9_.。\\u4e00-\\u9fa5]+?)</");
+//        Matcher matcher = codePompile.matcher(ss);
+//        while (matcher.find()){
+//            String group = matcher.group(1);
+//            System.out.println("地址:    "+group);
+//        }
 
     }
 
