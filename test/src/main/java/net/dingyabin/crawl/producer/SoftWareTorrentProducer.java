@@ -1,17 +1,23 @@
 package net.dingyabin.crawl.producer;
 
+import com.alibaba.fastjson.JSONObject;
+import com.google.common.collect.ImmutableMap;
 import net.dingyabin.crawl.model.Torrent;
 import net.wecash.utils.HTTPClient;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 /**
  * Created by MrDing
@@ -25,6 +31,13 @@ public class SoftWareTorrentProducer extends AbstractTorrentProducer {
     private Pattern baiduPompile = Pattern.compile("(https://pan.baidu.com/[a-zA-Z0-9]+/[a-zA-Z0-9_\\-]+)");
 
     private Pattern codePompile = Pattern.compile("\\[提取码\\]：</span><span [\\s\\S]*?>([a-zA-Z0-9_]+)</span>");
+
+    private Pattern subTitlePompile = Pattern.compile(">([a-zA-Z0-9_\\u4e00-\\u9fa5]+?[&nbsp;]*?)</");
+
+    private List<String> IMgStrs = Arrays.asList(
+            "https://mmbiz.qpic.cn/mmbiz_gif/mWLribm6sbwKbFmKToSImq3CsNxopsUZgC4lnIMAiacZjpmWaPIqfSm3uWZd8uPuO4ibPuvXM6up5JbOicXxrwObPQ/640?wx_fmt=gif",
+            "https://mmbiz.qpic.cn/mmbiz_gif/mWLribm6sbwI1qzZMucV5Gj2QP82UNbFSLnUytKhvYwJLeiaE1ZvZnbPTtMt8k04B0K6fhjDIfqcY9BEicibG9BHsw/640?wx_fmt=gif"
+    );
 
 
     public SoftWareTorrentProducer(BlockingQueue<Torrent> queue, String encoding, int pageNumber) {
@@ -42,12 +55,11 @@ public class SoftWareTorrentProducer extends AbstractTorrentProducer {
 
     @Override
     protected List<Torrent> makeTorrent(String resource) {
-        List<Torrent> list = new ArrayList<>();
-        StringBuilder stringBuilder = new StringBuilder();
         try {
             Document doc = Jsoup.parse(resource);
             Elements tbodys = doc.getElementsByTag("tbody");
 
+            int fff=0;
             for (int i = 1; i < tbodys.size(); i++) {
                 Element tbody = tbodys.get(i);
                 Elements tds = tbody.getElementsByTag("td");
@@ -57,52 +69,124 @@ public class SoftWareTorrentProducer extends AbstractTorrentProducer {
                     }
                     String colspan = td.attr("colspan");
                     if ("3".equals(colspan) && "center".equals(td.attr("align"))) {
-                        String html = td.getElementsByAttributeValueContaining("style", "rgb(0, 0, 0)").html();
-                        System.out.println("大标题: " + html.replaceAll("&nbsp;", ""));
-                        stringBuilder.append(html.replaceAll("&nbsp;", "")).append("\n");
+                        String html = td.getElementsByAttributeValueContaining("style", "rgb(0, 0, 0)").html().replaceAll("&nbsp;", "");
+                        System.out.println("大标题: " + html);
+                        pushTorrent(new Torrent("soft", JSONObject.toJSONString(ImmutableMap.of("name", html)).getBytes(),true));
                         continue;
                     }
                     Elements aTags = td.getElementsByTag("a");
                     if (aTags == null || aTags.isEmpty()) {
-                        String html = td.getElementsByTag("strong").get(0).getElementsByTag("span").html();
-                        System.out.println("小标题: " + html.replaceAll("&nbsp;", ""));
-                        stringBuilder.append(html.replaceAll("&nbsp;", "")).append("\n");
+                        Matcher matcher = subTitlePompile.matcher(td.html());
+                        String subTitle = StringUtils.EMPTY;
+                        if (matcher.find()) {
+                            subTitle = matcher.group(1).replaceAll("&nbsp;", "");
+                            System.out.println("小标题: " + subTitle);
+                        }
+                        pushTorrent(new Torrent("soft", JSONObject.toJSONString(ImmutableMap.of("name", subTitle)).getBytes(),true));
                         continue;
                     }
+
+                    JSONObject jsonObject = new JSONObject();
+
                     Element atag = aTags.get(0);
                     String href = atag.attr("href");
                     String textvalue = atag.attr("textvalue");
                     System.out.println(textvalue + " : " + href);
-                    stringBuilder.append(textvalue).append("\t");
+                    jsonObject.put("name", textvalue);
 
                     Document _doc = Jsoup.parse(HTTPClient.get(href));
                     String html = _doc.html();
-
-                    Matcher matcher = baiduPompile.matcher(html);
-                    while (matcher.find()){
-                        String group = matcher.group(1);
-                        System.out.println("地址:    "+group);
-                        stringBuilder.append(group).append("\t");
-                    }
-
-
-                    Matcher matcherCode = codePompile.matcher(html);
-                    while (matcherCode.find()){
-                        String group = matcherCode.group(1);
-                        System.out.println("提取码:    "+group);
-                        stringBuilder.append(group).append("\t");
-                    }
-                    stringBuilder.append("\n");
+                    //提取下载url
+                    findUrl(jsonObject, html);
+                    //提取验证码
+                    findCode(jsonObject, html);
+                    //获取安装方法
+                    findOperation(jsonObject, html, _doc);
+                    //载入下载队列
+                    pushTorrent(new Torrent("soft", jsonObject.toJSONString().getBytes(),true));
+                    //休眠2s防止太频繁
                     Thread.sleep(2000);
-                }
-                if (i==2){
-                    break;
+                    fff++;
+                    if (fff ==10) {
+                        return null;
+                    }
                 }
             }
-            list.add(new Torrent("soft",stringBuilder.toString().getBytes()));
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return list;
+        return null;
+    }
+
+
+
+
+
+    private void findUrl(JSONObject jsonObject, String html) {
+        List<String> urls = new ArrayList<>();
+        Matcher matcher = baiduPompile.matcher(html);
+        while (matcher.find()){
+            String group = matcher.group(1);
+            urls.add(group);
+            System.out.println("地址:    " + group);
+        }
+        jsonObject.put("url", String.join("\n", urls));
+    }
+
+
+
+
+
+    private void findCode(JSONObject jsonObject, String html) {
+        List<String> codes = new ArrayList<>();
+        Matcher matcherCode = codePompile.matcher(html);
+        while (matcherCode.find()){
+            String group = matcherCode.group(1);
+            System.out.println("提取码:    "+group);
+            codes.add(group);
+        }
+        jsonObject.put("code", String.join("\n", codes));
+    }
+
+
+
+    private void findOperation(JSONObject jsonObject, String html, Document doc){
+        Elements imgs = doc.getElementsByTag("img");
+        Element section = null;
+        for (Element img : imgs) {
+            String src = img.attr("data-src");
+            if (IMgStrs.contains(src)){
+                Element cur = img;
+                while (cur != null && !cur.tagName().equals("section")) {
+                    cur = cur.parent();
+                }
+                section = cur;
+                break;
+            }
+        }
+        if (section != null) {
+            Elements spans = section.getElementsByTag("span");
+            String operation = spans.stream().filter(span-> CollectionUtils.isEmpty(span.getElementsByTag("img"))).map(Element::html).collect(Collectors.joining("\n"));
+            jsonObject.put("operation", operation);
+        }
+        String imgStr = imgs.stream().map(element -> element.attr("data-src")).filter(str -> !IMgStrs.contains(str)).collect(Collectors.joining("\n"));
+        jsonObject.put("imgs", imgStr);
+    }
+
+
+
+
+    @Override
+    public void run() {
+        try {
+            String resource = getResource();
+            if (StringUtils.isBlank(resource)) {
+                System.out.println("xxxxxxxxxxparseHome,第1页空白,跳过xxxxxxxxxxx");
+                return;
+            }
+            makeTorrent(resource);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
