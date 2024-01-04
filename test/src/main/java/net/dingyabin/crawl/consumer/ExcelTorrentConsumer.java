@@ -28,7 +28,7 @@ public class ExcelTorrentConsumer extends SimpleTorrentConcumer {
 
     public ExcelTorrentConsumer(Class<? extends ExcelBean> excelBeanClass) {
         this.excelBeanClass = excelBeanClass;
-        this.excelWriter = EasyExcel.write("C:\\Users\\丁亚宾\\Desktop\\torrent\\20230327\\software\\soft.xlsx", excelBeanClass).build();
+        this.excelWriter = EasyExcel.write("C:\\Users\\Administrator\\Desktop\\torrent\\20240103\\soft.xlsx", excelBeanClass).build();
         this.writeSheet = EasyExcel.writerSheet().build();
     }
 

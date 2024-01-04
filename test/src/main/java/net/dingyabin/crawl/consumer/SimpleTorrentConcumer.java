@@ -1,5 +1,7 @@
 package net.dingyabin.crawl.consumer;
 
+import lombok.Getter;
+import net.dingyabin.crawl.Start;
 import net.dingyabin.crawl.enums.WebSiteEnum;
 import net.dingyabin.crawl.model.Torrent;
 import net.dingyabin.crawl.request.AbstractRequest;
@@ -20,6 +22,7 @@ import java.util.concurrent.TimeUnit;
  * Date: 2018/7/28.
  * Time:23:13
  */
+@Getter
 public class SimpleTorrentConcumer extends AbstractRequest implements Runnable {
 
     private BlockingQueue<Torrent> queue;
@@ -62,7 +65,8 @@ public class SimpleTorrentConcumer extends AbstractRequest implements Runnable {
             while (true) {
                 Torrent torrent = queue.poll(getWaitTimeSec(), TimeUnit.SECONDS);
                 if (torrent == null) {
-                    if (queue.isEmpty()) {
+                    if (Start.iProducerExecutorFinished()) {
+                        System.out.println("xxxxxxxxxxxxxxxxxx结束消费");
                         return;
                     }
                     continue;
@@ -89,7 +93,7 @@ public class SimpleTorrentConcumer extends AbstractRequest implements Runnable {
                     continue;
                 }
                 doWrite(torrent, file, bytes);
-                System.out.printf(">>>>>>线程%s成功download一个文件,目前还剩%s个任务<<<<<<<<", Thread.currentThread().getName(), queue.size());
+                System.out.printf(">>>>>>线程%s成功download一个文件,目前还剩%s个任务<<<<<<<<\n", Thread.currentThread().getName(), queue.size());
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -129,6 +133,6 @@ public class SimpleTorrentConcumer extends AbstractRequest implements Runnable {
 
 
     protected int getWaitTimeSec(){
-        return 100;
+        return 10;
     }
 }

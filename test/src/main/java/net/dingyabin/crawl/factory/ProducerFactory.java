@@ -37,6 +37,8 @@ public class ProducerFactory {
                 return new YueLiangProducer(queue, "utf-8", page);
             case FOSTWARE:
                 return new SoftWareTorrentProducer(queue, "utf-8", page);
+            case CILICAO:
+                return new CiLiCaoTorrentProducer(queue, "utf-8", page);
             default:
                 throw new IllegalArgumentException("暂不支持此网站的解析...");
         }

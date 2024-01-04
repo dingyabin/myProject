@@ -1,6 +1,7 @@
 package net.dingyabin.crawl.enums;
 
 import net.dingyabin.bean.SoftDownload;
+import net.dingyabin.bean.TorrentDownload;
 import net.dingyabin.crawl.consumer.ExcelTorrentConsumer;
 import net.dingyabin.crawl.consumer.SimpleTorrentConcumer;
 import org.joda.time.DateTime;
@@ -45,13 +46,19 @@ public enum WebSiteEnum {
     YUELAING(".txt", String.format("C:\\Users\\%s\\Desktop\\torrent\\%s\\yueliang\\", System.getenv().get("USERNAME"), DateTime.now().toString("yyyyMMdd"))),
 
 
-    FOSTWARE(".xlsx", String.format("C:\\Users\\%s\\Desktop\\torrent\\%s\\software\\", System.getenv().get("USERNAME"), DateTime.now().toString("yyyyMMdd"))){
+    FOSTWARE(".xlsx", String.format("C:\\Users\\%s\\Desktop\\torrent\\%s\\software\\", System.getenv().get("USERNAME"), "20240103")){
         @Override
         public SimpleTorrentConcumer consumer() {
             return new ExcelTorrentConsumer(SoftDownload.class);
         }
-    }
+    },
 
+    CILICAO(".xlsx", String.format("C:\\Users\\%s\\Desktop\\torrent\\%s\\", System.getenv().get("USERNAME"), DateTime.now().toString("yyyyMMdd"))){
+        @Override
+        public SimpleTorrentConcumer consumer() {
+            return new ExcelTorrentConsumer(TorrentDownload.class);
+        }
+    }
     ;
 
 
