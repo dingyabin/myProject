@@ -39,7 +39,7 @@ public class Start {
 
 
     public static void main(String[] args) throws InterruptedException {
-        for (int i = 21; i <= 30; i++) {
+        for (int i = 51; i <= 60; i++) {
             PRODUCER_EXECUTOR.submit(ProducerFactory.getProducer(CAITADIYI, QUEUE, i));
         }
         //生产者线程池关闭

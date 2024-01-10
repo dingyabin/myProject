@@ -56,6 +56,9 @@ public class CaiTaDiYiTorrentProducer extends AbstractTorrentProducer {
             }
             for (ResourceMsg resourceMsg : homeSimpleMsg) {
                 String detailMsgSrc = getDetailIframMsgSrc(resourceMsg);
+                if (StringUtils.isBlank(detailMsgSrc)) {
+                    continue;
+                }
                 String videoUrl = getVideoUrl(detailMsgSrc);
                 if (StringUtils.isNotBlank(videoUrl)) {
                     byte[] content = String.format("%s \t %s \n", resourceMsg.getTitle(), videoUrl).getBytes();
@@ -95,40 +98,50 @@ public class CaiTaDiYiTorrentProducer extends AbstractTorrentProducer {
 
 
     private String getDetailIframMsgSrc(ResourceMsg resourceMsg) {
-        //限流
-        RATE_LIMITER.acquire();
-        String html = getResource(resourceMsg.getUrl());
-        if (StringUtils.isBlank(html)) {
-            return null;
+        try {
+            //限流
+            RATE_LIMITER.acquire();
+            String html = getResource(resourceMsg.getUrl());
+            if (StringUtils.isBlank(html)) {
+                return null;
+            }
+            Document doc = Jsoup.parse(html);
+            Element player = doc.getElementById("player");
+            if (player == null) {
+                return null;
+            }
+            Elements iframes = player.getElementsByTag("iframe");
+            if (CollectionUtils.isEmpty(iframes)) {
+                return null;
+            }
+            Element element = iframes.get(0);
+            String src = element.attr("src");
+            return baseUrl + StringUtils.substringBefore(src, "pathid") + "pathid=2";
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        Document doc = Jsoup.parse(html);
-        Element player = doc.getElementById("player");
-        if (player == null) {
-            return null;
-        }
-        Elements iframes = player.getElementsByTag("iframe");
-        if (CollectionUtils.isEmpty(iframes)) {
-            return null;
-        }
-        Element element = iframes.get(0);
-        String src = element.attr("src");
-        return baseUrl + StringUtils.substringBefore(src, "pathid") + "pathid=2";
+        return null;
     }
 
 
 
 
     private String getVideoUrl(String src) {
-        //限流
-        RATE_LIMITER.acquire();
-        String html = getResource(src);
-        if (StringUtils.isBlank(html) || !html.contains("video:")) {
-            return null;
+        try {
+            //限流
+            RATE_LIMITER.acquire();
+            String html = getResource(src);
+            if (StringUtils.isBlank(html) || !html.contains("video:")) {
+                return null;
+            }
+            String videoUrl = StringUtils.substringAfter(html, "video:");
+            videoUrl = StringUtils.substring(videoUrl, videoUrl.indexOf("'") + 1, videoUrl.lastIndexOf("'"));
+            videoUrl = StringUtils.substringBefore(videoUrl, "?");
+            return videoUrl;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        String videoUrl = StringUtils.substringAfter(html, "video:");
-        videoUrl = StringUtils.substring(videoUrl, videoUrl.indexOf("'") + 1, videoUrl.lastIndexOf("'"));
-        videoUrl = StringUtils.substringBefore(videoUrl, "?");
-        return videoUrl;
+        return null;
     }
 
 
