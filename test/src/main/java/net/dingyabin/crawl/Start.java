@@ -38,7 +38,7 @@ public class Start {
 
 
     public static void main(String[] args) throws InterruptedException {
-        for (int i = 1; i <= 34; i++) {
+        for (int i = 1; i <= 22; i++) {
             PRODUCER_EXECUTOR.submit(ProducerFactory.getProducer(CILICAO, QUEUE, i));
         }
         //生产者线程池关闭

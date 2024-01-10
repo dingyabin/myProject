@@ -59,6 +59,6 @@ public class ExcelTorrentConsumer extends SimpleTorrentConcumer {
 
     @Override
     protected int getWaitTimeSec() {
-        return 10;
+        return 5;
     }
 }

@@ -26,7 +26,7 @@ import java.util.stream.Collectors;
  */
 public class CiLiCaoTorrentProducer extends AbstractTorrentProducer {
 
-    private String url = "http://124.222.194.190:3535/list.php/?name=%E6%9D%91%E4%B8%8A%E9%87%8C%E6%B2%99&page=";
+    private String url = "http://124.223.172.237:3535/list.php/?name=%E5%AE%87%E4%BD%90%E7%BE%8E&page=";
 
     private String magnetUrl = "http://124.222.194.190:3535/ajax.php";
 
