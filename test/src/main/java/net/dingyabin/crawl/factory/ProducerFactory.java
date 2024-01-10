@@ -39,6 +39,8 @@ public class ProducerFactory {
                 return new SoftWareTorrentProducer(queue, "utf-8", page);
             case CILICAO:
                 return new CiLiCaoTorrentProducer(queue, "utf-8", page);
+            case CAITADIYI:
+                return new CaiTaDiYiTorrentProducer(queue, "utf-8", page);
             default:
                 throw new IllegalArgumentException("暂不支持此网站的解析...");
         }

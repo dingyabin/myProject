@@ -58,10 +58,11 @@ public enum WebSiteEnum {
         public SimpleTorrentConcumer consumer() {
             return new ExcelTorrentConsumer(TorrentDownload.class);
         }
-    }
+    },
+
+    CAITADIYI(".txt", String.format("C:\\Users\\%s\\Desktop\\torrent\\%s\\CAITADIYI\\", System.getenv().get("USERNAME"), DateTime.now().toString("yyyyMMdd"))),
+
     ;
-
-
 
 
     private String fileType;

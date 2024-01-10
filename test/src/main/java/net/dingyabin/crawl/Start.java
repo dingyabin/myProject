@@ -9,6 +9,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static net.dingyabin.crawl.enums.WebSiteEnum.CAITADIYI;
 import static net.dingyabin.crawl.enums.WebSiteEnum.CILICAO;
 
 
@@ -38,15 +39,15 @@ public class Start {
 
 
     public static void main(String[] args) throws InterruptedException {
-        for (int i = 1; i <= 22; i++) {
-            PRODUCER_EXECUTOR.submit(ProducerFactory.getProducer(CILICAO, QUEUE, i));
+        for (int i = 21; i <= 30; i++) {
+            PRODUCER_EXECUTOR.submit(ProducerFactory.getProducer(CAITADIYI, QUEUE, i));
         }
         //生产者线程池关闭
         PRODUCER_EXECUTOR.shutdown();
 
 
         for (int i = 0; i < 1; i++) {
-            CONSUMER_EXECUTOR.submit(CILICAO.consumer().setWebSiteEnum(CILICAO).setQueue(QUEUE));
+            CONSUMER_EXECUTOR.submit(CAITADIYI.consumer().setWebSiteEnum(CAITADIYI).setQueue(QUEUE));
         }
         //消费者线程池关闭
         CONSUMER_EXECUTOR.shutdown();

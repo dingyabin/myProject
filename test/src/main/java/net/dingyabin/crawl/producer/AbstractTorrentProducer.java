@@ -1,5 +1,6 @@
 package net.dingyabin.crawl.producer;
 
+import com.google.common.util.concurrent.RateLimiter;
 import net.dingyabin.crawl.model.Torrent;
 import net.dingyabin.crawl.request.AbstractRequest;
 import org.apache.commons.collections4.CollectionUtils;
@@ -90,7 +91,10 @@ public abstract class AbstractTorrentProducer extends AbstractRequest implements
     @Override
     public void run() {
         try {
-
+            RateLimiter rateLimiter = getRateLimiter();
+            if (rateLimiter != null) {
+                rateLimiter.acquire();
+            }
             String resource = getResource();
             if (StringUtils.isBlank(resource)) {
                 System.out.printf("xxxxxxxxxxparseHome,第%s页空白,跳过xxxxxxxxxxx\n", pageNumber);
@@ -114,7 +118,9 @@ public abstract class AbstractTorrentProducer extends AbstractRequest implements
 
 
 
-
+    protected RateLimiter getRateLimiter(){
+        return null;
+    }
 
 
 
