@@ -247,14 +247,14 @@ public class TempTxtProducer extends AbstractRequest {
 
     public static void main(String[] args) {
         try {
-            TempTxtProducer txtProducer = new TempTxtProducer("【艾琳S175】性感大长腿踩虐肚脐 = https://88.xn--bw2a68j.com/20231207/D127KLF3/2145kb/hls/index.m3u8", "F:\\IE下载\\下载测试\\");
+            TempTxtProducer txtProducer = new TempTxtProducer("沅芷超暴力耳光 = https://1.xn--bw2a68j.com/20230416/S416KMA20/937kb/hls/index.m3u8", "F:\\IE下载\\下载测试\\");
             FileResult fileResult = txtProducer.download();
             if (fileResult == null) {
                 System.out.println("下载失败...............................");
                 return;
             }
-            executorService.shutdown();
             txtProducer.waitToFinish(fileResult);
+            executorService.shutdown();
             executorService.awaitTermination(1, TimeUnit.HOURS);
             System.out.println("^_^_^_^_^_^^_^_^任务完成^_^^_^_^^_^_^^_^_^");
         } catch (Exception e) {
