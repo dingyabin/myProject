@@ -1,5 +1,6 @@
 package net.dingyabin.crawl.request;
 
+import com.google.common.util.concurrent.RateLimiter;
 import net.dingyabin.crawl.utils.SSLUtils;
 import net.dingyabin.crawl.utils.Utils;
 import org.apache.commons.io.IOUtils;
@@ -79,8 +80,14 @@ public class AbstractRequest {
 
 
     private InputStream getInputStream(String curl, int retry, Map<String,String> header) throws Exception {
-        if (retry > 2) {
-            System.out.println("重试"+retry+"次失败，退出...url=" + curl);
+        //限流校验
+        RateLimiter rateLimiter = getRateLimiter();
+        if (rateLimiter != null) {
+            rateLimiter.acquire();
+        }
+
+        if (needRetry() && retry > 2) {
+            System.out.println("重试" + retry + "次失败，退出...url=" + curl);
             return null;
         }
 //        SSLUtils.ignoreSsl();
@@ -105,7 +112,21 @@ public class AbstractRequest {
             e.printStackTrace();
             System.out.println("getInputStream()失败了.....");
         }
-        return getInputStream(curl, retry + 1, header);
+        return needRetry() ? getInputStream(curl, retry + 1, header) : null;
+    }
+
+
+    /**
+     * 是否需要重试
+     * @return 是否需要重试
+     */
+    protected boolean needRetry() {
+        return true;
+    }
+
+
+    protected RateLimiter getRateLimiter() {
+        return null;
     }
 
 }
