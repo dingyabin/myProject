@@ -99,8 +99,6 @@ public class CaiTaDiYiTorrentProducer extends AbstractTorrentProducer {
 
     private String getDetailIframMsgSrc(ResourceMsg resourceMsg) {
         try {
-            //限流
-            RATE_LIMITER.acquire();
             String html = getResource(resourceMsg.getUrl());
             if (StringUtils.isBlank(html)) {
                 return null;
@@ -128,8 +126,6 @@ public class CaiTaDiYiTorrentProducer extends AbstractTorrentProducer {
 
     private String getVideoUrl(String src) {
         try {
-            //限流
-            RATE_LIMITER.acquire();
             String html = getResource(src);
             if (StringUtils.isBlank(html) || !html.contains("video:")) {
                 return null;
@@ -142,6 +138,12 @@ public class CaiTaDiYiTorrentProducer extends AbstractTorrentProducer {
             e.printStackTrace();
         }
         return null;
+    }
+
+
+    @Override
+    protected boolean needRetry() {
+        return false;
     }
 
 

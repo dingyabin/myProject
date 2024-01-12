@@ -139,8 +139,6 @@ public class CiLiCaoTorrentProducer extends AbstractTorrentProducer {
     @Override
     public void run() {
         try {
-            //限流
-            RATE_LIMITER.acquire();
             String resource = getResource();
             if (StringUtils.isBlank(resource)) {
                 System.out.println("xxxxxxxxxxparseHome,第" + getPageNumber() + "页空白,跳过xxxxxxxxxxx");
@@ -150,5 +148,17 @@ public class CiLiCaoTorrentProducer extends AbstractTorrentProducer {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+
+    @Override
+    protected boolean needRetry() {
+        return false;
+    }
+
+
+    @Override
+    protected RateLimiter getRateLimiter() {
+        return RATE_LIMITER;
     }
 }

@@ -31,7 +31,7 @@ public class TempTxtProducer extends AbstractRequest {
 
     private static final RateLimiter RATE_LIMITER = RateLimiter.create(3);
 
-    private static ExecutorService executorService = Executors.newFixedThreadPool(100);
+    private static ExecutorService executorService = Executors.newFixedThreadPool(150);
 
     private String torrentPath;
 
@@ -247,7 +247,7 @@ public class TempTxtProducer extends AbstractRequest {
 
     public static void main(String[] args) {
         try {
-            TempTxtProducer txtProducer = new TempTxtProducer("沅芷超暴力耳光 = https://1.xn--bw2a68j.com/20230416/S416KMA20/937kb/hls/index.m3u8", "F:\\IE下载\\下载测试\\");
+            TempTxtProducer txtProducer = new TempTxtProducer("允薇 耳光专场 = https://1.xn--bw2a68j.com/20231113/S1113GPV16/1059kb/hls/index.m3u8", "F:\\IE下载\\下载测试\\");
             FileResult fileResult = txtProducer.download();
             if (fileResult == null) {
                 System.out.println("下载失败...............................");
