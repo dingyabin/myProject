@@ -68,7 +68,7 @@ public class TempTxtProducer extends AbstractRequest {
         FileResult fileResult = new FileResult();
         try {
 
-            String[] split = torrentPath.split("=");
+            String[] split = torrentPath.split("[=\t]");
 
             String movieName = split[0].trim();
             fileResult.setMoviePath(moviePath + movieName);
@@ -104,7 +104,7 @@ public class TempTxtProducer extends AbstractRequest {
                     }
                     continue;
                 }
-                if (line.startsWith("/") && line.endsWith(".ts")) {
+                if (line.startsWith("/") && (line.endsWith(".jpg") || line.endsWith(".ts"))) {
                     parts.add(baseUrl + line);
                 }
             }
@@ -175,7 +175,7 @@ public class TempTxtProducer extends AbstractRequest {
                     doDownloadAsync(url, filePath, fileResult);
                     return;
                 } else {
-                    fileResource = AES.decrypt(fileResource, key);
+                    fileResource = processFileResource(fileResource, fileResult);
                     System.out.println("下载完成：" + filePath);
                     //成功了，计数减一,删除失败记录
                     fileResult.getCountDownLatch().countDown();
@@ -189,6 +189,14 @@ public class TempTxtProducer extends AbstractRequest {
             }
         });
     }
+
+
+
+    protected byte[] processFileResource(byte[] fileResource, FileResult fileResult) {
+        return AES.decrypt(fileResource, key);
+    }
+
+
 
 
     private List<String> createScriptAndRun(String moviePath, String movieName) {
@@ -247,7 +255,7 @@ public class TempTxtProducer extends AbstractRequest {
 
     public static void main(String[] args) {
         try {
-            TempTxtProducer txtProducer = new TempTxtProducer("允薇 耳光专场 = https://1.xn--bw2a68j.com/20231113/S1113GPV16/1059kb/hls/index.m3u8", "F:\\IE下载\\下载测试\\");
+            TempTxtProducer txtProducer = new TempTxtProducer("【王若思】平面模特女友 \t https://al1.zacuin.com/20231116/Unj0LGkP/1955kb/hls/index.m3u8 ", "F:\\IE下载\\下载测试\\");
             FileResult fileResult = txtProducer.download();
             if (fileResult == null) {
                 System.out.println("下载失败...............................");

@@ -9,8 +9,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static net.dingyabin.crawl.enums.WebSiteEnum.CAITADIYI;
-import static net.dingyabin.crawl.enums.WebSiteEnum.CILICAO;
+import static net.dingyabin.crawl.enums.WebSiteEnum.*;
 
 
 /**
@@ -24,7 +23,7 @@ public class Start {
 
     private static final AtomicInteger INDEX = new AtomicInteger();
 
-    private static final ExecutorService PRODUCER_EXECUTOR = Executors.newCachedThreadPool(r -> {
+    private static final ExecutorService PRODUCER_EXECUTOR = Executors.newFixedThreadPool( 10, r -> {
         Thread thread = new Thread(r);
         thread.setName("producer task thread-" + INDEX.getAndIncrement());
         return thread;
@@ -39,15 +38,15 @@ public class Start {
 
 
     public static void main(String[] args) throws InterruptedException {
-        for (int i = 121; i <= 179; i++) {
-            PRODUCER_EXECUTOR.submit(ProducerFactory.getProducer(CAITADIYI, QUEUE, i));
+        for (int i = 1; i <= 19; i++) {
+            PRODUCER_EXECUTOR.submit(ProducerFactory.getProducer(TAI9, QUEUE, i));
         }
         //生产者线程池关闭
         PRODUCER_EXECUTOR.shutdown();
 
 
         for (int i = 0; i < 1; i++) {
-            CONSUMER_EXECUTOR.submit(CAITADIYI.consumer().setWebSiteEnum(CAITADIYI).setQueue(QUEUE));
+            CONSUMER_EXECUTOR.submit(TAI9.consumer().setWebSiteEnum(TAI9).setQueue(QUEUE));
         }
         //消费者线程池关闭
         CONSUMER_EXECUTOR.shutdown();
