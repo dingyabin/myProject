@@ -12,6 +12,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Stream;
 
 /**
  * Created by MrDing
@@ -22,14 +23,23 @@ public class Test58 {
 
 
     public static void main(String[] args) {
+//
+//        try {
+//            Path source = Paths.get("E:\\迅雷下载\\Java\\LSYPZM\\java文件\\定制音频");
+//            Stream<Path> walk = Files.walk(source);
+//            walk.filter(e-> Files.isRegularFile(e)).forEach(e-> Files.move());
+//
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
 
-        Path source = Paths.get("C:\\Users\\丁亚宾\\Desktop");
-        Path target = source.resolveSibling("new.txt");
-
-        System.out.println(source.getFileName());
-        System.out.println(source.getNameCount());
-
+//        Path source = Paths.get("C:\\Users\\丁亚宾\\Desktop");
+//        Path target = source.resolveSibling("new.txt");
+//
+//        System.out.println(source.getFileName());
+//        System.out.println(source.getNameCount());
+//
 //        try {
 //            Files.move(source, target, StandardCopyOption.REPLACE_EXISTING);
 //        } catch (IOException e) {
