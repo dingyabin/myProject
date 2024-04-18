@@ -142,7 +142,7 @@ public class AES {
 //        /*
 //         * 此处使用AES-128-ECB加密模式，key需要为16位。
 //         */
-//        String cKey = "4164672deadb88ae";
+//        String cKey = "ca3e8d6589dcf8e9";
 ////        // 需要加密的字串
 ////        String cSrc = "www.gowhere.so";
 ////        System.out.println(cSrc);
@@ -154,9 +154,9 @@ public class AES {
 ////        String DeString = AES.Decrypt(enString, cKey);
 ////        System.out.println("解密后的字串是：" + DeString);
 //
-//         String path = "E:\\迅雷下载\\0afoUIcX.ts";
+//         String path = "F:\\IE下载\\MNazhHMt.ts";
 //         byte[] bytes = IOUtils.toByteArray(new FileInputStream(path));
 //        byte[] decrypt = decrypt(bytes, cKey);
-//        IOUtils.write(decrypt, new FileOutputStream("C:\\Users\\丁亚宾\\Desktop\\cccccc.mp4"));
+//        IOUtils.write(decrypt, new FileOutputStream("F:\\IE下载\\cccccc.mp4"));
 //    }
 }
