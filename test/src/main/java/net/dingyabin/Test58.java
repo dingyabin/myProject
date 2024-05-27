@@ -1,11 +1,13 @@
 package net.dingyabin;
 
+import com.google.common.io.Files;
 import net.wecash.utils.HTTPBuilder;
 import net.wecash.utils.HTTPClient;
+import org.apache.commons.io.IOUtils;
 import org.apache.http.message.BasicHeader;
 
+import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -22,14 +24,29 @@ import java.util.stream.Stream;
 public class Test58 {
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
+
+//        byte[] bytes = Files.toByteArray(new File("E:\\SoftWareFiles\\CloudMusic\\缓存\\Cache\\1475124792-128-5379b03f2895542721c254fe01f2ec1d.uc"));
+//
+//        for (int i = 0; i < bytes.length; i++) {
+//            bytes[i] = (bytes[i] ^= 163);
+//        }
+//        File file = new File("C:\\Users\\丁亚宾\\Desktop\\test.mp3");
+//        Files.write(bytes, file);
+//
+//
 //
 //        try {
 //            Path source = Paths.get("E:\\迅雷下载\\Java\\LSYPZM\\java文件\\定制音频");
 //            Stream<Path> walk = Files.walk(source);
-//            walk.filter(e-> Files.isRegularFile(e)).forEach(e-> Files.move());
-//
-//        } catch (IOException e) {
+//            walk.filter(e -> Files.isRegularFile(e)).forEach(e -> {
+//                try {
+//                    Files.move(e,  Paths.get("E:\\迅雷下载\\Java\\LSYPZM\\java文件\\合并", e.getFileName().toString()));
+//                } catch (Exception ex) {
+//                    ex.printStackTrace();
+//                }
+//            });
+//        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
 
