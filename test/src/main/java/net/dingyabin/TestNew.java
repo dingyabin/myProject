@@ -45,16 +45,13 @@ public class TestNew {
             }
         }
 
-        // 创建Scanner对象
-        Scanner scanner = new Scanner(System.in);
-
         try (PrintWriter printWriter = new PrintWriter(new FileOutputStream("C:\\Users\\丁亚宾\\Desktop\\处理后的文档.txt"))) {
             String header = objMap.get(HEADER);
             printWriter.println(header);
             for (Map.Entry<String, String> entry : objMap.entrySet()) {
                 if (!HEADER.equals(entry.getKey())) {
                     printWriter.println(entry.getValue());
-                    System.out.println("写入游戏： " + entry.getKey());
+                    System.out.println("写入游戏 ： " + entry.getKey());
                 }
             }
             printWriter.flush();
