@@ -26,6 +26,9 @@ public class Test58 {
 
     public static void main(String[] args) throws Exception {
 
+
+
+
 //        byte[] bytes = Files.toByteArray(new File("E:\\SoftWareFiles\\CloudMusic\\缓存\\Cache\\1475124792-128-5379b03f2895542721c254fe01f2ec1d.uc"));
 //
 //        for (int i = 0; i < bytes.length; i++) {
