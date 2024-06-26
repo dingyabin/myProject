@@ -3,7 +3,6 @@ package net.dingyabin.upload.strategy;
 import net.dingyabin.upload.model.ImageUplaodContext;
 import net.dingyabin.upload.model.UploadResult;
 import net.dingyabin.upload.model.UploadServicePerfermence;
-import net.dingyabin.upload.model.UploadServiceWeight;
 import net.dingyabin.upload.source.AbstractUploadService;
 import net.dingyabin.upload.source.IUploadService;
 import org.springframework.beans.factory.InitializingBean;
@@ -12,7 +11,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.util.*;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
