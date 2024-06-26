@@ -2,14 +2,17 @@ package net.dingyabin.upload.strategy;
 
 import net.dingyabin.upload.model.ImageUplaodContext;
 import net.dingyabin.upload.model.UploadResult;
+import net.dingyabin.upload.model.UploadServicePerfermence;
+import net.dingyabin.upload.model.UploadServiceWeight;
 import net.dingyabin.upload.source.AbstractUploadService;
 import net.dingyabin.upload.source.IUploadService;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.io.File;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -18,25 +21,44 @@ import java.util.concurrent.ConcurrentHashMap;
  * Time:21:45
  */
 @Service
-public class BestWorkUploadServiceSelectStrategy extends UploadServiceSelectStrategy {
+public class BestWorkUploadServiceSelectStrategy extends UploadServiceSelectStrategy implements InitializingBean {
+
+    @Value("${servicePerfermence.maxCount}")
+    private int maxCount;
+
+    @Autowired
+    private List<IUploadService> uploadServices;
+
+    private Map<String, UploadServiceWrapper> serviceMap = new ConcurrentHashMap<>();
+
+    private Map<String, UploadServicePerfermence> servicePerfermenceMap = new ConcurrentHashMap<>();
 
 
-    @Resource
-    private UploadServiceWeightManager uploadServiceWeightManager;
-
-
-    private Map<String, IUploadService> serviceMap = new ConcurrentHashMap<>();
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        for (IUploadService uploadService : uploadServices) {
+            servicePerfermenceMap.put(uploadService.uploadSource(), new UploadServicePerfermence(maxCount));
+        }
+    }
 
 
     @Override
     public IUploadService selectServiceSelectStrategy(List<IUploadService> uploadServices) {
-        IUploadService iUploadService = uploadServiceWeightManager.selectBestUploadService(uploadServices);
+        Optional<Map.Entry<String, UploadServicePerfermence>> max = servicePerfermenceMap.entrySet().stream().max(Comparator.comparingInt(e -> e.getValue().successCount()));
+        String uploadSource = max.map(e -> e.getKey()).orElse(null);
+
+        Optional<IUploadService> iUploadServiceOptional = uploadServices.stream().filter(e -> e.uploadSource().equals(uploadSource)).findFirst();
+        IUploadService iUploadService = iUploadServiceOptional.orElse(null);
+
+        if (iUploadService == null) {
+            return null;
+        }
+
         if (iUploadService instanceof AbstractUploadService) {
-            return serviceMap.computeIfAbsent(iUploadService.uploadSource(), uploadSource -> new UploadServiceWrapper((AbstractUploadService) iUploadService));
+            return serviceMap.computeIfAbsent(iUploadService.uploadSource(), k -> new UploadServiceWrapper((AbstractUploadService) iUploadService));
         }
         return iUploadService;
     }
-
 
 
     private class UploadServiceWrapper extends AbstractUploadService {
@@ -62,10 +84,9 @@ public class BestWorkUploadServiceSelectStrategy extends UploadServiceSelectStra
             abstractUploadService.afterUpload(imageUplaodContext);
             UploadResult uploadResult = imageUplaodContext.getUploadResult();
             try {
-                if (uploadResult.isSuccess()) {
-                    uploadServiceWeightManager.addUploadServiceWeight(imageUplaodContext.getUploadSource());
-                } else {
-                    uploadServiceWeightManager.decreUploadServiceWeight(imageUplaodContext.getUploadSource());
+                UploadServicePerfermence uploadServicePerfermence = servicePerfermenceMap.get(imageUplaodContext.getUploadSource());
+                if (uploadServicePerfermence != null) {
+                    uploadServicePerfermence.setResult(uploadResult.isSuccess());
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -73,12 +94,10 @@ public class BestWorkUploadServiceSelectStrategy extends UploadServiceSelectStra
         }
 
 
-
         @Override
         public UploadResult doUpload(File file, ImageUplaodContext imageUplaodContext) {
             return abstractUploadService.doUpload(file, imageUplaodContext);
         }
-
 
 
         @Override
