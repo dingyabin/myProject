@@ -1,5 +1,7 @@
 package net.dingyabin.upload.model;
 
+import org.apache.commons.lang3.RandomUtils;
+
 import java.util.BitSet;
 
 /**
@@ -24,15 +26,34 @@ public class UploadServicePerfermence {
 
 
     public synchronized void setResult(boolean result) {
+        bitSet.set(curIndex, result);
         if (++curIndex == maxCount) {
             curIndex = 0;
         }
-        bitSet.set(curIndex, result);
     }
 
 
     public synchronized int successCount() {
         return bitSet.cardinality();
+    }
+
+
+    @Override
+    public String toString() {
+        return "UploadServicePerfermence{" +
+                "maxCount=" + maxCount +
+                ", curIndex=" + curIndex +
+                ", bitSet=" + bitSet +
+                '}';
+    }
+
+    public static void main(String[] args) {
+        UploadServicePerfermence uploadServicePerfermence = new UploadServicePerfermence(20);
+        for (int i = 0; i < 100; i++) {
+            boolean nextBoolean = RandomUtils.nextBoolean();
+            uploadServicePerfermence.setResult(nextBoolean);
+            System.out.println(uploadServicePerfermence + "  " + nextBoolean + "  "  + uploadServicePerfermence.successCount());
+        }
     }
 
 

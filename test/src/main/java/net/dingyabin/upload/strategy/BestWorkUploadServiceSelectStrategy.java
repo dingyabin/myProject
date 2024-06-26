@@ -25,7 +25,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Service
 public class BestWorkUploadServiceSelectStrategy extends UploadServiceSelectStrategy implements InitializingBean {
 
-    @Value("${servicePerfermence.maxCount}")
+    @Value("${servicePerfermence.maxCount:50}")
     private int maxCount;
 
     @Autowired
