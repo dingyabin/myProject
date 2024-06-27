@@ -39,7 +39,7 @@ public class UploadServicePerfermence {
 
 
     @Override
-    public String toString() {
+    public synchronized String toString() {
         return "UploadServicePerfermence{" +
                 "maxCount=" + maxCount +
                 ", curIndex=" + curIndex +
@@ -47,12 +47,12 @@ public class UploadServicePerfermence {
                 '}';
     }
 
-    public static void main(String[] args) {
-        UploadServicePerfermence uploadServicePerfermence = new UploadServicePerfermence(20);
-        for (int i = 0; i < 100; i++) {
+    public static void main(String[] args) throws InterruptedException {
+        UploadServicePerfermence uploadServicePerfermence = new UploadServicePerfermence(50);
+        for (int i = 0; i < 68; i++) {
             boolean nextBoolean = RandomUtils.nextBoolean();
             uploadServicePerfermence.setResult(nextBoolean);
-            System.out.println(uploadServicePerfermence + "  " + nextBoolean + "  "  + uploadServicePerfermence.successCount());
+            System.out.println(uploadServicePerfermence + "  " + nextBoolean + "  " + uploadServicePerfermence.successCount());
         }
     }
 

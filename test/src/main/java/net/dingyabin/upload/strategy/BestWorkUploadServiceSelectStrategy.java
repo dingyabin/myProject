@@ -63,6 +63,7 @@ public class BestWorkUploadServiceSelectStrategy extends UploadServiceSelectStra
     }
 
 
+
     private class UploadServiceWrapper extends AbstractUploadService {
 
         private AbstractUploadService abstractUploadService;
