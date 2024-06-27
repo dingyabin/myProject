@@ -47,7 +47,7 @@ public class BestWorkUploadServiceSelectStrategy extends UploadServiceSelectStra
     @Override
     public IUploadService selectServiceSelectStrategy(List<IUploadService> uploadServices) {
         Optional<Map.Entry<String, UploadServicePerfermence>> max = servicePerfermenceMap.entrySet().stream().max(Comparator.comparingInt(e -> e.getValue().successCount()));
-        String uploadSource = max.map(e -> e.getKey()).orElse(null);
+        String uploadSource = max.map(Map.Entry::getKey).orElse(null);
 
         Optional<IUploadService> iUploadServiceOptional = uploadServices.stream().filter(e -> e.uploadSource().equals(uploadSource)).findFirst();
         IUploadService iUploadService = iUploadServiceOptional.orElse(null);
