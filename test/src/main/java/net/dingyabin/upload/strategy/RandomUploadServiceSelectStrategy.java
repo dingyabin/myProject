@@ -16,6 +16,6 @@ public class RandomUploadServiceSelectStrategy extends UploadServiceSelectStrate
 
     @Override
     public IUploadService selectServiceSelectStrategy(List<IUploadService> uploadServices) {
-        return uploadServices.get(RandomUtils.nextInt(0, uploadServices.size()));
+        return uploadServices.get(RandomUtils.nextInt() % uploadServices.size());
     }
 }
