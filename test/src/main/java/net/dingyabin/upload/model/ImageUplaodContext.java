@@ -3,6 +3,8 @@ package net.dingyabin.upload.model;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.File;
+
 /**
  * @author 丁亚宾
  * Date: 2024/6/26.
@@ -13,6 +15,8 @@ import lombok.Setter;
 public class ImageUplaodContext<T> {
 
     private String uploadSource;
+
+    private File file;
 
     private UploadResult uploadResult;
 

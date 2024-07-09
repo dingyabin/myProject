@@ -16,6 +16,7 @@ public abstract class AbstractUploadService<T> implements IUploadService {
     @Override
     public UploadResult upload(File file) {
         ImageUplaodContext<T> imageUplaodContext = initImageUplaodContext();
+        imageUplaodContext.setFile(file);
         beforeUpload(imageUplaodContext);
         UploadResult uploadResult = doUpload(file, imageUplaodContext);
         imageUplaodContext.setUploadResult(uploadResult);

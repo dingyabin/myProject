@@ -33,7 +33,7 @@ public class AUploadService extends AbstractUploadService<AUploadParam> {
 
     @Override
     public void beforeUpload(ImageUplaodContext<AUploadParam> imageUplaodContext) {
-
+        AUploadParam uploadParam = imageUplaodContext.getUploadParam();
     }
 
     @Override
