@@ -1,5 +1,6 @@
 package net.dingyabin;
 
+import cn.hutool.core.util.IdUtil;
 import com.google.common.io.Files;
 import net.wecash.utils.HTTPBuilder;
 import net.wecash.utils.HTTPClient;
@@ -114,7 +115,20 @@ public class Test58 {
 //            System.out.println("地址:    "+group);
 //        }
 
+        long gene = 178365485L;
+        long temp = 31241245465L;
+        long number = rightPaddingBits(temp, gene);
+        System.out.println("number = "+ number);
+        System.out.println( "number % 16 ="+ number % 16);
+        System.out.println("gene % 16 ="+ gene % 16 );
+
+
     }
 
 
+
+    private static long rightPaddingBits(long number, long gene){
+        long shiftNumber = number << 4;
+        return shiftNumber | (gene & 0xF);
+    }
 }
