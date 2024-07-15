@@ -23,21 +23,17 @@ import java.util.concurrent.ConcurrentHashMap;
  * Time:21:45
  */
 @Service
-public class BestWorkUploadServiceSelectStrategy extends UploadServiceSelectStrategy implements InitializingBean {
+public class BestWorkUploadServiceSelectStrategy extends UploadServiceSelectStrategy {
 
     @Value("${servicePerfermence.maxCount:50}")
     private int maxCount;
-
-    @Autowired
-    private List<IUploadService> uploadServices;
 
     private Map<String, UploadServiceWrapper> serviceMap = new ConcurrentHashMap<>();
 
     private Map<String, UploadServicePerfermence> servicePerfermenceMap = new ConcurrentHashMap<>();
 
 
-    @Override
-    public void afterPropertiesSet() throws Exception {
+    public BestWorkUploadServiceSelectStrategy(List<IUploadService> uploadServices) {
         for (IUploadService uploadService : uploadServices) {
             servicePerfermenceMap.put(uploadService.uploadSource(), new UploadServicePerfermence(maxCount));
         }
