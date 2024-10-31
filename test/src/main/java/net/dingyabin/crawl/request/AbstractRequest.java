@@ -27,6 +27,7 @@ public class AbstractRequest {
         Map<String,String> header=new HashMap<>();
         header.put("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.221 Safari/537.36 SE 2.X MetaSr 1.0");
         header.put("x-forwarded-for", Utils.getRandomIp());
+        header.put("Host", "m3u8.74cdn.com");
         return header;
     }
 
@@ -90,7 +91,7 @@ public class AbstractRequest {
             System.out.println("重试" + retry + "次失败，退出...url=" + curl);
             return null;
         }
-//        SSLUtils.ignoreSsl();
+        SSLUtils.ignoreSsl();
         HttpURLConnection connection = (HttpURLConnection) (new URL(curl)).openConnection();
         if (header != null) {
             header.forEach(connection::setRequestProperty);

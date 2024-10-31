@@ -1,7 +1,10 @@
 package net.dingyabin;
 
+import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.IdUtil;
+import com.alibaba.fastjson.JSONObject;
 import com.google.common.io.Files;
+import net.dingyabin.bean.Weight;
 import net.wecash.utils.HTTPBuilder;
 import net.wecash.utils.HTTPClient;
 import org.apache.commons.io.IOUtils;
@@ -114,13 +117,26 @@ public class Test58 {
 //            String group = matcher.group(1);
 //            System.out.println("地址:    "+group);
 //        }
-
+//
         long gene = 178365485L;
         long temp = 31241245465L;
         long number = rightPaddingBits(temp, gene);
         System.out.println("number = "+ number);
         System.out.println( "number % 16 ="+ number % 16);
         System.out.println("gene % 16 ="+ gene % 16 );
+
+        Weight object = new Weight();
+        object.setId(10L);
+        object.setWeight(1.1);
+        object.setWaist(1.2);
+        object.setCreatetime(new DateTime());
+
+
+        String s = JSONObject.toJSONStringWithDateFormat(object, "yyyy-MM-dd HH:mm:ss");
+        System.out.println(s);
+
+        Weight object1 = JSONObject.parseObject(s, Weight.class);
+        System.out.println(object1);
 
 
     }

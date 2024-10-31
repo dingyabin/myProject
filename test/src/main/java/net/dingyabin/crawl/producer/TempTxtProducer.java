@@ -1,5 +1,7 @@
 package net.dingyabin.crawl.producer;
 
+import cn.hutool.http.HttpGlobalConfig;
+import cn.hutool.http.HttpRequest;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.RateLimiter;
 import net.dingyabin.bean.FileResult;
@@ -12,6 +14,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -29,7 +32,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class TempTxtProducer extends AbstractRequest {
 
-    private static final RateLimiter RATE_LIMITER = RateLimiter.create(3);
+    private static final RateLimiter RATE_LIMITER = RateLimiter.create(2);
 
     private static ExecutorService executorService = Executors.newFixedThreadPool(150);
 
@@ -40,10 +43,10 @@ public class TempTxtProducer extends AbstractRequest {
     private String key;
 
 
-    @Override
-    protected Map<String, String> getRequestHeader() {
-        return null;
-    }
+//    @Override
+//    protected Map<String, String> getRequestHeader() {
+//        return null;
+//    }
 
 
     @Override
@@ -104,7 +107,7 @@ public class TempTxtProducer extends AbstractRequest {
                     }
                     continue;
                 }
-                if (line.startsWith("/") && (line.endsWith(".jpg") || line.endsWith(".ts"))) {
+                if (line.startsWith("/") || (line.endsWith(".jpg") || line.endsWith(".ts"))) {
                     parts.add(baseUrl + line);
                 }
             }
@@ -127,14 +130,25 @@ public class TempTxtProducer extends AbstractRequest {
      * @param indexM3u8Url indexM3u8Url
      * @return m3u8内容
      */
+//    private String getM3u8ContentByUrl(String indexM3u8Url) {
+//        try {
+//            return getStringResource(indexM3u8Url, "utf-8");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
+
     private String getM3u8ContentByUrl(String indexM3u8Url) {
         try {
-            return getStringResource(indexM3u8Url, "utf-8");
+
+          return   IOUtils.toString( new FileInputStream("E:\\Edge下载\\index.m3u8"), "utf-8");
         } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
     }
+
 
 
     /**
@@ -143,13 +157,17 @@ public class TempTxtProducer extends AbstractRequest {
      * @return baseUrl
      */
     private String getBaseUrl(String longUrl) {
-        try {
-            URL url = new URL(longUrl);
-            return url.getProtocol() + "://" + url.getHost();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        return null;
+
+       return StringUtils.substringBeforeLast(longUrl,"/") + "/";
+
+
+//        try {
+//            URL url = new URL(longUrl);
+//            return url.getProtocol() + "://" + url.getHost();
+//        } catch (MalformedURLException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
     }
 
 
@@ -192,7 +210,24 @@ public class TempTxtProducer extends AbstractRequest {
 
 
 
+
+    protected byte[] getFileResource(String url) {
+
+        try {
+            HttpRequest httpRequest = HttpRequest.get(url);
+            getRequestHeader().forEach(httpRequest::header);
+            return httpRequest.execute().bodyBytes();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
     protected byte[] processFileResource(byte[] fileResource, FileResult fileResult) {
+        if (key == null) {
+            return fileResource;
+        }
         return AES.decrypt(fileResource, key);
     }
 
@@ -255,7 +290,7 @@ public class TempTxtProducer extends AbstractRequest {
 
     public static void main(String[] args) {
         try {
-            TempTxtProducer txtProducer = new TempTxtProducer("【王若思】平面模特女友 \t https://al1.zacuin.com/20231116/Unj0LGkP/1955kb/hls/index.m3u8 ", "F:\\IE下载\\下载测试\\");
+            TempTxtProducer txtProducer = new TempTxtProducer("xxxxxx \t https://m3u8.74cdn.com/videos/202407/668433d78eb67eee93c8e626/hls/index.m3u8", "E:\\迅雷下载\\Java\\LSYPZM\\java文件\\xxxx\\");
             FileResult fileResult = txtProducer.download();
             if (fileResult == null) {
                 System.out.println("下载失败...............................");

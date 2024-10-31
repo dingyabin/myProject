@@ -38,15 +38,15 @@ public class Start {
 
 
     public static void main(String[] args) throws InterruptedException {
-        for (int i = 1; i <= 19; i++) {
-            PRODUCER_EXECUTOR.submit(ProducerFactory.getProducer(TAI9, QUEUE, i));
+        for (int i = 1; i <= 1; i++) {
+            PRODUCER_EXECUTOR.submit(ProducerFactory.getProducer(CAITADIYI, QUEUE, i));
         }
         //生产者线程池关闭
         PRODUCER_EXECUTOR.shutdown();
 
 
         for (int i = 0; i < 1; i++) {
-            CONSUMER_EXECUTOR.submit(TAI9.consumer().setWebSiteEnum(TAI9).setQueue(QUEUE));
+            CONSUMER_EXECUTOR.submit(CAITADIYI.consumer().setWebSiteEnum(CAITADIYI).setQueue(QUEUE));
         }
         //消费者线程池关闭
         CONSUMER_EXECUTOR.shutdown();

@@ -25,13 +25,16 @@ public class CaiTaDiYiTorrentProducer extends AbstractTorrentProducer {
 
     private static String baseUrl = "https://www.caita3456.com/";
 
-    private String url = baseUrl + "video/index%s.html";
+//    private String url = baseUrl+ "video/index%s.html";
+    private String url = baseUrl + "/nvwang/";
 
     private static final RateLimiter RATE_LIMITER = RateLimiter.create(3);
 
     public CaiTaDiYiTorrentProducer(BlockingQueue<Torrent> queue, String encoding, int pageNumber) {
         super(queue, encoding, pageNumber);
-        this.url = String.format(this.url, pageNumber > 1 ? ("_" + pageNumber) : "");
+        if (url.contains("%")) {
+            this.url = String.format(this.url, pageNumber > 1 ? ("_" + pageNumber) : "");
+        }
     }
 
 
@@ -63,6 +66,7 @@ public class CaiTaDiYiTorrentProducer extends AbstractTorrentProducer {
                 if (StringUtils.isNotBlank(videoUrl)) {
                     byte[] content = String.format("%s \t %s \n", resourceMsg.getTitle(), videoUrl).getBytes();
                     list.add(new Torrent("测试", content, true));
+                    System.out.println("-----------完成一个--------- "+ resourceMsg.getTitle());
                 }
             }
             list.add(new Torrent("测试", ("------------------" + getPageNumber() + "----------------- \n").getBytes(), true));
@@ -132,7 +136,11 @@ public class CaiTaDiYiTorrentProducer extends AbstractTorrentProducer {
             }
             String videoUrl = StringUtils.substringAfter(html, "video:");
             videoUrl = StringUtils.substring(videoUrl, videoUrl.indexOf("'") + 1, videoUrl.lastIndexOf("'"));
+            String sign = StringUtils.substringAfter(videoUrl,"sign=");
             videoUrl = StringUtils.substringBefore(videoUrl, "?");
+            if (StringUtils.isNotBlank(sign)) {
+                videoUrl = videoUrl + "?sign=" + sign;
+            }
             return videoUrl;
         } catch (Exception e) {
             e.printStackTrace();
