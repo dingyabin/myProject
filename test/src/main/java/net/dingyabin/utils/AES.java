@@ -114,8 +114,8 @@ public class AES {
                 return null;
             }
         } catch (Exception ex) {
-            System.out.println(ex.toString());
-            return null;
+            ex.printStackTrace();
+            return sSrc;
         }
     }
 
@@ -123,15 +123,16 @@ public class AES {
     public static byte[] decrypt(byte[] sSrc, String sKey) {
         try {
             byte[] iv = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-            IvParameterSpec ivspec = new IvParameterSpec(iv);
+            IvParameterSpec ivspec = new IvParameterSpec(sKey.getBytes(StandardCharsets.UTF_8), 0, 16);
             SecretKeySpec skeySpec = new SecretKeySpec(sKey.getBytes(StandardCharsets.UTF_8), "AES");
             Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
             cipher.init(Cipher.DECRYPT_MODE, skeySpec, ivspec);
             return cipher.doFinal(sSrc);
         } catch (Exception e) {
             System.out.println("Error while decrypting: " + e.toString());
+            e.printStackTrace();
         }
-        return null;
+        return sSrc;
     }
 
 ////
@@ -142,7 +143,7 @@ public class AES {
 //        /*
 //         * 此处使用AES-128-ECB加密模式，key需要为16位。
 //         */
-//        String cKey = "ca3e8d6589dcf8e9";
+//        String cKey = "40b499f1a8efbc8a";
 ////        // 需要加密的字串
 ////        String cSrc = "www.gowhere.so";
 ////        System.out.println(cSrc);
@@ -154,9 +155,9 @@ public class AES {
 ////        String DeString = AES.Decrypt(enString, cKey);
 ////        System.out.println("解密后的字串是：" + DeString);
 //
-//         String path = "F:\\IE下载\\MNazhHMt.ts";
+//         String path = "E:\\xxx\\mn4sBtQK.ts";
 //         byte[] bytes = IOUtils.toByteArray(new FileInputStream(path));
 //        byte[] decrypt = decrypt(bytes, cKey);
-//        IOUtils.write(decrypt, new FileOutputStream("F:\\IE下载\\cccccc.mp4"));
+//         IOUtils.write(decrypt, new FileOutputStream("E:\\xxx\\cccccc.mp4"));
 //    }
 }

@@ -47,8 +47,7 @@ public class SSLUtils {
      * @throws Exception ""
      */
     public static void ignoreSsl() throws Exception{
-        HostnameVerifier hv = (urlHostName, session) -> true;
         trustAllHttpsCertificates();
-        HttpsURLConnection.setDefaultHostnameVerifier(hv);
+        HttpsURLConnection.setDefaultHostnameVerifier((urlHostName, session) -> true);
     }
 }

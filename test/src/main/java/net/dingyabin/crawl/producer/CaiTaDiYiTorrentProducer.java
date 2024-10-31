@@ -5,6 +5,7 @@ import com.google.common.util.concurrent.RateLimiter;
 import lombok.Getter;
 import lombok.Setter;
 import net.dingyabin.crawl.model.Torrent;
+import net.dingyabin.crawl.utils.SSLUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
@@ -25,8 +26,7 @@ public class CaiTaDiYiTorrentProducer extends AbstractTorrentProducer {
 
     private static String baseUrl = "https://www.caita3456.com/";
 
-//    private String url = baseUrl+ "video/index%s.html";
-    private String url = baseUrl + "/nvwang/";
+    private String url = baseUrl + "nvwang/index%s.html";
 
     private static final RateLimiter RATE_LIMITER = RateLimiter.create(3);
 
@@ -37,6 +37,13 @@ public class CaiTaDiYiTorrentProducer extends AbstractTorrentProducer {
         }
     }
 
+    static {
+        try {
+            SSLUtils.ignoreSsl();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     protected String getUrl() {
