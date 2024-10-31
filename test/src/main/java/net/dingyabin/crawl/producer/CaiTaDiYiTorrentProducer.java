@@ -14,8 +14,10 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
+import java.util.Map;
+import java.util.concurrent.*;
 
 /**
  * Created by MrDing
@@ -24,11 +26,11 @@ import java.util.concurrent.BlockingQueue;
  */
 public class CaiTaDiYiTorrentProducer extends AbstractTorrentProducer {
 
-    private static String baseUrl = "https://www.caita3456.com/";
+    private String baseUrl = "https://www.caita3456.com/";
 
     private String url = baseUrl + "nvwang/index%s.html";
 
-    private static final RateLimiter RATE_LIMITER = RateLimiter.create(3);
+    private static final RateLimiter RATE_LIMITER = RateLimiter.create(2);
 
     public CaiTaDiYiTorrentProducer(BlockingQueue<Torrent> queue, String encoding, int pageNumber) {
         super(queue, encoding, pageNumber);
@@ -56,6 +58,13 @@ public class CaiTaDiYiTorrentProducer extends AbstractTorrentProducer {
     }
 
     @Override
+    protected Map<String, String> getRequestHeader() {
+        Map<String, String> requestHeader = super.getRequestHeader();
+        requestHeader.put("referer","www.caita3456.com");
+        return requestHeader;
+    }
+
+    @Override
     protected List<Torrent> makeTorrent(String resource) {
         List<Torrent> list = new ArrayList<>();
         try {
@@ -72,7 +81,9 @@ public class CaiTaDiYiTorrentProducer extends AbstractTorrentProducer {
                 String videoUrl = getVideoUrl(detailMsgSrc);
                 if (StringUtils.isNotBlank(videoUrl)) {
                     byte[] content = String.format("%s \t %s \n", resourceMsg.getTitle(), videoUrl).getBytes();
-                    list.add(new Torrent("测试", content, true));
+                    Torrent torrent = new Torrent("测试", content, true);
+                    pushTorrent(torrent.alreadyPushInQueue());
+                    list.add(torrent);
                     System.out.println("-----------完成一个--------- "+ resourceMsg.getTitle());
                 }
             }

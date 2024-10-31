@@ -85,6 +85,13 @@ public abstract class AbstractTorrentProducer extends AbstractRequest implements
     }
 
 
+    protected void pushTorrent(List<Torrent> torrents){
+        if (CollectionUtils.isNotEmpty(torrents)) {
+            torrents.forEach(torrent -> queue.offer(torrent));
+        }
+    }
+
+
 
     @Override
     public void run() {
@@ -100,15 +107,23 @@ public abstract class AbstractTorrentProducer extends AbstractRequest implements
                 return;
             }
             torrents.forEach(torrent -> {
-                pushTorrent(torrent);
+                if (!torrent.isAlreadyPushInQueue()) {
+                    pushTorrent(torrent);
+                }
                 String content = (torrent.getContent() != null) ? new String(torrent.getContent()) : null;
                 System.out.println("第" + pageNumber + "页-->" + torrent.getName() + ",url=(" + torrent.getUrl() + ") content=" + content + "\n\n");
             });
             System.out.printf("第%s页，获取到%s个\n", pageNumber, torrents.size());
         } catch (Exception e) {
             e.printStackTrace();
+        } finally {
+            destroy();
         }
     }
 
+
+
+    protected void destroy(){
+    }
 
 }

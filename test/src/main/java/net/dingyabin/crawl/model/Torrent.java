@@ -11,6 +11,7 @@ public class Torrent {
     private String url;
     private boolean append;
     private byte[] content;
+    private boolean alreadyPushInQueue;
 
     public Torrent() {
     }
@@ -66,5 +67,14 @@ public class Torrent {
 
     public void setAppend(boolean append) {
         this.append = append;
+    }
+
+    public boolean isAlreadyPushInQueue() {
+        return alreadyPushInQueue;
+    }
+
+    public Torrent alreadyPushInQueue() {
+        this.alreadyPushInQueue = true;
+        return this;
     }
 }
