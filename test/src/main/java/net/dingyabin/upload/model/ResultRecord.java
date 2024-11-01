@@ -9,7 +9,7 @@ import java.util.BitSet;
  * Date: 2024/6/27.
  * Time:3:10
  */
-public class UploadServicePerfermence {
+public class ResultRecord {
 
     private final int maxCount;
 
@@ -18,7 +18,7 @@ public class UploadServicePerfermence {
     private final BitSet bitSet;
 
 
-    public UploadServicePerfermence(int maxCount) {
+    public ResultRecord(int maxCount) {
         this.maxCount = maxCount;
         this.bitSet = new BitSet(maxCount);
         bitSet.set(0, maxCount, true);
@@ -40,7 +40,7 @@ public class UploadServicePerfermence {
 
     @Override
     public synchronized String toString() {
-        return "UploadServicePerfermence{" +
+        return "ResultRecord{" +
                 "maxCount=" + maxCount +
                 ", curIndex=" + curIndex +
                 ", bitSet=" + bitSet +
@@ -48,7 +48,7 @@ public class UploadServicePerfermence {
     }
 
     public static void main(String[] args) throws InterruptedException {
-        UploadServicePerfermence uploadServicePerfermence = new UploadServicePerfermence(50);
+        ResultRecord uploadServicePerfermence = new ResultRecord(50);
         for (int i = 0; i < 68; i++) {
             boolean nextBoolean = RandomUtils.nextBoolean();
             uploadServicePerfermence.setResult(nextBoolean);

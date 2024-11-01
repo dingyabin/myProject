@@ -30,7 +30,7 @@ public class CaiTaDiYiTorrentProducer extends AbstractTorrentProducer {
 
     private String url = baseUrl + "nvwang/index%s.html";
 
-    private static final RateLimiter RATE_LIMITER = RateLimiter.create(2);
+    private static final RateLimiter RATE_LIMITER = RateLimiter.create(1);
 
     public CaiTaDiYiTorrentProducer(BlockingQueue<Torrent> queue, String encoding, int pageNumber) {
         super(queue, encoding, pageNumber);

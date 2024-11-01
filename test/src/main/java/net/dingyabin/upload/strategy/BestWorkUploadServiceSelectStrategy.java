@@ -1,12 +1,10 @@
 package net.dingyabin.upload.strategy;
 
 import net.dingyabin.upload.model.ImageUplaodContext;
+import net.dingyabin.upload.model.ResultRecord;
 import net.dingyabin.upload.model.UploadResult;
-import net.dingyabin.upload.model.UploadServicePerfermence;
 import net.dingyabin.upload.source.AbstractUploadService;
 import net.dingyabin.upload.source.IUploadService;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 /**
  * @author 丁亚宾
@@ -28,44 +27,31 @@ public class BestWorkUploadServiceSelectStrategy extends UploadServiceSelectStra
     @Value("${servicePerfermence.maxCount:50}")
     private int maxCount;
 
-    private Map<String, UploadServiceWrapper> serviceMap = new ConcurrentHashMap<>();
-
-    private Map<String, UploadServicePerfermence> servicePerfermenceMap = new ConcurrentHashMap<>();
-
-
-    public BestWorkUploadServiceSelectStrategy(List<IUploadService> uploadServices) {
-        for (IUploadService uploadService : uploadServices) {
-            servicePerfermenceMap.put(uploadService.uploadSource(), new UploadServicePerfermence(maxCount));
-        }
-    }
+    private final Map<String, UploadServiceProxy> serviceMap = new ConcurrentHashMap<>();
 
 
     @Override
     public IUploadService selectServiceSelectStrategy(List<IUploadService> uploadServices) {
-        Optional<Map.Entry<String, UploadServicePerfermence>> max = servicePerfermenceMap.entrySet().stream().max(Comparator.comparingInt(e -> e.getValue().successCount()));
-        String uploadSource = max.map(Map.Entry::getKey).orElse(null);
-
-        Optional<IUploadService> iUploadServiceOptional = uploadServices.stream().filter(e -> e.uploadSource().equals(uploadSource)).findFirst();
-        IUploadService iUploadService = iUploadServiceOptional.orElse(null);
-
-        if (iUploadService == null) {
-            return null;
-        }
-
-        if (iUploadService instanceof AbstractUploadService) {
-            return serviceMap.computeIfAbsent(iUploadService.uploadSource(), k -> new UploadServiceWrapper((AbstractUploadService) iUploadService));
-        }
-        return iUploadService;
+        List<UploadServiceProxy> collect = uploadServices.stream()
+                .map(service -> {
+                    return serviceMap.computeIfAbsent(service.uploadSource(),
+                            k -> new UploadServiceProxy((AbstractUploadService) service, new ResultRecord(maxCount)));
+                }).collect(Collectors.toList());
+        Optional<UploadServiceProxy> max = collect.stream().max(Comparator.comparingInt(UploadServiceProxy::successCount));
+        return max.orElse(null);
     }
 
 
 
-    private class UploadServiceWrapper extends AbstractUploadService {
+    private class UploadServiceProxy extends AbstractUploadService {
 
         private AbstractUploadService abstractUploadService;
 
-        public UploadServiceWrapper(AbstractUploadService abstractUploadService) {
+        private ResultRecord resultRecord;
+
+        public UploadServiceProxy(AbstractUploadService abstractUploadService, ResultRecord resultRecord) {
             this.abstractUploadService = abstractUploadService;
+            this.resultRecord = resultRecord;
         }
 
         @Override
@@ -82,14 +68,8 @@ public class BestWorkUploadServiceSelectStrategy extends UploadServiceSelectStra
         public void afterUpload(ImageUplaodContext imageUplaodContext) {
             abstractUploadService.afterUpload(imageUplaodContext);
             UploadResult uploadResult = imageUplaodContext.getUploadResult();
-            try {
-                UploadServicePerfermence uploadServicePerfermence = servicePerfermenceMap.get(imageUplaodContext.getUploadSource());
-                if (uploadServicePerfermence != null) {
-                    uploadServicePerfermence.setResult(uploadResult.isSuccess());
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            //记录结果
+            resultRecord.setResult(uploadResult.isSuccess());
         }
 
 
@@ -102,6 +82,16 @@ public class BestWorkUploadServiceSelectStrategy extends UploadServiceSelectStra
         @Override
         public String uploadSource() {
             return abstractUploadService.uploadSource();
+        }
+
+
+        public ResultRecord getResultRecord(){
+            return this.resultRecord;
+        }
+
+
+        public int successCount(){
+            return getResultRecord().successCount();
         }
     }
 
