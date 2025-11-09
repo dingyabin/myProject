@@ -6,6 +6,7 @@ import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.RateLimiter;
 import net.dingyabin.bean.FileResult;
 import net.dingyabin.crawl.request.AbstractRequest;
+import net.dingyabin.crawl.utils.SSLUtils;
 import net.dingyabin.crawl.utils.Utils;
 import net.dingyabin.utils.AES;
 import org.apache.commons.io.FileUtils;
@@ -34,7 +35,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class TempTxtProducer extends AbstractRequest {
 
-    private static final RateLimiter RATE_LIMITER = RateLimiter.create(7);
+    private static final RateLimiter RATE_LIMITER = RateLimiter.create(2);
 
     private static ExecutorService executorService = Executors.newFixedThreadPool(150);
 
@@ -59,6 +60,13 @@ public class TempTxtProducer extends AbstractRequest {
         return header;
     }
 
+    static {
+        try {
+            SSLUtils.ignoreSsl();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     @Override
     protected int getConnTimeOut() {
@@ -289,7 +297,7 @@ public class TempTxtProducer extends AbstractRequest {
 
     public static void main(String[] args) {
         try {
-            TempTxtProducer txtProducer = new TempTxtProducer("xxx \t https://88.manman168.com/20240424/D424VPQ3/hls/index.m3u8?sign=f51bece9e5fe3250cff2e5520a6570990097453d8059e74c05fc11708122e4a24e0f46f67aaaaadf3d9e1b2211d6a23b", "E:\\xxx\\");
+            TempTxtProducer txtProducer = new TempTxtProducer("xxx \t  https://1.manman168.com/20241205/S123FFAP9/hls/index.m3u8?sign=778a26afd57d7de135ba0a83209ffafe53fb265f141f8c6d453b5e577f061417957550c02a4f683c7d398592c0ac2c18", "E:\\xxx\\");
             FileResult fileResult = txtProducer.download();
             if (fileResult == null) {
                 System.out.println("下载失败...............................");

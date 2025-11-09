@@ -28,7 +28,7 @@ public class CaiTaDiYiTorrentProducer extends AbstractTorrentProducer {
 
     private String baseUrl = "https://www.caita3456.com/";
 
-    private String url = baseUrl + "nvwang/index%s.html";
+    private String url = baseUrl + "mingfei/index%s.html";
 
     private static final RateLimiter RATE_LIMITER = RateLimiter.create(1);
 
@@ -74,6 +74,7 @@ public class CaiTaDiYiTorrentProducer extends AbstractTorrentProducer {
                 return null;
             }
             for (ResourceMsg resourceMsg : homeSimpleMsg) {
+                sleep(1000);
                 String detailMsgSrc = getDetailIframMsgSrc(resourceMsg);
                 if (StringUtils.isBlank(detailMsgSrc)) {
                     continue;
