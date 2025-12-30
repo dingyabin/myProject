@@ -34,7 +34,7 @@ public class ReConsumeTorrentConsumer extends SimpleTorrentConcumer {
 
         System.out.println(jsonObject.toJSONString());
         synchronized (ReConsumeTorrentConsumer.class) {
-            super.doWrite(torrent, file, jsonObject.toJSONString().getBytes(StandardCharsets.UTF_8));
+            super.doWrite(torrent, file, (jsonObject.toJSONString() + System.lineSeparator() ).getBytes(StandardCharsets.UTF_8));
         }
     }
 
@@ -42,7 +42,7 @@ public class ReConsumeTorrentConsumer extends SimpleTorrentConcumer {
     private List<String> findContent(String url) throws IOException {
         List<String> result = new ArrayList<>();
         while (true) {
-            sleep(500);
+            sleep(100);
             String html = getResource(url);
             if (StringUtils.isEmpty(html)) {
                 //计算下一页
