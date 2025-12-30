@@ -46,7 +46,12 @@ public class ReConsumeTorrentConsumer extends SimpleTorrentConcumer {
             String html = getResource(url);
             if (StringUtils.isEmpty(html)) {
                 //计算下一页
-                return result;
+                String pageNumStr = StringUtils.substringBetween(url, "_", ".html");
+                if (StringUtils.isBlank(pageNumStr)) {
+                    return result;
+                }
+                url = StringUtils.substringBefore(url, "_") + "_" + (Integer.parseInt(pageNumStr) + 1) + ".html";
+                continue;
             }
             Document doc = Jsoup.parse(html);
             Element div = doc.getElementsByTag("main").get(0).getElementsByClass("default-loop-wrap").get(0);
@@ -55,6 +60,9 @@ public class ReConsumeTorrentConsumer extends SimpleTorrentConcumer {
             for (Element element : li) {
                 String text = element.getElementsByClass("item-meta-left").get(0).text();
                 result.add(text);
+            }
+            if (CollectionUtils.size(result) == 0) {
+                return result;
             }
             Elements navLinkEles = div.getElementsByClass("nav-links");
             if (CollectionUtils.isEmpty(navLinkEles)) {
