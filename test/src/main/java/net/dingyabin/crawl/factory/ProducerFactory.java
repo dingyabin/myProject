@@ -43,6 +43,8 @@ public class ProducerFactory {
                 return new CaiTaDiYiTorrentProducer(queue, "utf-8", page);
             case TAI9:
                 return new Tai9TorrentProducer(queue, "utf-8", page);
+           case TAI91:
+                return new HaoHaokuTorrentProducer(queue, "utf-8", page);
             default:
                 throw new IllegalArgumentException("暂不支持此网站的解析...");
         }

@@ -38,8 +38,8 @@ public class Start {
 
 
     public static void main(String[] args) throws InterruptedException {
-        for (int i = 11; i <= 11; i++) {
-            PRODUCER_EXECUTOR.submit(ProducerFactory.getProducer(CAITADIYI, QUEUE, i));
+        for (int i = 1; i <= 1; i++) {
+            PRODUCER_EXECUTOR.submit(ProducerFactory.getProducer(TAI91, QUEUE, i));
         }
         //生产者线程池关闭
         PRODUCER_EXECUTOR.shutdown();

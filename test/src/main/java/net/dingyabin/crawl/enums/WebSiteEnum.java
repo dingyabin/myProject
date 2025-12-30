@@ -65,6 +65,8 @@ public enum WebSiteEnum {
 
     TAI9(".txt", String.format("C:\\Users\\%s\\Desktop\\torrent\\%s\\TAI9\\", System.getenv().get("USERNAME"), DateTime.now().toString("yyyyMMdd"))),
 
+    TAI91(".txt", String.format("C:\\Users\\%s\\Desktop\\torrent\\%s\\CAITADIYI\\", System.getenv().get("USERNAME"), DateTime.now().toString("yyyyMMdd"))),
+
     ;
 
 

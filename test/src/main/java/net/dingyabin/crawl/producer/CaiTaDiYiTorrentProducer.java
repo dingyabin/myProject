@@ -28,7 +28,7 @@ public class CaiTaDiYiTorrentProducer extends AbstractTorrentProducer {
 
     private String baseUrl = "https://www.caita3456.com/";
 
-    private String url = baseUrl + "mingfei/index%s.html";
+    private String url = baseUrl + "tag/erguang/index%s.html";
 
     private static final RateLimiter RATE_LIMITER = RateLimiter.create(1);
 

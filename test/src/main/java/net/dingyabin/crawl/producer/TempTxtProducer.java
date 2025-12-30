@@ -35,7 +35,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class TempTxtProducer extends AbstractRequest {
 
-    private static final RateLimiter RATE_LIMITER = RateLimiter.create(2);
+    private static final RateLimiter RATE_LIMITER = RateLimiter.create(1.5);
 
     private static ExecutorService executorService = Executors.newFixedThreadPool(150);
 
@@ -297,7 +297,7 @@ public class TempTxtProducer extends AbstractRequest {
 
     public static void main(String[] args) {
         try {
-            TempTxtProducer txtProducer = new TempTxtProducer("xxx \t  https://1.manman168.com/20241205/S123FFAP9/hls/index.m3u8?sign=778a26afd57d7de135ba0a83209ffafe53fb265f141f8c6d453b5e577f061417957550c02a4f683c7d398592c0ac2c18", "E:\\xxx\\");
+            TempTxtProducer txtProducer = new TempTxtProducer("xxx \t  https://88.manman168.com/20241026/D1026GGTW7/2129kb/hls/index.m3u8?sign=3cd77114f21a3c2ca8c82f78204365b0a74c147f985a7a94b2f052dd6c0b56a123257435089c4556b2064596ec81d843", "E:\\xxx\\");
             FileResult fileResult = txtProducer.download();
             if (fileResult == null) {
                 System.out.println("下载失败...............................");

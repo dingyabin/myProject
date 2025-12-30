@@ -29,6 +29,8 @@ public class SimpleTorrentConcumer extends AbstractRequest implements Runnable {
 
     private WebSiteEnum webSiteEnum;
 
+    private String encoding = "utf-8";
+
     private String[] delStr = {"\\*", "\\?", "\\|", "<", ">", "!", "\"", "/", " ", "：", ":"};
 
 
@@ -39,6 +41,12 @@ public class SimpleTorrentConcumer extends AbstractRequest implements Runnable {
     public SimpleTorrentConcumer(WebSiteEnum webSiteEnum, BlockingQueue<Torrent> queue) {
         this.queue = queue;
         this.webSiteEnum = webSiteEnum;
+    }
+
+    public SimpleTorrentConcumer(WebSiteEnum webSiteEnum, BlockingQueue<Torrent> queue, String encoding) {
+        this.queue = queue;
+        this.webSiteEnum = webSiteEnum;
+        this.encoding = encoding;
     }
 
     protected Pair<File,Boolean> createFile(String path) throws IOException {
@@ -134,5 +142,16 @@ public class SimpleTorrentConcumer extends AbstractRequest implements Runnable {
 
     protected int getWaitTimeSec(){
         return 10;
+    }
+
+
+    protected String getResource(String url){
+        String stringResource = null;
+        try {
+            stringResource = getStringResource(url, encoding);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return stringResource;
     }
 }
