@@ -46,7 +46,7 @@ public class Start {
 
 
         for (int i = 0; i < 1; i++) {
-            CONSUMER_EXECUTOR.submit(CAITADIYI.consumer().setWebSiteEnum(CAITADIYI).setQueue(QUEUE));
+            CONSUMER_EXECUTOR.submit(TAI91.consumer().setWebSiteEnum(TAI91).setQueue(QUEUE));
         }
         //消费者线程池关闭
         CONSUMER_EXECUTOR.shutdown();

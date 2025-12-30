@@ -1,6 +1,5 @@
 package net.dingyabin.crawl.producer;
 
-import com.alibaba.fastjson.JSONObject;
 import net.dingyabin.crawl.model.Torrent;
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
@@ -8,9 +7,8 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
@@ -63,53 +61,16 @@ public class HaoHaokuTorrentProducer extends AbstractTorrentProducer {
                 String href = linkEle.attr("href");
                 String title = linkEle.attr("title");
                 System.out.println(href + " --------------" + title);
-
-                list.add(new Torrent(, ));
                 if (href.startsWith("/")) {
                     href = StringUtils.substringAfter(href, "/");
                 }
+                list.add(new Torrent(title, href.getBytes(StandardCharsets.UTF_8), true));
                 sleep(500);
-                List<String> content = findContent(baseUrl + "/" + URLEncoder.encode(href, "utf-8"));
-                JSONObject jsonObject = new JSONObject();
-                jsonObject.put(title, content);
-                System.out.println(jsonObject.toJSONString());
+                return list;
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return list;
     }
-
-
-    private List<String> findContent(String url) {
-        String html = getResource(url);
-        if (StringUtils.isEmpty(html)) {
-            System.out.println("xxxxxxxxxxx空值:" + url);
-            return Collections.emptyList();
-        }
-        List<String> result = new ArrayList<>();
-        Document doc = Jsoup.parse(html);
-        Elements ul = doc.getElementsByTag("main").get(0).getElementsByClass("post-loop post-loop-default cols-4");
-        Elements li = ul.get(0).getElementsByTag("li");
-        for (Element element : li) {
-            String text = element.getElementsByClass("item-meta-left").get(0).text();
-            result.add(text);
-        }
-        return result;
-    }
-
-
-//    @Override
-//    public void run() {
-//        try {
-//            String resource = getResource();
-//            if (StringUtils.isBlank(resource)) {
-//                System.out.println("xxxxxxxxxxparseHome,第1页空白,跳过xxxxxxxxxxx");
-//                return;
-//            }
-//            makeTorrent(resource);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
 }

@@ -141,7 +141,7 @@ public class SimpleTorrentConcumer extends AbstractRequest implements Runnable {
 
 
     protected int getWaitTimeSec(){
-        return 10;
+        return 20;
     }
 
 
@@ -153,5 +153,14 @@ public class SimpleTorrentConcumer extends AbstractRequest implements Runnable {
             e.printStackTrace();
         }
         return stringResource;
+    }
+
+
+    protected void sleep(int time){
+        try {
+            Thread.sleep(time);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

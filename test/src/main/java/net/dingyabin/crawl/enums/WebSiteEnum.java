@@ -3,6 +3,7 @@ package net.dingyabin.crawl.enums;
 import net.dingyabin.bean.SoftDownload;
 import net.dingyabin.bean.TorrentDownload;
 import net.dingyabin.crawl.consumer.ExcelTorrentConsumer;
+import net.dingyabin.crawl.consumer.ReConsumeTorrentConsumer;
 import net.dingyabin.crawl.consumer.SimpleTorrentConcumer;
 import org.joda.time.DateTime;
 
@@ -65,7 +66,12 @@ public enum WebSiteEnum {
 
     TAI9(".txt", String.format("C:\\Users\\%s\\Desktop\\torrent\\%s\\TAI9\\", System.getenv().get("USERNAME"), DateTime.now().toString("yyyyMMdd"))),
 
-    TAI91(".txt", String.format("C:\\Users\\%s\\Desktop\\torrent\\%s\\CAITADIYI\\", System.getenv().get("USERNAME"), DateTime.now().toString("yyyyMMdd"))),
+    TAI91(".txt", String.format("C:\\Users\\%s\\Desktop\\torrent\\%s\\CAITADIYI\\", System.getenv().get("USERNAME"), DateTime.now().toString("yyyyMMdd"))){
+        @Override
+        public SimpleTorrentConcumer consumer() {
+            return new ReConsumeTorrentConsumer();
+        }
+    },
 
     ;
 
