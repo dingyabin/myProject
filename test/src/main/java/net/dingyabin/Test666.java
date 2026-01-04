@@ -57,8 +57,8 @@ public class Test666 {
             LineIterator lineIterator = IOUtils.lineIterator(Files.newInputStream(Paths.get(filePath)), StandardCharsets.UTF_8);
             while (lineIterator.hasNext()) {
                 String next = lineIterator.next();
-                String between = StringUtils.substringBetween(next, "{\"", "\":");
-                set.add(between);
+                JSONObject jsonObject = JSONObject.parseObject(next);
+                set.add(jsonObject.getString("title"));
             }
         } catch (IOException e) {
             e.printStackTrace();

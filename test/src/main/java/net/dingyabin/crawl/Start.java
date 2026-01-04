@@ -1,15 +1,12 @@
 package net.dingyabin.crawl;
 
+import cn.hutool.core.thread.NamedThreadFactory;
 import net.dingyabin.crawl.factory.ProducerFactory;
 import net.dingyabin.crawl.model.Torrent;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.*;
 
-import static net.dingyabin.crawl.enums.WebSiteEnum.*;
+import static net.dingyabin.crawl.enums.WebSiteEnum.TAI91;
 
 
 /**
@@ -21,31 +18,31 @@ public class Start {
 
     private static final LinkedBlockingQueue<Torrent> QUEUE = new LinkedBlockingQueue<>();
 
-    private static final AtomicInteger INDEX = new AtomicInteger();
-
-    private static final ExecutorService PRODUCER_EXECUTOR = Executors.newFixedThreadPool( 10, r -> {
-        Thread thread = new Thread(r);
-        thread.setName("producer task thread-" + INDEX.getAndIncrement());
-        return thread;
-    });
-
-    private static final ExecutorService CONSUMER_EXECUTOR = Executors.newCachedThreadPool(r -> {
-        Thread thread = new Thread(r);
-        thread.setName("consumer task thread-" + INDEX.getAndIncrement());
-        return thread;
-    });
+    private static final ExecutorService PRODUCER_EXECUTOR = Executors.newFixedThreadPool(
+            5,
+            new NamedThreadFactory("producer task thread-", false)
+    );
 
 
+    private static final ThreadPoolExecutor CONSUMER_EXECUTOR = new ThreadPoolExecutor(
+            5,
+            10,
+            1,
+            TimeUnit.MINUTES,
+            new ArrayBlockingQueue<>(1000000),
+            new NamedThreadFactory("consumer task thread-", false),
+            new ThreadPoolExecutor.CallerRunsPolicy()
+    );
 
     public static void main(String[] args) throws InterruptedException {
-        for (int i = 1; i <= 1; i++) {
+        for (int i = 950; i <= 1000; i++) {
             PRODUCER_EXECUTOR.submit(ProducerFactory.getProducer(TAI91, QUEUE, i));
         }
         //生产者线程池关闭
         PRODUCER_EXECUTOR.shutdown();
 
 
-        for (int i = 0; i < 1; i++) {
+        for (int i = 0; i < 5; i++) {
             CONSUMER_EXECUTOR.submit(TAI91.consumer().setWebSiteEnum(TAI91).setQueue(QUEUE));
         }
         //消费者线程池关闭
@@ -62,6 +59,10 @@ public class Start {
         return QUEUE;
     }
 
+
+    public static int getRestTaskCount(){
+        return CONSUMER_EXECUTOR.getQueue().size() + CONSUMER_EXECUTOR.getActiveCount() + QUEUE.size();
+    }
 
     /**
      * 等待线程池任务全部完成

@@ -101,7 +101,7 @@ public class SimpleTorrentConcumer extends AbstractRequest implements Runnable {
                     continue;
                 }
                 doWrite(torrent, file, bytes);
-                System.out.printf(">>>>>>线程%s成功download一个文件,目前还剩%s个任务<<<<<<<<\n", Thread.currentThread().getName(), queue.size());
+                System.out.printf(">>>>>>线程%s成功download一个文件,目前还剩%s个任务<<<<<<<<\n", Thread.currentThread().getName(), Start.getRestTaskCount());
             }
         } catch (Exception e) {
             e.printStackTrace();
