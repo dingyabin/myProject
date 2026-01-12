@@ -16,10 +16,10 @@ import static net.dingyabin.crawl.enums.WebSiteEnum.TAI91;
  */
 public class Start {
 
-    private static final LinkedBlockingQueue<Torrent> QUEUE = new LinkedBlockingQueue<>();
+    private static final LinkedBlockingQueue<Torrent> QUEUE = new LinkedBlockingQueue<>(1000);
 
     private static final ExecutorService PRODUCER_EXECUTOR = Executors.newFixedThreadPool(
-            5,
+            2,
             new NamedThreadFactory("producer task thread-", false)
     );
 
@@ -35,7 +35,8 @@ public class Start {
     );
 
     public static void main(String[] args) throws InterruptedException {
-        for (int i = 950; i <= 1000; i++) {
+        //大约6000
+        for (int i = 3601; i <= 4000; i++) {
             PRODUCER_EXECUTOR.submit(ProducerFactory.getProducer(TAI91, QUEUE, i));
         }
         //生产者线程池关闭

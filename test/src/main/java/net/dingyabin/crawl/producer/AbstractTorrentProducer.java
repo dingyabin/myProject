@@ -1,5 +1,6 @@
 package net.dingyabin.crawl.producer;
 
+import lombok.extern.slf4j.Slf4j;
 import net.dingyabin.crawl.model.Torrent;
 import net.dingyabin.crawl.request.AbstractRequest;
 import org.apache.commons.collections4.CollectionUtils;
@@ -14,6 +15,7 @@ import java.util.concurrent.BlockingQueue;
  * Date: 2018/7/28.
  * Time:22:25
  */
+@Slf4j
 public abstract class AbstractTorrentProducer extends AbstractRequest implements Runnable {
 
 
@@ -81,13 +83,10 @@ public abstract class AbstractTorrentProducer extends AbstractRequest implements
 
 
     protected void pushTorrent(Torrent torrent){
-        queue.offer(torrent);
-    }
-
-
-    protected void pushTorrent(List<Torrent> torrents){
-        if (CollectionUtils.isNotEmpty(torrents)) {
-            torrents.forEach(torrent -> queue.offer(torrent));
+        try {
+            queue.put(torrent);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
